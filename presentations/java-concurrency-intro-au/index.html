@@ -148,19 +148,19 @@ value: <strong>E</strong></pre>
                     <tr class="step" data-y="300">
                         <td style="width: 450px;">
                             <pre>&gt; value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
-store buffer(<strong>value</strong>)
-read invalidate(<strong>value</strong>)</pre>
+&lt; store_buffer(<strong>value</strong>)
+&lt; read_inv(<strong>value</strong>)</pre>
                         </td>
                         <td valign="top">
                             <pre>&gt; <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
-read(<strong>finished</strong>)</pre>
+&lt; read(<strong>finished</strong>)</pre>
                         </td>
                     </tr>
                     <tr class="step" data-y="450">
                         <td style="width: 450px;">
                             <pre>&gt; finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
 finished: <strong>M</strong>
-read response(<strong>finished</strong>)
+&lt; read_resp(<strong>finished</strong>)
 finished: <strong>S</strong></pre>
                         </td>
                         <td valign="top">
@@ -173,8 +173,6 @@ finished: <strong>S</strong></pre>
                     </tr>
                     <tr class="step" data-y="600">
                         <td style="width: 450px;">
-                            <pre>
-</pre>
                         </td>
                         <td valign="top">
                             <pre>&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
@@ -184,6 +182,112 @@ finished: <strong>S</strong></pre>
                         <td colspan="2">
                             <center><h1 style="color: darkred">Assertion FAILS!</h1></center>
                             <img src="img/cereal-split.png" />
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="2000">
+                        <td style="width: 450px;">
+                        </td>
+                        <td valign="top">
+                            <pre>&lt; read_resp(<strong>value</strong>)
+&lt; invalidate_ack(<strong>value</strong>)
+value: <strong>I</strong>
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="2100">
+                        <td style="width: 450px;">
+                            <pre>&lt; writeback(<strong>value</strong>)</pre>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="step" data-x="5500" data-y="2400">
+                <h2>Invalidate queues</h2>
+                <p>
+                    <strong class="mono">Invalidate Acknowledge</strong> будет отправлен моментально, а фактически инвалидацию процессор сделает тогда, когда
+                    ему это будет удобно. При этом до того, как он это сделает, не будет отправлено ни одно сообщение по соответствующей ячейке памяти.
+                </p>
+            </div>
+
+            <div class="step" data-x="5500" data-y="3200">
+                <table>
+                    <tr>
+                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
+                        <td><strong class="mono">CPU 1</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                        <td>
+                            <pre>
+<span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+<b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="100">
+                        <td colspan="2">
+                            Казалось бы, что <strong>ещё</strong> может пойти не так?
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="200">
+                        <td style="width: 450px;">
+                            <pre>finished: <strong>E</strong>
+value: <strong>S</strong></pre>
+                        </td>
+                        <td>
+                            <pre>finished: <strong>I</strong>
+value: <strong>S</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="300">
+                        <td style="width: 450px;">
+                            <pre>&gt; value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+&lt; store_buffer(<strong>value</strong>)
+&lt; invalidate(<strong>value</strong>)</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+&lt; read(<strong>finished</strong>)</pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="450">
+                        <td style="width: 450px;">
+                            <pre>&gt; finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+finished: <strong>M</strong>
+&lt; read_resp(<strong>finished</strong>)
+finished: <strong>S</strong></pre>
+                        </td>
+                        <td valign="top">
+                            <pre>invalidate_ack(<strong>value</strong>)
+invalidate_queue(<strong>value</strong>)
+
+finished: <strong>S</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="600">
+                        <td style="width: 450px;">
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="1500" data-rotate="180">
+                        <td colspan="2">
+                            <center><h1 style="color: darkred">Assertion fails AGAIN!</h1></center>
+                            <img src="img/desk-flip.png" />
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="2000">
+                        <td style="width: 450px;">
+                            <pre>&lt; writeback(<strong>value</strong>)</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>value: <strong>I</strong></pre>
                         </td>
                     </tr>
                 </table>
