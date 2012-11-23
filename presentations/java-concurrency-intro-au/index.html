@@ -23,15 +23,10 @@
                 </p>
             </div>
 
-            <div class="step" data-x="2200" data-y="-1100">
+            <div class="step" data-x="2200" data-y="-800">
                 <h2>Just another brick in the <strong>memory wall</strong></h2>
                 <ul>
                     <li>Скорость доступа к RAM растёт в ~1000 раз медленнее, чем скорость CPU</li>
-                </ul>
-            </div>
-
-            <div class="step" data-x="2200" data-y="-800">
-                <ul>
                     <li>Нужно расположить данные ближе к ядрам! Многоуровневые кеши &dash; панацея!</li>
                 </ul>
             </div>
@@ -84,6 +79,114 @@
 
             <div class="step" data-x="4400">
                 <h1>Cache coherency</h1>
+                <p>
+                    &laquo;А что, если у потоков есть общая память?&raquo;
+                </p>
+            </div>
+
+            <div class="step" data-x="4400" data-y="800">
+                <h2>Протокол <strong class="mono">MESI</strong></h2>
+                <ul>
+                    <li><span class="mono"><strong class="large">I</strong>nvalid</span> &dash; ячейка не содержится в кеше;</li>
+                    <li><span class="mono"><strong class="large">S</strong>hared</span> &dash; ячейка содердится в кеше, но не только у этого ядра;</li>
+                    <li><span class="mono"><strong class="large">E</strong>xclusive</span> &dash; ячейка содердится в кеше только у этого ядра;</li>
+                    <li><span class="mono"><strong class="large">M</strong>odified</span> &dash; значение в кеше изменено, но об этом пока никто не знает</li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="4400" data-y="1600">
+                <h2>Сообщения протокола <strong class="mono">MESI</strong></h2>
+                <ul>
+                    <li><span class="mono"><strong>Read</strong> &amp; <strong>Read Response</strong></span> &dash; чтение ячейки и ответ на этот запрос;</li>
+                    <li><span class="mono"><strong>Invalidate</strong> &amp; <strong>Invalidate Acknowledge</strong></span> &dash; команда удалить ячейку из кеша и ответ на этот запрос;</li>
+                    <li><span class="mono"><strong>Read Invalidate</strong></span> &dash; запрос значения ячейки с требованием еэ сразу же удалить;</li>
+                    <li><span class="mono"><strong>Writeback</strong></span> &dash; записать ячейку в основную память</li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="4400" data-y="2400">
+                <h2>Store Buffers</h2>
+                <p>
+                    Не дожидаясь <strong class="mono">Invalidate Acknowledge</strong>, поместить новое значение в буфер и продолжить выполнять инструкции.
+                    Когда придут все <strong class="mono">acknowledge</strong>, произвести запись.
+                </p>
+            </div>
+
+            <div class="step" data-x="4400" data-y="3200">
+                <table>
+                    <tr>
+                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
+                        <td><strong class="mono">CPU 1</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                        <td>
+                            <pre>
+<span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+<b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="100">
+                        <td colspan="2">
+                            Казалось бы, что может пойти не так?
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="200">
+                        <td style="width: 450px;">
+                            <pre>finished: <strong>E</strong>
+value: <strong>I</strong></pre>
+                        </td>
+                        <td>
+                            <pre>finished: <strong>I</strong>
+value: <strong>E</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="300">
+                        <td style="width: 450px;">
+                            <pre>&gt; value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+store buffer(<strong>value</strong>)
+read invalidate(<strong>value</strong>)</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+read(<strong>finished</strong>)</pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="450">
+                        <td style="width: 450px;">
+                            <pre>&gt; finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+finished: <strong>M</strong>
+read response(<strong>finished</strong>)
+finished: <strong>S</strong></pre>
+                        </td>
+                        <td valign="top">
+                            <pre>
+
+
+
+finished: <strong>S</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="600">
+                        <td style="width: 450px;">
+                            <pre>
+</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="1400">
+                        <td colspan="2">
+                            <center><h1 style="color: darkred">Assertion FAILS!</h1></center>
+                            <img src="img/cereal-split.png" />
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
