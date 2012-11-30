@@ -178,13 +178,12 @@ finished: <strong>S</strong></pre>
                             <pre>&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
                         </td>
                     </tr>
-                    <tr class="step" data-y="1400">
+                    <tr class="step" data-y="800">
                         <td colspan="2">
                             <center><h1 style="color: darkred">Assertion FAILS!</h1></center>
-                            <img src="img/cereal-split.png" />
                         </td>
                     </tr>
-                    <tr class="step" data-y="2000">
+                    <tr class="step" data-y="1000">
                         <td style="width: 450px;">
                         </td>
                         <td valign="top">
@@ -194,7 +193,7 @@ value: <strong>I</strong>
                             </pre>
                         </td>
                     </tr>
-                    <tr class="step" data-y="2100">
+                    <tr class="step" data-y="1100">
                         <td style="width: 450px;">
                             <pre>&lt; writeback(<strong>value</strong>)</pre>
                         </td>
@@ -276,13 +275,12 @@ finished: <strong>S</strong></pre>
                             <pre>&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
                         </td>
                     </tr>
-                    <tr class="step" data-y="1500" data-rotate="180">
+                    <tr class="step" data-y="800">
                         <td colspan="2">
                             <center><h1 style="color: darkred">Assertion fails AGAIN!</h1></center>
-                            <img src="img/desk-flip.png" />
                         </td>
                     </tr>
-                    <tr class="step" data-y="2000">
+                    <tr class="step" data-y="1000">
                         <td style="width: 450px;">
                             <pre>&lt; writeback(<strong>value</strong>)</pre>
                         </td>
@@ -291,6 +289,83 @@ finished: <strong>S</strong></pre>
                         </td>
                     </tr>
                 </table>
+            </div>
+
+            <div class="step" data-x="5500" data-rotate="270">
+                <h1>Trade-off</h1>
+                <p>
+                    <strong>Performance</strong> vs <strong>"free" coherence</strong>
+                </p>
+                <p>
+                    Есть грань между производительностью и "простотой" написания многопоточного приложения
+                </p>
+            </div>
+
+            <div class="step" data-x="6300" data-rotate="270">
+                <h1>Memory Model</h1>
+                <p>
+                    Описание того, как потоки взаимодействуют с памятью в некоторой среде исполнения. Позволяет "автору" кода (разработчику, компилятору, ...)
+                    понять, как их код всё же будет выполнен.
+                </p>
+            </div>
+
+            <div class="step" data-x="7100" data-rotate="270">
+                <h1>Memory Barrier</h1>
+                <p>
+                    Инструкция для процессора, запрещающая допускать <strong>reordering</strong> инструкций чтения и/или записи. В простейшем случае различают <strong>Store Memory Barrier</strong>, <strong>Load Memory Barrier</strong>, <strong>Fence</strong>
+                </p>
+            </div>
+
+            <div class="step" data-x="8000" data-rotate="270">
+                <h1>Store Memory Barrier</h1>
+                <p>
+                    Требование у процессора выполнить все <strong>store</strong>, уже находящиеся в буфере, прежде чем выполнять те, что попадут туда после этой инструкции
+                </p>
+            </div>
+
+            <div class="step" data-x="8900" data-rotate="270">
+                <h1>Load Memory Barrier</h1>
+                <p>
+                    Требование у процессора применить все <strong>invalidate</strong>, уже находящиеся в очереди, прежде чем выполнять какие-либо инструкции <strong>load</strong>
+                </p>
+            </div>
+
+            <div class="step" data-x="9800" data-rotate="270">
+                <table>
+                    <tr>
+                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
+                        <td><strong class="mono">CPU 1</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+storeMemoryBarrier();
+finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                        <td>
+                            <pre>
+<span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+loadMemoryBarrier();
+<b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="step" data-x="10700" data-rotate="270">
+                <h1>Membar &dash; инструмент HMM</h1>
+                <p>
+                    Различных HMM очень много; они варьируются не только от вендора к вендору, но даже и внутри одной линейки одного производителя.
+                </p>
+            </div>
+
+            <div class="step" data-x="6600" data-y="1600">
+                <center>
+                    <h1 style="color: #ea2d2e;">Write Once</h1>
+                    <img src="img/java-logo.png" />
+                    <h1 style="color: #0074bd;">Run Anywhere</h1>
+                </center>
             </div>
 
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
