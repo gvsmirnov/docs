@@ -10,13 +10,13 @@
 
     <body>
         <div id="impress" class="impress-not-supported">
-            <div class="step slide title">
+            <div class="step slide" style="text-align: center">
                 <h1>Куда текут абстракции многопоточности</h1>
-                <p>Или казалось бы, причём здесь java</p>
+                <h2>Или казалось бы, причём здесь Java</h2>
             </div>
 
             <div class="step slide" data-x="1100">
-                <h2>Disclaimer: <i>"на самом деле"&trade;</i>, всё не так</h2>
+                <h1>Disclaimer: <small style="font-size: 30px">на самом деле, всё не так</small></h2>
                 <p>
                     Изложенный на данном семинаре материал является общим и поверхностным описанием того, как и почему работает многопоточность.
                     Во многих реальных случаях происходящее может отличаться от описанного здесь. Многие из теоретических аспектов также опущены или упрощены.
@@ -41,12 +41,14 @@
             </div>
 
             <div class="step" data-x="3300">
-                <h1>Tradeoff</h1>
-                <h2><span class="mono">frequency</span> vs <span class="mono">...</span></h2>
+                <h1>Частота процессоров почти не растёт</h1>
+                <p>
+                    За последние 5-10 лет практически не увеличилась частота процессора, поскольку возникли физические ограничения.
+                </p>
             </div>
 
-            <div class="step" data-x="3300" data-y="800">
-                <h2><span class="mono">...</span> vs <span class="mono">size</span></h2>
+            <div class="step" data-x="3300" data-y="800" data-jmpress="fade">
+                <h2>Частота vs размер</h2>
                 <p>
                     <ul>
                         <li>transistor gate и так толщиной в молекулу</li>
@@ -56,11 +58,11 @@
             </div>
 
             <div class="step" data-x="3300" data-y="1600">
-                <h2><span class="mono">...</span> vs <span class="mono">power consumption</span></h2>
+                <h2>Частота vs энергоэффективность</h2>
                 <p>
                     <ul>
-                        <li>clock-gating</li>
-                        <li>power-gating</li>
+                        <li><strong>clock-gating</strong>: если новое состояние такое же, как и старое, смена не производится</li>
+                        <li><strong>power-gating</strong>: неиспользуемые функциональные блоки отключаются</li>
                     </ul>
                 </p>
             </div>
@@ -69,12 +71,12 @@
                 <img src="img/boromir-on-cpus.jpg" />
             </div>
 
-            <div class="step" data-y="1900" data-x="1100" data-scale="3">
-                <span id="par-algs">Параллельные алгоритмы в массы!</span>
-                <span id="more-blocks">Нужно больше блоков исполнения!</span>
-                <span id="more-threads">Даёшь больше нативных потоков!</span>
-                <span id="full-utilization">Не допустим простоя процессора!</span>
-                <span id="actors">Нужно использовать модель акторов!</span>
+            <div class="step nested-steps" data-y="1900" data-x="1100" data-scale="3" id="mottos" data-duration="10">
+                <span class="step" data-x="-100" data-y="-160" data-rotate="-20" data-scale="0.6">Параллельные алгоритмы в массы!</span>
+                <span class="step" data-x="200" data-y="-10" data-rotate="10" data-scale="0.8">Нужно больше блоков исполнения!</span>
+                <span class="step" data-x="10" data-y="20" data-scale="0.8">Даёшь больше нативных потоков!</span>
+                <span class="step" data-x="300" data-y="200" data-rotate="30" data-scale="0.7">Не допустим простоя процессора!</span>
+                <span class="step" data-x="-250" data-y="100" data-rotate="-10" data-scale="0.5">Нужно использовать модель акторов!</span>
             </div>
 
             <div class="step" data-x="4400">
@@ -112,7 +114,7 @@
                 </p>
             </div>
 
-            <div class="step" data-x="4400" data-y="3200">
+            <div class="step nested-steps listing" data-x="4400" data-y="3200">
                 <table>
                     <tr>
                         <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
@@ -210,7 +212,7 @@ value: <strong>I</strong>
                 </p>
             </div>
 
-            <div class="step" data-x="5500" data-y="3200">
+            <div class="step nested-steps listing" data-x="5500" data-y="3200">
                 <table>
                     <tr>
                         <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
@@ -373,7 +375,15 @@ loadMemoryBarrier();
 
         <script type="text/javascript">
             $(function() {
-                $('#impress').jmpress();
+                    $('#impress').jmpress({
+                        "mouse": { clickSelects: false },
+                        "beforeChange": function(element, eventData) {
+                            element = $(element);
+                            if(element.is('tr')) {
+                                element.addClass('visited'); // code should not be hidden after visiting
+                            }
+                        }
+                    });
             });
         </script>
     </body>
