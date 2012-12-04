@@ -13,6 +13,14 @@
             <div class="step slide" style="text-align: center">
                 <h1>Куда текут абстракции многопоточности</h1>
                 <h2>Или казалось бы, причём здесь Java</h2>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <small>Глеб Смирнов, <a href="me@gvsmirnov.ru">me@gvsmirnov.ru</a></small>
             </div>
 
             <div class="step slide" data-x="1100">
@@ -391,6 +399,7 @@ loadMemoryBarrier();
                     и изменения, которые повлекла эта операция, видны потоку <strong style="color: red">Y</strong> в момент выполнения операции
                     <strong style="color: darkred">B</strong> и после выполнения этой операции.
                 </p>
+                <h2>Отношение happens-before транзитивно</h2>
             </div>
 
             <div class="step" data-x="6600" data-y="4000">
@@ -422,11 +431,87 @@ someInt++<span style='color:#555555; '>;</span> <span style='color: darkred; '>/
                 </p>
             </div>
 
-            <div class="step" data-x="5400" data-y="5600" data-rotate="150">
+            <div class="step" data-x="5500" data-y="5600" data-rotate="150">
                 <h1><i>happens-before</i> обеспечивает только <strong>visibility</strong></h1>
                 <p>
                     Кроме того, могут быть необходимы <strong>Atomicity</strong>, <strong>Mutual Exclusion</strong>, <strong>Synchronization</strong>
                 </p>
+            </div>
+
+            <div class="step" data-x="5100" data-y="4800" data-rotate="150">
+                <h1>Atomicity</h1>
+                <p>
+                    <strong>Compare And Set (CAS, Compare And Swap)</strong> &dash; операция, неделимо проверяющая значение ячейки и, если оно
+                    соответствует ожиданиям, меняет его на указанное.
+                </p>
+                <pre>boolean compareAndSet(Wrapper&lt;T&gt; target, T expected,
+                                         T newValue) {
+  <span style='color:#7f0055; font-weight:bold; '>if</span>(target.getValue().equals(expected)) {
+    target.setValue(newValue);
+    <span style='color:#7f0055; font-weight:bold; '>return</span> <span style='color:#7f0055; font-weight:bold; '>true</span>;
+  } <span style='color:#7f0055; font-weight:bold; '>else</span> {
+    <span style='color:#7f0055; font-weight:bold; '>return</span> <span style='color:#7f0055; font-weight:bold; '>false</span>;
+  }
+}</pre>
+            </div>
+
+            <div class="step" data-x="3800" data-y="4800" data-rotate="150">
+                <h1>Atomicity</h1>
+                <p>
+                    Используйте пакет <strong>java.util.concurrent.atomic</strong>, если необходима только атомарность. Атомарные операции нативно поддерживаются
+                    большинством современных процессоров.
+                </p>
+            </div>
+
+            <div class="step" data-x="3200" data-y="4100" data-rotate="150">
+                <h1>Mutual Exclusion</h1>
+                <p>
+                    Исключение влияния потоков друг на друга. В критической секции в один момент времени может находиться лишь один поток.
+                    Следует использовать, если поток должен изменить несколько значений, и между этими изменениями состояние системы неконсистентно.
+                </p>
+            </div>
+
+            <div class="step" data-x="2600" data-y="3600" data-rotate="150">
+                <h1>Mutual Exclusion: основные инструменты</h1>
+                <ul>
+                    <li>Пакет <strong>java.util.concurrent.locks</strong></li>
+                    <li>Ключевое слово <strong>synchronized</strong></li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="2100" data-y="3100" data-rotate="150">
+                <h1>Synchronization</h1>
+                <p>
+                    Согласованность очерёдности действий потоков. Например, поток-вычислитель не может ничего вычислить, пока не подгрузилась в фоне свежая порция данных.
+                </p>
+            </div>
+
+            <div class="step" data-x="2100" data-y="5500" data-rotate="150">
+                <h1>Synchronization: основные инструменты</h1>
+                <ul>
+                    <li>Многое из пакета <strong>java.util.concurrent</strong>: <strong>Phaser</strong>, <strong>Semaphore</strong>, <strong>CountDownLatch</strong>, ...</li>
+                    <li>Ключевое слово <strong>synchronized</strong></li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="1200" data-y="6000" data-rotate="150">
+                <h1>Ещё полезные инструменты</h1>
+                <ul>
+                    <li>Thread Management: <strong>j.u.c.Executors</strong></li>
+                    <li>Concurrent Queues: <strong>j.u.c.ConcurrentLinkedQueue</strong>, <strong>j.u.c.LinkedBlockingQueue</strong></li>
+                    <li>Concurrent Collections: <strong>j.u.c.ConcurrentHashMap</strong>, <strong>j.u.c.CopyOnWriteArrayList</strong></li>
+                </ul>
+            </div>
+
+            <div class="step" data-y="3000">
+                <h1>Полезно почитать:</h1>
+                <ul>
+                    <li><a href="http://habrahabr.ru/post/133981/">http://habrahabr.ru/post/133981/</a>: Java Memory Model</li>
+                    <li>Java Concurrency in Practice</li>
+                    <li><a href="http://habrahabr.ru/post/143237/">http://habrahabr.ru/post/143237/</a>: Java Threading</li>
+                    <li><a href="http://habrahabr.ru/post/143390/">http://habrahabr.ru/post/143390/</a>: Java Safe Publishing</li>
+                    <li><a href="http://cheremin.blogspot.ru/">http://cheremin.blogspot.ru/</a>: Блог о многопоточности</li>
+                </ul>
             </div>
 
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
