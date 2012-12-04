@@ -45,7 +45,7 @@
             </div>
 
             <div class="step" data-x="2200" data-y="800">
-                <img width="700" src="img/moore-graph.png" />
+                <img width="700" src="img/moore-graph-annotated.png" />
             </div>
 
             <div class="step" data-x="3300">
@@ -463,6 +463,24 @@ someInt++<span style='color:#555555; '>;</span> <span style='color: darkred; '>/
                 </p>
             </div>
 
+            <div class="step" data-x="3800" data-y="4800" data-rotate="150" data-rotate-x="90">
+                <h2>Пример с AtomicInteger</h2>
+                <pre style="padding-left: 20px; margin-left: 20px; border-left: solid grey 2px;">AtomicInteger visitors = <b>new</b> AtomicInteger();
+<span style='color:#3f7f59; '>//...</span>
+logger.debug(<span style="color:darkgreen">"Visitor #"</span> + visitors.incrementAndGet());</pre>
+                <div class="step" data-y="350">
+                    <h2>Ещё пример с AtomicInteger</h2>
+                    <pre style="padding-left: 20px; margin-left: 20px; border-left: solid grey 2px;">AtomicInteger masterId = <b>new</b> AtomicInteger();
+
+if(masterId.compareAndSet(<b>NO_MASTER</b>, myId)) {
+  logger.info(<span style="color:darkgreen">"I am the master, performing operation"</span>);
+  performOperation();
+} else {
+  logger.info(<span style="color:darkgreen">"Other master detected"</span>);
+}</pre>
+                </div>
+            </div>
+
             <div class="step" data-x="3200" data-y="4100" data-rotate="150">
                 <h1>Mutual Exclusion</h1>
                 <p>
@@ -479,6 +497,45 @@ someInt++<span style='color:#555555; '>;</span> <span style='color: darkred; '>/
                 </ul>
             </div>
 
+            <div class="step" data-x="2600" data-y="3600" data-rotate="150" data-rotate-x="90">
+                <h2>Пример с synchronized</h2>
+                <pre style="padding-left: 20px; margin-left: 20px; border-left: solid grey 2px;">
+<b>synchronized</b>(this) {
+  lastUserId = user.id;
+  lastAction = currentAction;
+}</pre>
+                <div class="step" data-y="400">
+                    <h2>Пример с ReentrantLock</h2>
+                    <pre style="padding-left: 20px; margin-left: 20px; border-left: solid grey 2px;">ReentrantLock lock = new ReentrantLock();
+
+<span style='color:#3f7f59; '>//...</span>
+
+lock.lock();
+
+try {
+  lastUserId = user.id;
+  lastAction = currentAction;
+} finally {
+  lock.unlock();
+}</pre>
+                </div>
+            </div>
+
+            <div class="step" data-x="2600" data-y="3600" data-rotate="150" data-rotate-x="90" data-rotate-y="90">
+                <h2>synchronized vs ReentrantLock</h2>
+                <ul>
+                    <li>Семантика одинакова</li>
+                    <li>synchronized &dash; unfair, ReentrantLock может быть fair</li>
+                    <li>ReentrantLock не имеет скопов, требует unlock в finally</li>
+                </ul>
+                <img class="step" data-y="800" src="img/locks-1.png" />
+                <img class="step" data-y="1600" src="img/locks-2.png" />
+                <p class="step" data-y="2300">
+                    &copy; Java Platform Performance BoF <br /> by Aleksey Shipilev and Sergey Kuksenko <br />
+                    <a href="http://shipilev.net/pub/talks/javatechday-Feb2011-performanceBoF.pdf">http://shipilev.net/pub/talks/javatechday-Feb2011-performanceBoF.pdf</a>
+                </p>
+            </div>
+
             <div class="step" data-x="2100" data-y="3100" data-rotate="150">
                 <h1>Synchronization</h1>
                 <p>
@@ -490,6 +547,7 @@ someInt++<span style='color:#555555; '>;</span> <span style='color: darkred; '>/
                 <h1>Synchronization: основные инструменты</h1>
                 <ul>
                     <li>Многое из пакета <strong>java.util.concurrent</strong>: <strong>Phaser</strong>, <strong>Semaphore</strong>, <strong>CountDownLatch</strong>, ...</li>
+                    <li><strong>wait</strong> и <strong>notify</strong></li>
                     <li>Ключевое слово <strong>synchronized</strong></li>
                 </ul>
             </div>
