@@ -370,6 +370,65 @@ loadMemoryBarrier();
                 </center>
             </div>
 
+            <div class="step" data-x="6600" data-y="2400">
+                <h2>Java Memory Model</h2>
+                <p>
+                    Модель памяти, не зависящая от реального железа, на котором запущена JVM.
+                </p>
+            </div>
+
+            <div class="step" data-x="6600" data-y="3200">
+                <h1>Отношение happens-before</h1>
+                <p>
+                Пусть есть поток <strong style="color: green">X</strong> и поток <strong style="color: red">Y</strong>
+                (не обязательно отличающийся от потока <strong style="color: green">X</strong>).
+                И пусть есть операции <strong style="color: darkgreen">A</strong>
+                (выполняющаяся в потоке <strong style="color: green">X</strong>) и <strong style="color: darkred">B</strong> (выполняющаяся в потоке <strong style="color: red">Y</strong>).
+                </p>
+                <p>
+                    В таком случае, <strong style="color: darkgreen">A</strong> <i>happens-before</i> <strong style="color: darkred">B</strong>
+                    означает, что все изменения, выполненные потоком <strong style="color: green">X</strong> до момента операции <strong style="color: darkgreen">A</strong>
+                    и изменения, которые повлекла эта операция, видны потоку <strong style="color: red">Y</strong> в момент выполнения операции
+                    <strong style="color: darkred">B</strong> и после выполнения этой операции.
+                </p>
+            </div>
+
+            <div class="step" data-x="6600" data-y="4000">
+                <h2><strong style="color: darkgreen">operationA</strong> <i>happens-before</i> <strong style="color: darkred">operationB</strong></h2>
+                <p>
+                    <img src="img/happens-before.png" />
+                </p>
+            </div>
+
+            <div class="step" data-x="6600" data-y="4800">
+                <h2>Где есть happens-before</h2>
+                <ul>
+                    <li>Освобождение (<strong>releasing</strong>) монитора <i>happens-before</i> заполучение (<strong>acquiring</strong>) того же самого монитора.</li>
+                    <li>Запись в <strong>volatile</strong> переменную <i>happens-before</i> чтение из той же самой переменной.</li>
+                    <li>Последнее действие в потоке <i>happens-before</i> завершение <strong>join()</strong> или <strong>isAlive()</strong> на этом потоке</li>
+                    <li>Старт потока <i>happens-before</i> первое действие в этом потоке</li>
+                    <li>А ещё есть <strong>final</strong>-поля, но там всё сложнее</li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="6600" data-y="5600">
+                <h2>На одном <i>happens-before</i> далеко не уедешь</h2>
+                <p>
+                    <pre style="padding-left: 20px; margin-left: 20px; border-left: solid grey 2px;"><b>volatile</b> int someInt<span style='color:#555555; '>;</span>
+
+<span style='color: #696969'>// ...</span>
+
+someInt++<span style='color:#555555; '>;</span> <span style='color: darkred; '>// not atomic!</span></pre>
+                </p>
+            </div>
+
+            <div class="step" data-x="5400" data-y="5600" data-rotate="150">
+                <h1><i>happens-before</i> обеспечивает только <strong>visibility</strong></h1>
+                <p>
+                    Кроме того, могут быть необходимы <strong>Atomicity</strong>, <strong>Mutual Exclusion</strong>, <strong>Synchronization</strong>
+                </p>
+            </div>
+
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
         </div>
 
