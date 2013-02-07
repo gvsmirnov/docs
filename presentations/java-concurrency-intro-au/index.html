@@ -127,8 +127,8 @@
             <div class="step nested-steps listing" data-x="4400" data-y="3200">
                 <table>
                     <tr>
-                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
-                        <td><strong class="mono">CPU 1</strong></td>
+                        <td style="width: 450px;"><strong class="mono">CPU 1</strong></td>
+                        <td><strong class="mono">CPU 2</strong></td>
                     </tr>
                     <tr>
                         <td>
@@ -225,8 +225,8 @@ value: <strong>I</strong>
             <div class="step nested-steps listing" data-x="5500" data-y="3200">
                 <table>
                     <tr>
-                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
-                        <td><strong class="mono">CPU 1</strong></td>
+                        <td style="width: 450px;"><strong class="mono">CPU 1</strong></td>
+                        <td><strong class="mono">CPU 2</strong></td>
                     </tr>
                     <tr>
                         <td>
@@ -345,11 +345,11 @@ finished: <strong>S</strong></pre>
                 </p>
             </div>
 
-            <div class="step" data-x="9800" data-rotate="270">
+            <div class="step nested-steps listing" data-x="9800" data-rotate="270">
                 <table>
                     <tr>
-                        <td style="width: 450px;"><strong class="mono">CPU 0</strong></td>
-                        <td><strong class="mono">CPU 1</strong></td>
+                        <td style="width: 450px;"><strong class="mono">CPU 1</strong></td>
+                        <td><strong class="mono">CPU 2</strong></td>
                     </tr>
                     <tr>
                         <td>
@@ -365,10 +365,86 @@ loadMemoryBarrier();
 <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
                         </td>
                     </tr>
+                    <tr class="step" data-y="200">
+                        <td style="width: 450px;">
+                            <pre>finished: <strong>E</strong>
+value: <strong>S</strong></pre>
+                        </td>
+                        <td>
+                            <pre>finished: <strong>I</strong>
+value: <strong>S</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="300">
+                        <td style="width: 450px;">
+                            <pre>&gt; value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+&lt; store_buffer(<strong>value</strong>)
+&lt; invalidate(<strong>value</strong>)</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>finished<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+&lt; read(<strong>finished</strong>)</pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="450">
+                        <td style="width: 450px;">
+                            <pre>&gt; storeMemoryBarrier();
+value: <strong>M</strong>
+&lt; writeback(<strong>value</strong>)
+value: <strong>E</strong></pre>
+                        </td>
+                        <td valign="top">
+                            <pre>invalidate_ack(<strong>value</strong>)
+invalidate_queue(<strong>value</strong>)
+
+
+</pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="600">
+                        <td style="width: 450px;">
+                            <pre>&gt; finished <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+finished: <strong>M</strong>
+&lt; read_resp(<strong>finished</strong>)
+finished: <strong>S</strong></pre>
+                        </td>
+                        <td valign="top">
+                            <pre>
+
+
+
+finished: <strong>S</strong></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="850">
+                        <td style="width: 450px;">
+                            <pre>
+
+
+&lt; read_resp(value)
+value: <strong>S</strong>
+
+</pre>
+                        </td>
+                        <td valign="top">
+                            <pre>&gt; storeMemoryBarrier();
+value: <strong>I</strong>
+&lt; read(value)
+
+value: <strong>S</strong>
+
+&gt; <b>assert</b> value <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span></pre>
+                        </td>
+                    </tr>
+                    <tr class="step" data-y="1050">
+                        <td colspan="2">
+                            <center><h1 style="color: darkgreen">Assertion passed</h1></center>
+                        </td>
+                    </tr>
                 </table>
             </div>
 
-            <div class="step" data-x="10700" data-rotate="270">
+            <div class="step" data-x="11100" data-rotate="270">
                 <h1>Membar &dash; инструмент HMM</h1>
                 <p>
                     Различных HMM очень много: они варьируются не только от вендора к вендору, но даже и внутри одной линейки одного производителя
