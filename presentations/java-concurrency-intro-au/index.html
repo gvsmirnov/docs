@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8" />
         <title>Java concurrency: why & how</title>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="step slide" data-x="1100">
-                <h1>Disclaimer</h2>
+                <h2>Disclaimer</h2>
                 <p>
                     На самом деле, всё не так. Изложенный на данном семинаре материал является общим и поверхностным описанием того, как и почему работает многопоточность.
                     Во многих реальных случаях происходящее может отличаться от описанного здесь. Многие из теоретических аспектов также опущены или упрощены.
@@ -108,7 +108,7 @@
                 <h2>Сообщения протокола <strong class="mono">MESI</strong></h2>
                 <ul>
                     <li><span class="mono"><strong>Read</strong> &amp; <strong>Read Response</strong></span> &dash; чтение ячейки и ответ на этот запрос</li>
-                    <li><span class="mono"><strong>Invalidate</strong> &amp; <strong>Invalidate Acknowledge</strong></span> &dash; команда удалить ячейку<br />из кеша и ответ на этот запрос</li>
+                    <li><span class="mono"><strong>Invalidate</strong> &amp; <strong>Invalidate Acknowledge</strong></span> &dash; команда удалить ячейкуиз кеша и ответ на этот запрос</li>
                     <li><span class="mono"><strong>Read Invalidate</strong></span> &dash; запрос значения ячейки с требованием<br />её сразу же удалить</li>
                     <li><span class="mono"><strong>Writeback</strong></span> &dash; записать ячейку в основную память</li>
                 </ul>
@@ -117,7 +117,7 @@
             <div class="step" data-x="4400" data-y="2400">
                 <h2>Store Buffers</h2>
                 <p>
-                    Не дожидаясь <strong class="mono">Invalidate Acknowledge</strong>, поместить новое значение<br /> в буфер и продолжить выполнять инструкции
+                    Не дожидаясь <strong class="mono">Invalidate Acknowledge</strong>, поместить <br/>новое значение в буфер и продолжить выполнять инструкции
                 </p>
                 <p>
                     Когда придут все <strong class="mono">acknowledge</strong>, произвести запись
@@ -334,14 +334,14 @@ finished: <strong>S</strong></pre>
             <div class="step" data-x="8000" data-rotate="270">
                 <h1>Store Memory Barrier</h1>
                 <p>
-                    Требование у процессора выполнить все <strong>store</strong>, уже находящиеся<br />в буфере, прежде чем выполнять те, что попадут туда<br />после этой инструкции
+                    Требование у процессора выполнить все <strong class="mono">store</strong>, уже находящиеся<br />в буфере, прежде чем выполнять те, что попадут туда<br />после этой инструкции
                 </p>
             </div>
 
             <div class="step" data-x="8900" data-rotate="270">
                 <h1>Load Memory Barrier</h1>
                 <p>
-                    Требование у процессора применить все <strong>invalidate</strong>, уже находящиеся в очереди, прежде чем выполнять какие-либо инструкции <strong>load</strong>
+                    Требование у процессора применить все <strong class="mono">invalidate</strong>, уже находящиеся в очереди, прежде чем выполнять какие-либо инструкции <strong class="mono">load</strong>
                 </p>
             </div>
 
@@ -493,11 +493,11 @@ value: <strong>S</strong>
             <div class="step" data-x="6600" data-y="4800">
                 <h2>Где есть <i>happens-before</i></h2>
                 <ul>
-                    <li>Освобождение (<strong>releasing</strong>) монитора <i>happens-before</i> заполучение (<strong>acquiring</strong>) того же самого монитора</li>
-                    <li>Запись в <strong>volatile</strong> переменную <i>happens-before</i> чтение<br />из той же самой переменной</li>
-                    <li>Последнее действие в потоке <i>happens-before</i> завершение <strong>join()</strong> или <strong>isAlive()</strong> на этом потоке</li>
+                    <li>Освобождение (<strong class="mono">releasing</strong>) монитора <i>happens-before</i> заполучение (<strong class="mono">acquiring</strong>) того же самого монитора</li>
+                    <li>Запись в <strong class="mono">volatile</strong> переменную <i>happens-before</i> чтение<br />из той же самой переменной</li>
+                    <li>Последнее действие в потоке <i>happens-before</i> завершение <strong class="mono">join()</strong> или <strong class="mono">isAlive()</strong> на этом потоке</li>
                     <li>Старт потока <i>happens-before</i> первое действие в этом потоке</li>
-                    <li>А ещё есть <strong>final</strong>-поля, но там всё сложнее</li>
+                    <li>А ещё есть <strong class="mono">final</strong>-поля, но там всё сложнее</li>
                 </ul>
             </div>
 
@@ -509,7 +509,7 @@ value: <strong>S</strong>
             </div>
 
             <div class="step" data-x="5500" data-y="5600" data-rotate="150" data-rotate-y="90">
-                <h1>Пример с volatile</h1>
+                <h1>Пример с <strong class="mono">volatile</strong></h1>
                 <pre>volatile <span style="color:#ff7800">boolean</span> finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">false</span>;
 
 <span style="color:#8c868f">// Thread 1</span>
@@ -519,6 +519,62 @@ finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">true</
 <span style="color:#8c868f">// Thread 2</span>
 <span style="color:#ff7800">while</span> (<span style="color:#ff7800">!</span>finished);
 <span style="color:#ff7800">assert</span> value <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">10</span>;</pre>
+            </div>
+
+            <div class="step" data-x="5500" data-y="6500" data-rotate="150" data-rotate-y="90">
+                <h1>Пример с <strong class="mono">final</strong></h1>
+                <pre><span style="color:#ff7800">class</span> <span style="color:#3b5bb5">ValueHolder</span> {
+  <span style="color:#ff7800">int</span> first;
+  <span style="color:#ff7800">final</span> <span style="color:#ff7800">int</span> second;
+  <span style="color:#3b5bb5">ValueHolder</span>(<span style="color:#ff7800">int</span> first, <span style="color:#ff7800">int</span> second) {
+    this<span style="color:#ff7800">.</span>first <span style="color:#ff7800">=</span> first;
+    this<span style="color:#ff7800">.</span>second <span style="color:#ff7800">=</span> second;
+  }
+}
+
+<span style="color:#8c868f">//Thread 1</span>
+value <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">ValueHolder</span>(<span style="color:#3b5bb5">4</span>, <span style="color:#3b5bb5">2</span>);
+
+<span style="color:#8c868f">//Thread 2</span>
+<span style="color:#ff7800">while</span>(value <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">null</span>);
+<span style="color:#ff7800">assert</span> value<span style="color:#ff7800">.</span>first <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">4</span>;
+<span style="color:darkred" class="step spoiler" data-y="298">                        // May fail!</span></pre>
+            </div>
+
+            <div class="step" data-x="7500" data-y="6500" data-rotate="150" data-rotate-y="90">
+                <h1>С <strong class="mono">final</strong> всё не так просто</h1>
+                <p>
+                    Использование <strong class="mono">final</strong> даёт особое, не транзитивное, <i>happens-before</i>
+                </p>
+            </div>
+
+            <div class="step" data-x="7500" data-y="2500" data-rotate="150" data-rotate-y="90">
+                <h1>Не транзитивное? А так?</h1>
+                <pre><span style="color:#ff7800">class</span> <span style="color:#3b5bb5">ValueHolder</span> {
+  <span style="color:#ff7800">int</span> first;
+  <span style="color:#ff7800">final</span> <span style="color:#ff7800">int</span> second;
+  <span style="color:#3b5bb5">ValueHolder</span>(<span style="color:#ff7800">int</span> val) {
+    this<span style="color:#ff7800">.</span>first <span style="color:#ff7800">=</span> val;
+    this<span style="color:#ff7800">.</span>second <span style="color:#ff7800">=</span> this<span style="color:#ff7800">.</span>first;
+  }
+}
+
+<span style="color:#8c868f">//Thread 1</span>
+value <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">ValueHolder</span>(<span style="color:#3b5bb5">1334</span>);
+
+<span style="color:#8c868f">//Thread 2</span>
+<span style="color:#ff7800">while</span>(value <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">null</span>);
+<span style="color:#ff7800">assert</span> value<span style="color:#ff7800">.</span>first <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">1334</span>;
+<span style="color:darkred" class="step spoiler" data-y="298">                             // Still may fail!</span></pre>
+            </div>
+
+            <div class="step" data-x="7500" data-y="4500" data-rotate="150" data-rotate-y="90">
+                <h1>С <strong class="mono">final</strong> всё не так просто</h1>
+                <p>
+                    <i>happens-before</i> есть от любой записи, <i>случившейся-до</i> <strong>заморозки сконструированного объекта</strong>
+                    (<strong>freeze</strong>), но только до тех чтений, что обращаются к этому объекту или его
+                    <strong>dereference chain</strong>
+                </p>
             </div>
 
             <div class="step" data-x="6600" data-y="5600">
@@ -550,13 +606,13 @@ someInt<span style="color:#ff7800">++</span>; <span style="color: darkred">// no
             <div class="step" data-x="3800" data-y="4800" data-rotate="150">
                 <h1>Atomicity</h1>
                 <p>
-                    Используйте пакет <strong>java.util.concurrent.atomic</strong>, если необходима только атомарность. Атомарные операции нативно поддерживаются
+                    Используйте пакет <strong class="mono">java.util.concurrent.atomic</strong>, если необходима только атомарность. Атомарные операции нативно поддерживаются
                     большинством современных процессоров.
                 </p>
             </div>
 
             <div class="step" data-x="3800" data-y="4800" data-rotate="150" data-rotate-x="90">
-                <h2>Пример с AtomicInteger</h2>
+                <h2>Пример с <strong class="mono">AtomicInteger</strong></h2>
                 <pre><span style="color:#ff7800">AtomicInteger</span> visitors <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">AtomicInteger</span>();
 
 <span style="color:#8c868f">//...</span>
@@ -564,7 +620,7 @@ someInt<span style="color:#ff7800">++</span>; <span style="color: darkred">// no
 logger<span style="color:#ff7800">.</span>debug(<span style="color:#409b1c">"Visitor #"</span> <span style="color:#ff7800">+</span> visitors<span style="color:#ff7800">.</span>incrementAndGet());</pre>
 
                 <div class="step" data-y="350">
-                    <h2>Ещё пример с AtomicInteger</h2>
+                    <h2>Ещё пример с <strong class="mono">AtomicInteger</strong></h2>
                     <pre><span style="color:#ff7800">AtomicInteger</span> masterId <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">AtomicInteger</span>();
 
 <span style="color:#8c868f">//...</span>
@@ -591,19 +647,19 @@ logger<span style="color:#ff7800">.</span>debug(<span style="color:#409b1c">"Vis
             <div class="step" data-x="2600" data-y="3600" data-rotate="150">
                 <h1>Mutual Exclusion: основные инструменты</h1>
                 <ul>
-                    <li>Пакет <strong>java.util.concurrent.locks</strong></li>
-                    <li>Ключевое слово <strong>synchronized</strong></li>
+                    <li>Пакет <strong class="mono">java.util.concurrent.locks</strong></li>
+                    <li>Ключевое слово <strong class="mono">synchronized</strong></li>
                 </ul>
             </div>
 
             <div class="step" data-x="2600" data-y="3600" data-rotate="150" data-rotate-x="90">
-                <h2>Пример с synchronized</h2>
+                <h2>Пример с <strong class="mono">synchronized</strong></h2>
                 <pre><span style="color:#ff7800">synchronized</span>(this) {
     lastUserId <span style="color:#ff7800">=</span> user<span style="color:#ff7800">.</span>id;
     lastAction <span style="color:#ff7800">=</span> currentAction;
 }</pre>
                 <div class="step" data-y="400">
-                    <h2>Пример с ReentrantLock</h2>
+                    <h2>Пример с <strong class="mono">ReentrantLock</strong></h2>
                     <pre><span style="color:#ff7800">ReentrantLock</span> lock <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">ReentrantLock</span>();
 
 <span style="color:#8c868f">//...</span>
@@ -620,11 +676,11 @@ lock<span style="color:#ff7800">.</span>lock();
             </div>
 
             <div class="step" data-x="2600" data-y="3600" data-rotate="150" data-rotate-x="90" data-rotate-y="90">
-                <h2>ReentrantLock vs synchronized</h2>
+                <h2><strong class="mono">ReentrantLock</strong> vs <strong class="mono">synchronized</strong></h2>
                 <ul>
                     <li>Семантика одинакова</li>
-                    <li>ReentrantLock может быть fair, synchronized &dash; unfair</li>
-                    <li>ReentrantLock не имеет скопов, требует unlock в finally</li>
+                    <li>ReentrantLock может быть fair, <strong class="mono">synchronized</strong> &dash; unfair</li>
+                    <li>ReentrantLock не имеет скопов, требует <strong class="mono">unlock</strong> в finally</li>
                 </ul>
                 <img class="step" data-y="800" src="img/locks-1.png" />
                 <img class="step" data-y="1600" src="img/locks-2.png" />
@@ -645,14 +701,16 @@ lock<span style="color:#ff7800">.</span>lock();
             <div class="step" data-x="2100" data-y="5500" data-rotate="150">
                 <h1>Synchronization: основные инструменты</h1>
                 <ul>
-                    <li>Методы <strong>wait</strong> и <strong>notify</strong></li>
-                    <li>Ключевое слово <strong>synchronized</strong></li>
-                    <li>Многое из пакета <strong>java.util.concurrent</strong>: <strong>Phaser</strong>, <strong>Semaphore</strong>, <strong>CountDownLatch</strong>, ...</li>
+                    <li>Методы <strong class="mono">wait</strong> и <strong class="mono">notify</strong></li>
+                    <li>Ключевое слово <strong class="mono">synchronized</strong></li>
+                    <li>Многое из пакета <strong class="mono">java.util.concurrent</strong>:<br/>
+                        <strong class="mono">Phaser</strong>, <strong class="mono">Semaphore</strong>,
+                        <strong class="mono">CountDownLatch</strong>, ...</li>
                 </ul>
             </div>
 
             <div class="step" data-x="1100" data-y="4500" data-rotate="150" data-rotate-y="90">
-                <h1>Пример с wait/notify + synchronized</h1>
+                <h1>Пример с <strong class="mono">wait/notify</strong> + <strong class="mono">synchronized</strong></h1>
                 <table>
                     <tr>
                         <td colspan="2">
@@ -673,7 +731,7 @@ value <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">10</span>
                         <td><pre><span style="color:#8c868f">// Thread 2</span>
 <span style="color:#ff7800">while</span>(<span style="color:#ff7800">!</span>finished) {
     <span style="color:#ff7800">synchronized</span>(this) {
-        wait(); <span class="step spoiler" style="color: darkred" data-x="490">//BROKEN!</span>
+        wait(); <span class="step spoiler" data-y="160" style="color: darkred">                                            //BROKEN!</span>
     }
 }
 
@@ -683,12 +741,13 @@ value <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">10</span>
                 </table>
             </div>
 
-            <div class="step" data-x="2100" data-y="5500" data-rotate="150" data-rotate-y="90">
-                <h1>Пример с wait/notify + synchronized</h1>
+            <div class="step" data-x="1000" data-y="5800" data-rotate="150" data-rotate-y="90">
+                <h1>Пример с <strong class="mono">wait/notify</strong> + <strong class="mono">synchronized</strong></h1>
                 <table>
                     <tr>
                         <td colspan="2">
-                            <pre><span style="color:#ff7800">boolean</span> finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">false</span>;</pre>
+                            <pre><span style="color:#ff7800">boolean</span> finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">false</span>;
+                                <span class="step spoiler" style="color: darkred" data-y="0">                         //MESSY!</span></pre>
                         </td>
                     </tr>
                     <tr>
@@ -717,8 +776,40 @@ value <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">10</span>
                 </table>
             </div>
 
-            <div class="step" data-x="3100" data-y="6500" data-rotate="150" data-rotate-y="90">
-                <h1>Пример с CountDownLatch</h1>
+            <div class="step" data-x="2100" data-y="5500" data-z="1000" data-rotate="150" data-rotate-y="90">
+                <h1>Пример с <strong class="mono">wait/notify</strong> + <strong class="mono">synchronized</strong></h1>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <pre><span style="color:#ff7800">boolean</span> finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">false</span>;</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 480px;"><pre><span style="color:#8c868f">// Thread 1</span>
+value <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">10</span>;
+<span style="color:#ff7800">synchronized</span>(this) {
+    finished <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">true</span>;
+    notifyAll();
+}
+
+
+</pre>
+                        </td>
+                        <td><pre><span style="color:#8c868f">// Thread 2</span>
+<span style="color:#ff7800">synchronized</span>(this) {
+    <span style="color:#ff7800">while</span>(<span style="color:#ff7800">!</span>finished) {
+        wait(); <span style="color:#8c868f">// monitorexit</span>
+    }
+}
+
+<span style="color:#ff7800">assert</span> value <span style="color:#ff7800">==</span> <span style="color:#3b5bb5">10</span>;</pre>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="step" data-x="3100" data-y="6500" data-z="2000" data-rotate="150" data-rotate-y="90">
+                <h1>Пример с <strong class="mono">CountDownLatch</strong></h1>
                 <pre><span style="color:#ff7800">CountDownLatch</span> latch <span style="color:#ff7800">=</span> <span style="color:#ff7800">new</span> <span style="color:#ff7800">CountDownLatch</span>(<span style="color:#3b5bb5">1</span>);
 
 <span style="color:#8c868f">//Thread 1</span>
@@ -733,9 +824,9 @@ latch<span style="color:#ff7800">.</span>await();
             <div class="step" data-x="1200" data-y="6000" data-rotate="150">
                 <h1>Ещё полезные инструменты</h1>
                 <ul>
-                    <li>Thread Management: <strong>j.u.c.Executors</strong></li>
-                    <li>Concurrent Queues: <strong>j.u.c.ConcurrentLinkedQueue</strong>, <strong>j.u.c.LinkedBlockingQueue</strong></li>
-                    <li>Concurrent Collections: <strong>j.u.c.ConcurrentHashMap</strong>, <strong>j.u.c.CopyOnWriteArrayList</strong></li>
+                    <li>Thread Management: <strong class="mono">j.u.c.Executors</strong></li>
+                    <li>Concurrent Queues: <strong class="mono">j.u.c.ConcurrentLinkedQueue</strong>, <strong class="mono">j.u.c.LinkedBlockingQueue</strong></li>
+                    <li>Concurrent Collections: <strong class="mono">j.u.c.ConcurrentHashMap</strong>, <strong class="mono">j.u.c.CopyOnWriteArrayList</strong></li>
                 </ul>
             </div>
 
