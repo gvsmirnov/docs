@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Java mutation testing</title>
+
+        <link href="css/impress.css" rel="stylesheet"/>
+        <link href="css/prettify.css" rel="stylesheet"/>
+
+        <script src="js/jquery-1.8.2.min.js"></script>
+        <script src="js/jmpress.impress.js"></script>
+        <script src="js/prettify.js"></script>
+
+    </head>
+
+    <body>
+        <div id="impress" class="impress-not-supported">
+            <div class="step slide" style="text-align: center;">
+                <img src="img/yandex_eng_logo.png" alt="Yandex" style="margin-top: 100px;"/>
+            </div>
+
+            <div class="step slide" data-x="1100" style="text-align: center;">
+                <h1>Mutation Testing</h1>
+                <h2>or what Code Coverage doesn't tell us</h2>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <small>Gleb Smirnov<br /><a href="mailto:me@gvsmirnov.ru">me@gvsmirnov.ru</a></small>
+            </div>
+
+            <!--
+            ***********************************
+                       CODE COVERAGE
+            ***********************************
+            -->
+
+            <div class="step" data-x="2200">
+                <h2>People have noticed that tests can be broken</h2>
+                <pre class='mono prettyprint lang-java'>public class NodeMapperTest {
+
+    @Test
+    public void testGetMachineById() {
+        // The boss says we should write tests, but it has worked
+        // just fine up until now, and I have *important* things to do
+
+        Assert.assertTrue(true);
+    }
+
+}</pre>
+            </div>
+
+            <div class="step" data-x="2200" data-y="800">
+                <h2>So they invented Code Coverage</h2>
+                <pre class="mono console">$ mvn clean -Dtest=NodeMapperTest#testGetMachineById test jacoco:report</pre>
+
+                <pre class="mono prettyprint lang-java">
+public class NodeMapper {
+
+    //...
+
+    public String getMachineById(long nodeId) {
+<span class="nc">        if(nodeId2machine.containsKey(nodeId)) {</span>
+<span class="nc">            return nodeId2machine.get(nodeId);</span>
+        } else {
+<span class="nc">            return DEFAULT_MACHINE_NAME;</span>
+        }
+    }
+
+}
+</pre>
+            </div>
+
+            <div class="step" data-x="2200" data-y="1600">
+                <h2>But the broken tests didn't stop being broken</h2>
+                <pre class='mono prettyprint lang-java'>private static final Map&lt;String, List&lt;Long&gt;&gt; MACHINES = /* ... */
+
+@Test
+public void testGetMachineById2() {
+    NodeMapper nodeMapper = new NodeMapper(MACHINES);
+
+    nodeMapper.getMachineById(0);
+    nodeMapper.getMachineById(1);
+}</pre>
+            </div>
+
+            <div class="step" data-x="2200" data-y="2400">
+                <h2>While Code Coverage reported that it was OK</h2>
+                <pre class="mono console">$ mvn clean -Dtest=NodeMapperTest#testGetMachineById2 test jacoco:report</pre>
+                <pre class="mono prettyprint lang-java">
+public class NodeMapper {
+
+    //...
+
+    public String getMachineById(long nodeId) {
+<span class="fc bfc">        if(nodeId2machine.containsKey(nodeId)) {</span>
+<span class="fc">            return nodeId2machine.get(nodeId);</span>
+        } else {
+<span class="fc">            return DEFAULT_MACHINE_NAME;</span>
+        }
+    }
+
+}
+</pre>
+                <h3 class="mono success">&gt; Code coverage: 100%</h3>
+            </div>
+
+            <!--
+            ***********************************
+                     MUTATION TESTING
+            ***********************************
+            -->
+
+            <div class="step" data-x="3300">
+                <h2>So people invented Mutation Testing</h2>
+                <ol>
+                    <li>Run the tests</li>
+                    <li>Randomly change some code</li>
+                    <li>Run the tests again</li>
+                    <li>Expect the tests to fail</li>
+                </ol>
+                <h3>If a changed instruction doesn't cause any test to fail,<br/>
+                    the instruction is likely not tested properly</h3>
+            </div>
+
+            <div class="step" data-x="3300" data-y="800">
+                <h2>In fact, they invented it a long time ago</h2>
+                <p>
+                    <ul>
+                        <li>Richard Lipton proposes the idea in 1971</li>
+                        <li>
+                            Timothy Budd implements the first<br/>
+                            mutation testing tool for FORTRAN in 1979<sup>[1]</sup>
+                        </li>
+                        <li style="margin-top: 20pt; list-style-type: none; color: #a9a9a9;">
+                            ... Nearly 30 years pass ...
+                        </li>
+                        <li style="margin-top: 20pt;">
+                            People are finally starting to use it in production
+                        </li>
+                    </ul>
+                </p>
+            </div>
+
+            <!--
+            ***********************************
+                           PITEST
+            ***********************************
+            -->
+
+            <div class="step" data-x="6600">
+                <h2></h2>
+                <pre class="mono console">$ mvn clean -Dtest=NodeMapperTest#testGetMachineById2 test pitest:mutationCoverage</pre>
+                <table>
+                    <tr>
+                        <td class="line-numbers"><pre class="mono">7
+
+
+
+33
+<span class="nc">34</span>
+<span class="nc">35</span>
+36
+<span class="nc">37</span>
+38
+39
+40
+41</pre></td>
+                        <td><pre class="mono prettyprint lang-java">public class NodeMapper {
+
+    //...
+
+    public String getMachineById(long nodeId) {
+<span class="nc">        if(nodeId2machine.containsKey(nodeId)) {</span>
+<span class="nc">            return nodeId2machine.get(nodeId);</span>
+        } else {
+<span class="nc">            return DEFAULT_MACHINE_NAME;</span>
+        }
+    }
+
+}</pre></td>
+                    </tr>
+                </table>
+                <h3>Mutations</h3>
+                <ol class="mutation-list mono">
+                    <li class="nc">34: negated conditional : SURVIVED</li>
+                    <li class="nc">35: mutated return of Object value /* ... */ : SURVIVED</li>
+                    <li class="nc">37: mutated return of Object value /* ... */ : SURVIVED</li>
+                </ol>
+            </div>
+
+            <div class="step" data-x="6600" data-y="800">
+                <h2>The following changes were made</h2>
+                <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
+    if(<span class="nb popover-me" data-text="1">!</span>nodeId2machine.containsKey(nodeId)) {
+        <span class="nb popover-me" data-text="2">if(nodeId2machine.get(nodeId) != null) {
+    return null;
+} else {
+    throw new RuntimeException();
+}</span>
+    } else {
+        <span class="nb popover-me" data-text="3">if(DEFAULT_MACHINE_NAME != null) {
+    return null;
+} else {
+    throw new RuntimeException();
+}</span>
+    }
+}</pre>
+            </div>
+
+            <div class="step" id="reading-material" data-y="800">
+                <ol>
+                    <li>Mutation Analysis [1979]: Budd, Lipton, DeNillo, Sayward<br/>
+                        <a href="http://www.cs.yale.edu/publications/techreports/tr155.pdf">
+                            http://www.cs.yale.edu/publications/techreports/tr155.pdf
+                        </a>
+                    </li>
+                </ol>
+            </div>
+
+            <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
+        </div>
+
+        <script type="text/javascript">
+            $(function() {
+                    $('#impress').jmpress({
+                        "mouse": { clickSelects: false },
+                        "beforeChange": function(element, eventData) {
+                            element = $(element);
+                            if(element.is('tr')) {
+                                element.addClass('visited'); // code should not be hidden after visiting
+                            }
+                        }
+                    });
+            });
+
+            prettyPrint();
+        </script>
+    </body>
+</html>
+
+
+
+
