@@ -146,14 +146,63 @@ public class NodeMapper {
                 </p>
             </div>
 
-            <!--
-            ***********************************
-                           PITEST
-            ***********************************
-            -->
+            <div class="step" data-x="3300" data-y="1600">
+                <h2>Usable mutation testing libraries are few</h2>
+                <p>
+                <ul>
+                    <li>Javalanche</li>
+                    <li>Jumble</li>
+                    <li>Jester</li>
+                    <li>Simple Jester</li>
+                </ul>
+                <div class="step spoiler" data-y="250">
+                    <h3>
+                        All of these are <span class="fail">not</span> usable,
+                        as they are <small class="remark">at least one of</small>:
+                    </h3>
+                    <ul>
+                        <li>Abandoned</li>
+                        <li>Outdated</li>
+                        <li>Very slow</li>
+                        <li>Barely support any frameworks</li>
+                    </ul>
+                </div>
+                </p>
+            </div>
 
-            <div class="step" data-x="6600">
-                <h2></h2>
+            <div class="step" data-x="3300" data-y="2400">
+                <h2>But PIT saves the day</h2>
+                <p>
+                    <ul>
+                        <li>Actively developed</li>
+                        <li>Performance is acceptable</li>
+                        <li>Open source</li>
+                        <li>Supports Java 7, Maven, JUnit, *Mock, ...</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="step" data-x="3300" data-y="3200">
+                <h2>Comparison table<sup>[2]</sup></h2>
+                <p>
+                    <img src="img/mutation-comparison.png"/>
+                </p>
+                <ul>
+                    <li><strong>Y</strong>- supported out of the box</li>
+                    <li>N - no support</li>
+                    <li>! - supported but with issues reported</li>
+                    <li>3rd - supported via 3rd party component</li>
+                    <li>? - don’t know</li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="3300" data-y="3600">
+                <h1 class="success">Pitest rocks!</h1>
+            </div>
+
+
+            <div class="step" data-x="3300" data-y="4100">
+                <h2>And it <span class="success">does</span> detect the broken test</h2>
                 <pre class="mono console">$ mvn clean -Dtest=NodeMapperTest#testGetMachineById2 test pitest:mutationCoverage</pre>
                 <table>
                     <tr>
@@ -193,17 +242,39 @@ public class NodeMapper {
                 </ol>
             </div>
 
-            <div class="step" data-x="6600" data-y="800">
-                <h2>The following changes were made</h2>
+            <div class="step" data-x="3300" data-y="5000">
+                <h2>PIT has introduced the following mutations (1)</h2>
                 <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
-    if(<span class="nb popover-me" data-text="1">!</span>nodeId2machine.containsKey(nodeId)) {
-        <span class="nb popover-me" data-text="2">if(nodeId2machine.get(nodeId) != null) {
+    if(<span class="nb">!</span>nodeId2machine.containsKey(nodeId)) {
+        return nodeId2machine.get(nodeId);
+    } else {
+        return DEFAULT_MACHINE_NAME;
+    }
+}</pre>
+            </div>
+
+            <div class="step" data-x="3300" data-y="5000" data-rotate-y="90">
+                <h2>PIT has introduced the following mutations (2)</h2>
+                <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
+    if(nodeId2machine.containsKey(nodeId)) {
+        <span class="nb">if(nodeId2machine.get(nodeId) != null) {
     return null;
 } else {
     throw new RuntimeException();
 }</span>
     } else {
-        <span class="nb popover-me" data-text="3">if(DEFAULT_MACHINE_NAME != null) {
+        return DEFAULT_MACHINE_NAME;
+    }
+}</pre>
+            </div>
+
+            <div class="step" data-x="2200" data-y="5000" data-rotate-y="180">
+                <h2>PIT has introduced the following mutations (3)</h2>
+                <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
+    if(nodeId2machine.containsKey(nodeId)) {
+        return nodeId2machine.get(nodeId);
+    } else {
+        <span class="nb">if(DEFAULT_MACHINE_NAME != null) {
     return null;
 } else {
     throw new RuntimeException();
@@ -212,11 +283,119 @@ public class NodeMapper {
 }</pre>
             </div>
 
-            <div class="step" id="reading-material" data-y="800">
+
+
+            <div class="step" data-x="3300" data-y="5800">
+                <h2>To pass the testing, we have to write a proper test</h2>
+                <pre class='mono prettyprint lang-java'>@Test
+public void testGetMachineById3() {
+    NodeMapper nodeMapper = new NodeMapper(MACHINES);
+
+    Assert.assertEquals(NodeMapper.DEFAULT_MACHINE_NAME, nodeMapper.getMachineById(0));
+    Assert.assertEquals(TEST_MACHINE_NAME, nodeMapper.getMachineById(1));
+}</pre>
+            </div>
+
+            <div class="step" data-x="3300" data-y="6600">
+                <h2>And finally rejoice!</h2>
+                <pre class="mono console">$ mvn clean -Dtest=NodeMapperTest#testGetMachineById3 test pitest:mutationCoverage</pre>
+                <table>
+                    <tr>
+                        <td class="line-numbers"><pre class="mono">7
+
+
+
+33
+<span class="fc">34</span>
+<span class="fc">35</span>
+36
+<span class="fc">37</span>
+38
+39
+40
+41</pre></td>
+                        <td><pre class="mono prettyprint lang-java">public class NodeMapper {
+
+    //...
+
+    public String getMachineById(long nodeId) {
+<span class="fc">        if(nodeId2machine.containsKey(nodeId)) {</span>
+<span class="fc">            return nodeId2machine.get(nodeId);</span>
+        } else {
+<span class="fc">            return DEFAULT_MACHINE_NAME;</span>
+        }
+    }
+
+}</pre></td>
+                    </tr>
+                </table>
+                <h3>Mutations</h3>
+                <ol class="mutation-list mono">
+                    <li class="fc">34: negated conditional : KILLED</li>
+                    <li class="fc">35: mutated return of Object value /* ... */ : KILLED</li>
+                    <li class="fc">37: mutated return of Object value /* ... */ : KILLED</li>
+                </ol>
+            </div>
+
+            <div class="step" data-x="3300" data-y="7400">
+                <h2>PIT has also found a bug</h2>
+                <table>
+                    <tr>
+                        <td class="line-numbers"><pre class="mono">7
+
+14
+
+
+<span class="nc">26</span>
+27
+
+33
+<span class="fc">34</span>
+<span class="fc">35</span>
+36
+<span class="fc">37</span>
+38
+39
+40
+41</pre></td>
+                        <td><pre class="mono prettyprint lang-java">public class NodeMapper {
+
+    public NodeMapper(Map&lt;~&gt; machines, String defaultMachineName) {
+        //...
+
+<span class="nc">        this.defaultMachineName = defaultMachineName;</span>
+    }
+
+    public String getMachineById(long nodeId) {
+<span class="fc">        if(nodeId2machine.containsKey(nodeId)) {</span>
+<span class="fc">            return nodeId2machine.get(nodeId);</span>
+        } else {
+<span class="fc">            return DEFAULT_MACHINE_NAME;</span> // &lt;-- oops!
+        }
+    }
+
+}</pre></td>
+                    </tr>
+                </table>
+                <h3>Mutations</h3>
+                <ol class="mutation-list mono">
+                    <li class="nc">26: Removed assignment to member variable defaultMachineName : SURVIVED</li>
+                </ol>
+            </div>
+
+
+            <div class="step" id="reading-material" data-x="1100" data-y="800">
+                <h2>You might want to read</h2>
                 <ol>
                     <li>Mutation Analysis [1979]: Budd, Lipton, DeNillo, Sayward<br/>
                         <a href="http://www.cs.yale.edu/publications/techreports/tr155.pdf">
                             http://www.cs.yale.edu/publications/techreports/tr155.pdf
+                        </a>
+                    </li>
+                    <li>
+                        Detailed comparison of java mutation testing frameworks<br/>
+                        <a href="http://pitest.org/java_mutation_testing_systems">
+                            http://pitest.org/java_mutation_testing_systems
                         </a>
                     </li>
                 </ol>

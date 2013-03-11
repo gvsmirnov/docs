@@ -13,7 +13,7 @@ public class NodeMapper {
 
     public NodeMapper(Map<String, ? extends Iterable<Long>> machines, String defaultMachineName) {
 
-        Map<Long, String> nodeId2machine = new HashMap<Long, String>();
+        Map<Long, String> nodeId2machine = new HashMap<>();
 
         for (Map.Entry<String, ? extends Iterable<Long>> entry : machines.entrySet()) {
             String machineName = entry.getKey();
@@ -34,6 +34,8 @@ public class NodeMapper {
         if(nodeId2machine.containsKey(nodeId)) {
             return nodeId2machine.get(nodeId);
         } else {
+            // purposefully not using member variable defaultMachineName
+            // to demonstrate that PIT catches the error
             return DEFAULT_MACHINE_NAME;
         }
     }

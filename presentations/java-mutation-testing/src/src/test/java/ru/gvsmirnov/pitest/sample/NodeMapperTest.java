@@ -8,6 +8,8 @@ import java.util.*;
 
 public class NodeMapperTest {
 
+    private static final String TEST_MACHINE_NAME = "machine1";
+
     @Test
     public void testGetMachineById() {
         // The boss says we should write tests, but it has worked
@@ -17,7 +19,7 @@ public class NodeMapperTest {
     }
 
     private static final Map<String, List<Long>> MACHINES = new HashMap<String, List<Long>> () {{
-        put("machine1", Arrays.asList(1L, 2L, 3L, 4L));
+        put(TEST_MACHINE_NAME, Arrays.asList(1L, 2L, 3L, 4L));
     }};
 
     @Test
@@ -26,6 +28,24 @@ public class NodeMapperTest {
 
         nodeMapper.getMachineById(0);
         nodeMapper.getMachineById(1);
+    }
+
+    @Test
+    public void testGetMachineById3() {
+        NodeMapper nodeMapper = new NodeMapper(MACHINES);
+
+        Assert.assertEquals(NodeMapper.DEFAULT_MACHINE_NAME, nodeMapper.getMachineById(0));
+        Assert.assertEquals(TEST_MACHINE_NAME, nodeMapper.getMachineById(1));
+    }
+
+    @Test
+    public void testGetMachineById4() {
+        final String defaultMachineName = "myDefault";
+        NodeMapper nodeMapper = new NodeMapper(MACHINES, defaultMachineName);
+
+        // Will fail because the defaultMachineName is not actually used by NodeMapper
+        Assert.assertEquals(defaultMachineName, nodeMapper.getMachineById(0));
+        Assert.assertEquals(TEST_MACHINE_NAME, nodeMapper.getMachineById(1));
     }
 
 }
