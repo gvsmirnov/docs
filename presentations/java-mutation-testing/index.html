@@ -690,7 +690,7 @@ public void bar() {
                         <td>
                             <p>After:</p>
                 <pre class="mono prettyprint lang-java">public class Foo {
-    private int magic = 0;
+    private int magic = <span class="nb">0</span>;
     //...
 }</pre>
                         </td>
@@ -728,6 +728,74 @@ switch(a) {
                 </table>
             </div>
 
+
+            <!--
+            ***********************************
+                      TRYING OUT
+            ***********************************
+            -->
+
+            <div class="step" data-x="5500">
+                <h2>That's a lot of stuff to do, shouldn't it take ages?</h2>
+                <p>
+                    Take a well-tested library and see how long mutation testing runs
+                </p>
+                <pre class="mono console">$ ./prepare-commons-math3.sh
+
++ svn checkout http://svn.apache.org/repos/asf/commons/proper/math/trunk@1455261 commons-math3
+A    commons-math3/RELEASE-NOTES.txt
+A    commons-math3/...
+ U   commons-math3
+Checked out revision 1455261.
++ patch commons-math3/pom.xml commons-math3-pom-patch.diff
+patching file commons-math3/pom.xml</pre>
+            </div>
+
+            <div class="step" data-x="5500" data-y="800">
+                <h2>As a baseline, measure how long JUnit runs</h2>
+                <pre class="mono console">$ mvn clean test
+
+...
+
+Results :
+
+Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: <span class="nb">3:25.269s</span></pre>
+                <p class="warn">
+                    NB: maven is likely to spend a lot of time downloading jars
+                    when you run it for the first time
+                    <br/><br/>
+                    Make sure you measure the elapsed time at least twice
+                </p>
+
+            </div>
+
+            <div class="step" data-x="5500" data-y="1600">
+                <h2>Then, see how long code coverage runs</h2>
+                <pre class="mono console">$ mvn clean test jacoco:report
+
+...
+
+Results :
+
+Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
+
+[INFO]
+[INFO] --- jacoco-maven-plugin:0.6.2.201302030002:report (default-cli) @ commons-math3 ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: <span class="nb">4:48.765s</span></pre>
+
+                <p class="info">
+                    The total code coverage is 92%
+                </p>
+
+            </div>
 
             <div class="step" id="reading-material" data-x="1100" data-y="800">
                 <h2>You might want to read</h2>
