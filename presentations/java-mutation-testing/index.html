@@ -764,7 +764,7 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: <span class="nb">4:49.212s</span></pre>
+[INFO] Total time: <span class="nb">5:32.174s</span></pre>
                 <p class="warn">
                     NB: maven is likely to spend a lot of time downloading jars
                     when you first run it
@@ -789,7 +789,7 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: <span class="nb">5:46.751s</span></pre>
+[INFO] Total time: <span class="nb">5:40.120s</span></pre>
 
                 <p class="info">
                     The total code coverage is 92%
@@ -800,7 +800,6 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
             <div class="step" data-x="5500" data-y="2400">
                 <h2>Finally, run mutation coverage</h2>
                 <pre class="mono console"><span class="prompt">commons-math3$</span> mvn clean test pitest:mutationCoverage
-
 ...
 
 7:33:59 AM PIT >> INFO : Completed in 25012 seconds
@@ -816,9 +815,9 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 
                 <p class="warn">
                     The following packages were excluded: <br/>
-                    <span class="mono" style="font-size: 14pt;">
-                        - org.apache.commons.math3.optim.*    <br/>
-                        - org.apache.commons.math3.optimization.*
+                    <span class="mono" style="font-size: 12pt; line-height: 12pt;">
+                        - org.apache.commons.math3.optim*<br/>
+                        - org.apache.commons.math3.util.FastMathTestPerformance
                     </span>
                 </p>
 
@@ -834,13 +833,45 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 
             <div class="step" data-x="5500" data-y="4000">
                 <h2>We could throw in more threads</h2>
+                <pre class="mono console"><span class="prompt">commons-math3$</span> mvn clean test pitest:mutationCoverage -Dpit.threads=20
+
+...
+
+7:33:59 AM PIT >> INFO : Completed in ?????? seconds
+================================================================================
+- Timings
+================================================================================
+> scan classpath : < 1 second
+> coverage and dependency analysis : <span class="nb">?? minutes and ?? seconds</span>
+> build mutation tests : 2 seconds
+> run mutation analysis : <span class="nb">?? hours, ?? minutes and ?? seconds</span>
+--------------------------------------------------------------------------------
+> Total  : <span class="nb">?? hours, ?? minutes and ?? seconds</span></pre>
+                <p class="info">
+                    The overhead induced by concurrent execution is incomparably smaller than the time
+                    required to actually run mutation analysis. The speedup is nearly linear.
+                </p>
                 <p class="warn">
-                    TODO
+                    Some tests just take too long to execute, and increasing parallelism won't help
                 </p>
             </div>
 
             <div class="step" data-x="5500" data-y="4800">
                 <h2>Incremental analysis helps most</h2>
+                <pre class="mono console"><span class="prompt">commons-math3$</span> mvn clean test pitest:mutationCoverage -P pit-history -Dpit.threads=20
+
+...
+
+7:33:59 AM PIT >> INFO : Completed in ?????? seconds
+================================================================================
+- Timings
+================================================================================
+> scan classpath : < 1 second
+> coverage and dependency analysis : <span class="nb">?? minutes and ?? seconds</span>
+> build mutation tests : 2 seconds
+> run mutation analysis : <span class="nb">?? hours, ?? minutes and ?? seconds</span>
+--------------------------------------------------------------------------------
+> Total  : <span class="nb">?? hours, ?? minutes and ?? seconds</span></pre>
                 <p class="warn">
                     TODO
                 </p>
@@ -853,9 +884,30 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
             -->
 
             <div class="step" data-x="6600">
-                <h2>PIT in real life</h2>
-                <p class="warn">
-                    TODO
+                <h2>Why would I want to use PIT?</h2>
+                <p>
+                    The three laws of Test Driven Development<sup>[3]</sup>
+                    <ul>
+                        <li>You are not allowed to write any production code
+                            unless it is to make a failing unit test pass.</li>
+                        <li>You are not allowed to write any more of a unit test
+                            than is sufficient to fail; and compilation failures are failures.</li>
+                        <li>You are not allowed to write any more production code
+                            than is sufficient to pass the one failing unit test.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="step" data-x="6600" data-y=800>
+                <h2>PIT gives you <span class="success">confidence</span> in your tests</h2>
+                <p>
+                    Success story from TheLadders.com<sup>[4]</sup>
+                    <ul>
+                        <li>Project from scratch, mutation analysis from the very beginning</li>
+                        <li>Code and Mutation Coverage of <span class="success">95%</span></li>
+                        <li>It has been decided to refactor the db backend to use event sourcing</li>
+                        <li>Refactored, had all the tests pass, and encountered no issue afterwards</li>
+                    </ul>
                 </p>
             </div>
 
@@ -873,7 +925,29 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
                             http://pitest.org/java_mutation_testing_systems
                         </a>
                     </li>
+                    <li>
+                        The three laws of TDD <br/>
+                        <a href="http://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd">
+                            http://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd
+                        </a>
+                    </li>
+                    <li>
+                        Mutation Testing With PIT: A Step Beyond Normal Code Coverage<br/>
+                        <a href="http://dev.theladders.com/2013/02/mutation-testing-with-pit-a-step-beyond-normal-code-coverage/">
+                            http://dev.theladders.com/2013/02/mutation-testing-with-pit-a-step-beyond-normal-code-coverage/
+                        </a>
+                    </li>
                 </ol>
+            </div>
+
+            <div class="step" id="try-me" data-x="1100" data-y="1600">
+                <h2>To reproduce everything you saw here</h2>
+                <pre class="console mono">$ git clone git@github.com:gvsmirnov/docs.git
+$ cd docs/presentations/java-mutation-testing</pre>
+                <h2>To view this presentation again</h2>
+                <p><a href="http://gvsmirnov.ru/docs/presentations/java-mutation-testing/">http://gvsmirnov.ru/docs/presentations/java-mutation-testing/</a><br/>
+                    <small class="remark">Known to work in Yandex.Browser and Google Chrome on Mac OS X</small>
+                </p>
             </div>
 
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
