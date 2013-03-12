@@ -2,25 +2,71 @@ Index: pom.xml
 ===================================================================
 --- pom.xml	(revision 1455261)
 +++ pom.xml	(working copy)
-@@ -329,6 +329,40 @@
+@@ -324,11 +324,85 @@
+     <maven.compile.source>1.5</maven.compile.source>
+     <maven.compile.target>1.5</maven.compile.target>
+     <math.pmd.version>2.7.1</math.pmd.version>
+-  </properties> 
++    <pit.threads>1</pit.threads>
++  </properties>
+ 
++  <profiles>
++    <profile>
++      <id>pit-no-history</id>
++      <activation>
++        <activeByDefault>true</activeByDefault>
++      </activation>
++      <build>
++        <plugins>
++          <plugin>
++            <groupId>org.pitest</groupId>
++            <artifactId>pitest-maven</artifactId>
++            <version>0.29</version>
++            <configuration>
++              <verbose>true</verbose>
++              <targetClasses>
++                <param>org.apache.commons.math3.*</param>
++              </targetClasses>
++              <excludedClasses>
++                <param>org.apache.commons.math3.optim.*</param>
++                <param>org.apache.commons.math3.optimization.*</param>
++              </excludedClasses>
++              <threads>${pit.threads}</threads>
++            </configuration>
++          </plugin>
++        </plugins>
++      </build>
++    </profile>
++    <profile>
++      <id>pit-history</id>
++      <build>
++        <plugins>
++          <plugin>
++            <groupId>org.pitest</groupId>
++            <artifactId>pitest-maven</artifactId>
++            <version>0.29</version>
++            <configuration>
++              <verbose>true</verbose>
++              <targetClasses>
++                <param>org.apache.commons.math3.util.*</param>
++              </targetClasses>
++              <excludedClasses>
++                <param>org.apache.commons.math3.optim.*</param>
++                <param>org.apache.commons.math3.optimization.*</param>
++              </excludedClasses>
++              <threads>${pit.threads}</threads>
++              <historyInputLocation>pit/history.exec</historyInputLocation>
++              <historyOutputLocation>pit/history.exec</historyOutputLocation>
++            </configuration>
++          </plugin>
++        </plugins>
++      </build>
++    </profile>
++  </profiles>
++
    <build>
        <plugins>
          <plugin>
-+          <groupId>org.pitest</groupId>
-+          <artifactId>pitest-maven</artifactId>
-+          <version>0.29</version>
-+          <configuration>
-+            <verbose>true</verbose>
-+            <targetClasses>
-+              <param>org.apache.commons.math3.*</param>
-+            </targetClasses>
-+            <excludedClasses>
-+              <param>org.apache.commons.math3.optim.*</param>
-+              <param>org.apache.commons.math3.optimization.*</param>
-+            </excludedClasses>
-+          </configuration>
-+        </plugin>
-+        <plugin>
 +          <groupId>org.jacoco</groupId>
 +          <artifactId>jacoco-maven-plugin</artifactId>
 +          <version>0.6.2.201302030002</version>
