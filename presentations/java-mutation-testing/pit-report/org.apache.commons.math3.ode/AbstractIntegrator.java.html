@@ -1,0 +1,5851 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>AbstractIntegrator.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.ode;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_20'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.ArrayList;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_21'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Collection;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_22'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Collections;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_23'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Comparator;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_24'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Iterator;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_25'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.List;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_26'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.SortedSet;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_27'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.TreeSet;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_28'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_29'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolver;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_30'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.analysis.solvers.UnivariateSolver;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_31'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.DimensionMismatchException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_32'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.MaxCountExceededException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_33'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NoBracketingException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_34'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NumberIsTooSmallException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_35'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.util.LocalizedFormats;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_36'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.ode.events.EventHandler;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_37'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.ode.events.EventState;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_38'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.ode.sampling.AbstractStepInterpolator;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_39'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.ode.sampling.StepHandler;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_40'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_41'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.Incrementor;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_42'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.Precision;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_43'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_44'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_45'></a>
+</td>
+<td class=''><pre><span  class=''> * Base class managing common boilerplate for all integrators.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_46'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: AbstractIntegrator.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_47'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_48'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_49'></a>
+</td>
+<td class=''><pre><span  class=''>public abstract class AbstractIntegrator implements FirstOrderIntegrator {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_50'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_51'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Step handler. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_52'></a>
+</td>
+<td class=''><pre><span  class=''>    protected Collection&#60;StepHandler&#62; stepHandlers;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_53'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_54'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Current step start time. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_55'></a>
+</td>
+<td class=''><pre><span  class=''>    protected double stepStart;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_56'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_57'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Current stepsize. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_58'></a>
+</td>
+<td class=''><pre><span  class=''>    protected double stepSize;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_59'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_60'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Indicator for last step. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_61'></a>
+</td>
+<td class=''><pre><span  class=''>    protected boolean isLastStep;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_62'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_63'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Indicator that a state or derivative reset was triggered by some event. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_64'></a>
+</td>
+<td class=''><pre><span  class=''>    protected boolean resetOccurred;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_65'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_66'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Events states. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_67'></a>
+</td>
+<td class=''><pre><span  class=''>    private Collection&#60;EventState&#62; eventsStates;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_68'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_69'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Initialization indicator of events states. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_70'></a>
+</td>
+<td class=''><pre><span  class=''>    private boolean statesInitialized;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_71'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_72'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Name of the method. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_73'></a>
+</td>
+<td class=''><pre><span  class=''>    private final String name;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_74'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_75'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Counter for number of evaluations. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_76'></a>
+</td>
+<td class=''><pre><span  class=''>    private Incrementor evaluations;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_77'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_78'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Differential equations to integrate. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_79'></a>
+</td>
+<td class=''><pre><span  class=''>    private transient ExpandableStatefulODE expandable;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_80'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_81'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Build an instance.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_82'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param name name of the method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_83'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_84'></a>
+</td>
+<td class='covered'><pre><span  class=''>    public AbstractIntegrator(final String name) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_85'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.name = name;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_86'></a>
+</td>
+<td class='covered'><pre><span  class=''>        stepHandlers = new ArrayList&#60;StepHandler&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_87'></a>
+</td>
+<td class='covered'><pre><span  class=''>        stepStart = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_88'></a>
+</td>
+<td class='covered'><pre><span  class=''>        stepSize  = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_89'></a>
+</td>
+<td class='covered'><pre><span  class=''>        eventsStates = new ArrayList&#60;EventState&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_90'></a>
+</td>
+<td class='covered'><pre><span  class=''>        statesInitialized = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_91'></a>
+</td>
+<td class='covered'><pre><span  class=''>        evaluations = new Incrementor();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_92'/>
+92
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_92'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        setMaxEvaluations(-1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_93'/>
+93
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_93'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        evaluations.resetCount();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_94'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_95'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_96'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Build an instance with a null name.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_97'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_98'></a>
+</td>
+<td class=''><pre><span  class=''>    protected AbstractIntegrator() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_99'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this(null);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_100'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_101'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_102'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_103'></a>
+</td>
+<td class=''><pre><span  class=''>    public String getName() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_104'/>
+104
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_104'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return name;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_105'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_106'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_107'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_108'></a>
+</td>
+<td class=''><pre><span  class=''>    public void addStepHandler(final StepHandler handler) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_109'></a>
+</td>
+<td class='covered'><pre><span  class=''>        stepHandlers.add(handler);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_110'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_111'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_112'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_113'></a>
+</td>
+<td class=''><pre><span  class=''>    public Collection&#60;StepHandler&#62; getStepHandlers() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_114'/>
+114
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_114'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return Collections.unmodifiableCollection(stepHandlers);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_115'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_116'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_117'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_118'/>
+118
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_118'></a>
+</td>
+<td class=''><pre><span  class=''>    public void clearStepHandlers() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_119'/>
+119
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_119'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        stepHandlers.clear();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_120'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_121'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_122'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_123'></a>
+</td>
+<td class=''><pre><span  class=''>    public void addEventHandler(final EventHandler handler,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_124'></a>
+</td>
+<td class=''><pre><span  class=''>                                final double maxCheckInterval,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_125'></a>
+</td>
+<td class=''><pre><span  class=''>                                final double convergence,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_126'></a>
+</td>
+<td class=''><pre><span  class=''>                                final int maxIterationCount) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_127'/>
+127
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_127'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        addEventHandler(handler, maxCheckInterval, convergence,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_128'></a>
+</td>
+<td class=''><pre><span  class=''>                        maxIterationCount,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_129'></a>
+</td>
+<td class=''><pre><span  class=''>                        new BracketingNthOrderBrentSolver(convergence, 5));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_130'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_131'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_132'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_133'></a>
+</td>
+<td class=''><pre><span  class=''>    public void addEventHandler(final EventHandler handler,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_134'></a>
+</td>
+<td class=''><pre><span  class=''>                                final double maxCheckInterval,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_135'></a>
+</td>
+<td class=''><pre><span  class=''>                                final double convergence,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_136'></a>
+</td>
+<td class=''><pre><span  class=''>                                final int maxIterationCount,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_137'></a>
+</td>
+<td class=''><pre><span  class=''>                                final UnivariateSolver solver) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_138'></a>
+</td>
+<td class='covered'><pre><span  class=''>        eventsStates.add(new EventState(handler, maxCheckInterval, convergence,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_139'></a>
+</td>
+<td class=''><pre><span  class=''>                                        maxIterationCount, solver));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_140'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_141'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_142'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_143'></a>
+</td>
+<td class=''><pre><span  class=''>    public Collection&#60;EventHandler&#62; getEventHandlers() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_144'/>
+144
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_144'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final List&#60;EventHandler&#62; list = new ArrayList&#60;EventHandler&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_145'/>
+145
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_145'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (EventState state : eventsStates) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_146'></a>
+</td>
+<td class='covered'><pre><span  class=''>            list.add(state.getEventHandler());</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_147'/>
+147
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_147'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_148'/>
+148
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_148'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return Collections.unmodifiableCollection(list);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_149'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_150'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_151'/>
+151
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_151'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_152'/>
+152
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_152'></a>
+</td>
+<td class=''><pre><span  class=''>    public void clearEventHandlers() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_153'/>
+153
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_153'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        eventsStates.clear();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_154'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_155'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_156'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_157'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getCurrentStepStart() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_158'/>
+158
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_158'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return stepStart;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_159'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_160'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_161'/>
+161
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_161'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_162'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getCurrentSignedStepsize() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_163'/>
+163
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_163'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return stepSize;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_164'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_165'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_166'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_167'></a>
+</td>
+<td class=''><pre><span  class=''>    public void setMaxEvaluations(int maxEvaluations) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_168'/>
+168
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_168'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        evaluations.setMaximalCount((maxEvaluations &#60; 0) ? Integer.MAX_VALUE : maxEvaluations);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_169'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_170'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_171'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_172'></a>
+</td>
+<td class=''><pre><span  class=''>    public int getMaxEvaluations() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_173'/>
+173
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_173'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return evaluations.getMaximalCount();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_174'/>
+174
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_174'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_175'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_176'/>
+176
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_176'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_177'></a>
+</td>
+<td class=''><pre><span  class=''>    public int getEvaluations() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_178'/>
+178
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_178'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return evaluations.getCount();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_179'/>
+179
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_179'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_180'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_181'/>
+181
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_181'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Prepare the start of an integration.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_182'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t0 start value of the independent &#60;i&#62;time&#60;/i&#62; variable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_183'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param y0 array containing the start value of the state vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_184'/>
+184
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_184'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t target time for the integration</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_185'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_186'></a>
+</td>
+<td class=''><pre><span  class=''>    protected void initIntegration(final double t0, final double[] y0, final double t) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_187'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_188'/>
+188
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_188'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        evaluations.resetCount();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_189'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_190'/>
+190
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_190'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (final EventState state : eventsStates) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_191'/>
+191
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_191'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            state.getEventHandler().init(t0, y0, t);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_192'/>
+192
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_192'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_193'/>
+193
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_193'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_194'/>
+194
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_194'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (StepHandler handler : stepHandlers) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_195'/>
+195
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_195'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            handler.init(t0, y0, t);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_196'/>
+196
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_196'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_197'/>
+197
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_197'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_198'/>
+198
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_198'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        setStateInitialized(false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_199'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_200'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_201'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_202'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Set the equations.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_203'/>
+203
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_203'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param equations equations to set</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_204'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_205'></a>
+</td>
+<td class=''><pre><span  class=''>    protected void setEquations(final ExpandableStatefulODE equations) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_206'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.expandable = equations;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_207'/>
+207
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_207'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_208'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_209'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_210'></a>
+</td>
+<td class=''><pre><span  class=''>    public double integrate(final FirstOrderDifferentialEquations equations,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_211'></a>
+</td>
+<td class=''><pre><span  class=''>                            final double t0, final double[] y0, final double t, final double[] y)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_212'></a>
+</td>
+<td class=''><pre><span  class=''>        throws DimensionMismatchException, NumberIsTooSmallException,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_213'></a>
+</td>
+<td class=''><pre><span  class=''>               MaxCountExceededException, NoBracketingException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_214'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_215'/>
+215
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_215'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (y0.length != equations.getDimension()) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_216'/>
+216
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_216'></a>
+</td>
+<td class='covered'><pre><span  class=''>            throw new DimensionMismatchException(y0.length, equations.getDimension());</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_217'/>
+217
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_217'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_218'/>
+218
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_218'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (y.length != equations.getDimension()) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_219'/>
+219
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_219'></a>
+</td>
+<td class='covered'><pre><span  class=''>            throw new DimensionMismatchException(y.length, equations.getDimension());</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_220'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_221'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_222'/>
+222
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_222'></a>
+</td>
+<td class=''><pre><span  class=''>        // prepare expandable stateful equations</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_223'/>
+223
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_223'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final ExpandableStatefulODE expandableODE = new ExpandableStatefulODE(equations);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_224'/>
+224
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_224'>1</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>        expandableODE.setTime(t0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_225'/>
+225
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_225'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        expandableODE.setPrimaryState(y0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_226'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_227'/>
+227
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_227'></a>
+</td>
+<td class=''><pre><span  class=''>        // perform integration</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_228'/>
+228
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_228'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        integrate(expandableODE, t);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_229'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_230'/>
+230
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_230'></a>
+</td>
+<td class=''><pre><span  class=''>        // extract results back from the stateful equations</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_231'/>
+231
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_231'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        System.arraycopy(expandableODE.getPrimaryState(), 0, y, 0, y.length);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_232'/>
+232
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_232'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return expandableODE.getTime();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_233'/>
+233
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_233'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_234'/>
+234
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_234'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_235'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_236'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Integrate a set of differential equations up to the given time.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_237'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This method solves an Initial Value Problem (IVP).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_238'/>
+238
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_238'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The set of differential equations is composed of a main set, which</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_239'></a>
+</td>
+<td class=''><pre><span  class=''>     * can be extended by some sets of secondary equations. The set of</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_240'/>
+240
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_240'></a>
+</td>
+<td class=''><pre><span  class=''>     * equations must be already set up with initial time and partial states.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_241'/>
+241
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_241'></a>
+</td>
+<td class=''><pre><span  class=''>     * At integration completion, the final time and partial states will be</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_242'/>
+242
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_242'></a>
+</td>
+<td class=''><pre><span  class=''>     * available in the same object.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_243'/>
+243
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_243'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Since this method stores some internal state variables made</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_244'/>
+244
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_244'></a>
+</td>
+<td class=''><pre><span  class=''>     * available in its public interface during integration ({@link</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_245'/>
+245
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_245'></a>
+</td>
+<td class=''><pre><span  class=''>     * #getCurrentSignedStepsize()}), it is &#60;em&#62;not&#60;/em&#62; thread-safe.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_246'/>
+246
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_246'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param equations complete set of differential equations to integrate</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_247'/>
+247
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_247'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t target time for the integration</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_248'/>
+248
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_248'></a>
+</td>
+<td class=''><pre><span  class=''>     * (can be set to a value smaller than &#60;code&#62;t0&#60;/code&#62; for backward integration)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_249'/>
+249
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_249'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception NumberIsTooSmallException if integration step is too small</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_250'/>
+250
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_250'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws DimensionMismatchException if the dimension of the complete state does not</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_251'/>
+251
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_251'></a>
+</td>
+<td class=''><pre><span  class=''>     * match the complete equations sets dimension</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_252'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception MaxCountExceededException if the number of functions evaluations is exceeded</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_253'/>
+253
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_253'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception NoBracketingException if the location of an event cannot be bracketed</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_254'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_255'/>
+255
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_255'></a>
+</td>
+<td class=''><pre><span  class=''>    public abstract void integrate(ExpandableStatefulODE equations, double t)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_256'></a>
+</td>
+<td class=''><pre><span  class=''>        throws NumberIsTooSmallException, DimensionMismatchException,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_257'></a>
+</td>
+<td class=''><pre><span  class=''>               MaxCountExceededException, NoBracketingException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_258'/>
+258
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_258'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_259'/>
+259
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_259'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Compute the derivatives and check the number of evaluations.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_260'/>
+260
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_260'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t current value of the independent &#60;I&#62;time&#60;/I&#62; variable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_261'/>
+261
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_261'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param y array containing the current value of the state vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_262'/>
+262
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_262'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param yDot placeholder array where to put the time derivative of the state vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_263'/>
+263
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_263'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception MaxCountExceededException if the number of functions evaluations is exceeded</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_264'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception DimensionMismatchException if arrays dimensions do not match equations settings</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_265'/>
+265
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_265'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_266'/>
+266
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_266'></a>
+</td>
+<td class=''><pre><span  class=''>    public void computeDerivatives(final double t, final double[] y, final double[] yDot)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_267'/>
+267
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_267'></a>
+</td>
+<td class=''><pre><span  class=''>        throws MaxCountExceededException, DimensionMismatchException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_268'/>
+268
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_268'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        evaluations.incrementCount();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_269'/>
+269
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_269'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        expandable.computeDerivatives(t, y, yDot);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_270'/>
+270
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_270'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_271'/>
+271
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_271'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_272'/>
+272
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_272'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Set the stateInitialized flag.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_273'/>
+273
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_273'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This method must be called by integrators with the value</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_274'/>
+274
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_274'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@code false} before they start integration, so a proper lazy</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_275'/>
+275
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_275'></a>
+</td>
+<td class=''><pre><span  class=''>     * initialization is done automatically on the first step.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_276'/>
+276
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_276'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param stateInitialized new value for the flag</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_277'></a>
+</td>
+<td class=''><pre><span  class=''>     * @since 2.2</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_278'/>
+278
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_278'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_279'></a>
+</td>
+<td class=''><pre><span  class=''>    protected void setStateInitialized(final boolean stateInitialized) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_280'/>
+280
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_280'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.statesInitialized = stateInitialized;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_281'/>
+281
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_281'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_282'/>
+282
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_282'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_283'/>
+283
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_283'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Accept a step, triggering events and step handlers.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_284'/>
+284
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_284'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param interpolator step interpolator</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_285'/>
+285
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_285'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param y state vector at step end time, must be reset if an event</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_286'/>
+286
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_286'></a>
+</td>
+<td class=''><pre><span  class=''>     * asks for resetting or if an events stops integration during the step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_287'/>
+287
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_287'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param yDot placeholder array where to put the time derivative of the state vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_288'/>
+288
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_288'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param tEnd final integration time</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_289'/>
+289
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_289'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return time at end of step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_290'/>
+290
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_290'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception MaxCountExceededException if the interpolator throws one because</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_291'/>
+291
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_291'></a>
+</td>
+<td class=''><pre><span  class=''>     * the number of functions evaluations is exceeded</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_292'/>
+292
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_292'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception NoBracketingException if the location of an event cannot be bracketed</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_293'/>
+293
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_293'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception DimensionMismatchException if arrays dimensions do not match equations settings</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_294'/>
+294
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_294'></a>
+</td>
+<td class=''><pre><span  class=''>     * @since 2.2</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_295'/>
+295
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_295'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_296'/>
+296
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_296'></a>
+</td>
+<td class=''><pre><span  class=''>    protected double acceptStep(final AbstractStepInterpolator interpolator,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_297'/>
+297
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_297'></a>
+</td>
+<td class=''><pre><span  class=''>                                final double[] y, final double[] yDot, final double tEnd)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_298'/>
+298
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_298'></a>
+</td>
+<td class=''><pre><span  class=''>        throws MaxCountExceededException, DimensionMismatchException, NoBracketingException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_299'/>
+299
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_299'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_300'/>
+300
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_300'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double previousT = interpolator.getGlobalPreviousTime();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_301'/>
+301
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_301'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double currentT = interpolator.getGlobalCurrentTime();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_302'/>
+302
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_302'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_303'/>
+303
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_303'></a>
+</td>
+<td class=''><pre><span  class=''>            // initialize the events states if needed</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_304'/>
+304
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_304'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (! statesInitialized) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_305'/>
+305
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_305'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (EventState state : eventsStates) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_306'/>
+306
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_306'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    state.reinitializeBegin(interpolator);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_307'/>
+307
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_307'></a>
+</td>
+<td class='covered'><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_308'/>
+308
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_308'></a>
+</td>
+<td class='covered'><pre><span  class=''>                statesInitialized = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_309'/>
+309
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_309'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_310'/>
+310
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_310'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_311'/>
+311
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_311'></a>
+</td>
+<td class=''><pre><span  class=''>            // search for next events that may occur during the step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_312'/>
+312
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_312'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final int orderingSign = interpolator.isForward() ? +1 : -1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_313'/>
+313
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_313'></a>
+</td>
+<td class='covered'><pre><span  class=''>            SortedSet&#60;EventState&#62; occuringEvents = new TreeSet&#60;EventState&#62;(new Comparator&#60;EventState&#62;() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_314'/>
+314
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_314'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_315'/>
+315
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_315'></a>
+</td>
+<td class=''><pre><span  class=''>                /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_316'/>
+316
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_316'></a>
+</td>
+<td class=''><pre><span  class=''>                public int compare(EventState es0, EventState es1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_317'/>
+317
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_317'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return orderingSign * Double.compare(es0.getEventTime(), es1.getEventTime());</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_318'/>
+318
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_318'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_319'/>
+319
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_319'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_320'/>
+320
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_320'></a>
+</td>
+<td class=''><pre><span  class=''>            });</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_321'/>
+321
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_321'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_322'/>
+322
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_322'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (final EventState state : eventsStates) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_323'/>
+323
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_323'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (state.evaluateStep(interpolator)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_324'/>
+324
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_324'></a>
+</td>
+<td class=''><pre><span  class=''>                    // the event occurs during the current step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_325'/>
+325
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_325'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    occuringEvents.add(state);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_326'/>
+326
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_326'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_327'/>
+327
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_327'></a>
+</td>
+<td class='covered'><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_328'/>
+328
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_328'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_329'/>
+329
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_329'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            while (!occuringEvents.isEmpty()) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_330'/>
+330
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_330'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_331'/>
+331
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_331'></a>
+</td>
+<td class=''><pre><span  class=''>                // handle the chronologically first event</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_332'/>
+332
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_332'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final Iterator&#60;EventState&#62; iterator = occuringEvents.iterator();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_333'/>
+333
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_333'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final EventState currentEvent = iterator.next();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_334'/>
+334
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_334'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                iterator.remove();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_335'/>
+335
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_335'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_336'/>
+336
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_336'></a>
+</td>
+<td class=''><pre><span  class=''>                // restrict the interpolator to the first part of the step, up to the event</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_337'/>
+337
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_337'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double eventT = currentEvent.getEventTime();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_338'/>
+338
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_338'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                interpolator.setSoftPreviousTime(previousT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_339'/>
+339
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_339'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                interpolator.setSoftCurrentTime(eventT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_340'/>
+340
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_340'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_341'/>
+341
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_341'></a>
+</td>
+<td class=''><pre><span  class=''>                // trigger the event</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_342'/>
+342
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_342'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                interpolator.setInterpolatedTime(eventT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_343'/>
+343
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_343'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] eventY = interpolator.getInterpolatedState().clone();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_344'/>
+344
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_344'>1</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>                currentEvent.stepAccepted(eventT, eventY);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_345'/>
+345
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_345'></a>
+</td>
+<td class='covered'><pre><span  class=''>                isLastStep = currentEvent.stop();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_346'/>
+346
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_346'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_347'/>
+347
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_347'></a>
+</td>
+<td class=''><pre><span  class=''>                // handle the first part of the step, up to the event</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_348'/>
+348
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_348'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (final StepHandler handler : stepHandlers) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_349'/>
+349
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_349'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    handler.handleStep(interpolator, isLastStep);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_350'/>
+350
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_350'></a>
+</td>
+<td class='covered'><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_351'/>
+351
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_351'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_352'/>
+352
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_352'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (isLastStep) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_353'/>
+353
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_353'></a>
+</td>
+<td class=''><pre><span  class=''>                    // the event asked to stop integration</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_354'/>
+354
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_354'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    System.arraycopy(eventY, 0, y, 0, y.length);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_355'/>
+355
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_355'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (final EventState remaining : occuringEvents) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_356'/>
+356
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_356'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                        remaining.stepAccepted(eventT, eventY);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_357'/>
+357
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_357'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_358'/>
+358
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_358'>1</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>                    return eventT;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_359'/>
+359
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_359'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_360'/>
+360
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_360'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_361'/>
+361
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_361'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (currentEvent.reset(eventT, eventY)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_362'/>
+362
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_362'></a>
+</td>
+<td class=''><pre><span  class=''>                    // some event handler has triggered changes that</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_363'/>
+363
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_363'></a>
+</td>
+<td class=''><pre><span  class=''>                    // invalidate the derivatives, we need to recompute them</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_364'/>
+364
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_364'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    System.arraycopy(eventY, 0, y, 0, y.length);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_365'/>
+365
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_365'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    computeDerivatives(eventT, y, yDot);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_366'/>
+366
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_366'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    resetOccurred = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_367'/>
+367
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_367'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (final EventState remaining : occuringEvents) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_368'/>
+368
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_368'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        remaining.stepAccepted(eventT, eventY);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_369'/>
+369
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_369'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_370'/>
+370
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_370'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return eventT;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_371'/>
+371
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_371'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_372'/>
+372
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_372'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_373'/>
+373
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_373'></a>
+</td>
+<td class=''><pre><span  class=''>                // prepare handling of the remaining part of the step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_374'/>
+374
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_374'></a>
+</td>
+<td class='covered'><pre><span  class=''>                previousT = eventT;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_375'/>
+375
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_375'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                interpolator.setSoftPreviousTime(eventT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_376'/>
+376
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_376'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                interpolator.setSoftCurrentTime(currentT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_377'/>
+377
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_377'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_378'/>
+378
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_378'></a>
+</td>
+<td class=''><pre><span  class=''>                // check if the same event occurs again in the remaining part of the step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_379'/>
+379
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_379'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (currentEvent.evaluateStep(interpolator)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_380'/>
+380
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_380'></a>
+</td>
+<td class=''><pre><span  class=''>                    // the event occurs during the current step</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_381'/>
+381
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_381'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>                    occuringEvents.add(currentEvent);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_382'/>
+382
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_382'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_383'/>
+383
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_383'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_384'/>
+384
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_384'></a>
+</td>
+<td class='covered'><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_385'/>
+385
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_385'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_386'/>
+386
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_386'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            interpolator.setInterpolatedTime(currentT);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_387'/>
+387
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_387'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] currentY = interpolator.getInterpolatedState();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_388'/>
+388
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_388'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (final EventState state : eventsStates) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_389'/>
+389
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_389'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                state.stepAccepted(currentT, currentY);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_390'/>
+390
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_390'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                isLastStep = isLastStep || state.stop();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_391'/>
+391
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_391'></a>
+</td>
+<td class='covered'><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_392'/>
+392
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_392'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            isLastStep = isLastStep || Precision.equals(currentT, tEnd, 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_393'/>
+393
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_393'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_394'/>
+394
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_394'></a>
+</td>
+<td class=''><pre><span  class=''>            // handle the remaining part of the step, after all events if any</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_395'/>
+395
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_395'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (StepHandler handler : stepHandlers) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_396'/>
+396
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_396'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                handler.handleStep(interpolator, isLastStep);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_397'/>
+397
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_397'></a>
+</td>
+<td class='covered'><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_398'/>
+398
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_398'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_399'/>
+399
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_399'>1</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>            return currentT;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_400'/>
+400
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_400'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_401'/>
+401
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_401'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_402'/>
+402
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_402'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_403'/>
+403
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_403'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Check the integration span.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_404'/>
+404
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_404'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param equations set of differential equations</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_405'/>
+405
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_405'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t target time for the integration</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_406'/>
+406
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_406'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception NumberIsTooSmallException if integration span is too small</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_407'/>
+407
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_407'></a>
+</td>
+<td class=''><pre><span  class=''>     * @exception DimensionMismatchException if adaptive step size integrators</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_408'/>
+408
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_408'></a>
+</td>
+<td class=''><pre><span  class=''>     * tolerance arrays dimensions are not compatible with equations settings</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_409'/>
+409
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_409'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_410'/>
+410
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_410'></a>
+</td>
+<td class=''><pre><span  class=''>    protected void sanityChecks(final ExpandableStatefulODE equations, final double t)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_411'/>
+411
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_411'></a>
+</td>
+<td class=''><pre><span  class=''>        throws NumberIsTooSmallException, DimensionMismatchException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_412'/>
+412
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_412'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_413'/>
+413
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_413'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(equations.getTime()),</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_414'/>
+414
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_414'></a>
+</td>
+<td class=''><pre><span  class=''>                                                                  FastMath.abs(t)));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_415'/>
+415
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_415'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final double dt = FastMath.abs(equations.getTime() - t);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_416'/>
+416
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_416'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (dt &#60;= threshold) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_417'/>
+417
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_417'></a>
+</td>
+<td class='covered'><pre><span  class=''>            throw new NumberIsTooSmallException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_418'/>
+418
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_418'></a>
+</td>
+<td class=''><pre><span  class=''>                                                dt, threshold, false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_419'/>
+419
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_419'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_420'/>
+420
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_420'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_421'/>
+421
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_421'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_422'/>
+422
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_422'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@79d23b06_423'/>
+423
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_423'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_92'>92</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_92'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/AbstractIntegrator::setMaxEvaluations : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_93'>93</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_93'/> 
+
+<p class='SURVIVED'>removed call to org/apache/commons/math3/util/Incrementor::resetCount : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_104'>104</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_104'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/AbstractIntegrator::getName to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testSmallLastStep(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_114'>114</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_114'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/AbstractIntegrator::getStepHandlers to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_119'>119</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_119'/> 
+
+<p class='SURVIVED'>removed call to java/util/Collection::clear : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_127'>127</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_127'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/AbstractIntegrator::addEventHandler : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_145'>145</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_145'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_148'>148</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_148'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/AbstractIntegrator::getEventHandlers to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_153'>153</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_153'/> 
+
+<p class='KILLED'>removed call to java/util/Collection::clear : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_158'>158</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_158'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::getCurrentStepStart : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_163'>163</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_163'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::getCurrentSignedStepsize : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_168'>168</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_168'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> <p class='KILLED'>removed call to org/apache/commons/math3/util/Incrementor::setMaximalCount : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_173'>173</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_173'/> 
+
+<p class='NO_COVERAGE'>replaced return of integer sized value with (x == 0 ? 1 : 0) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_178'>178</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_178'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_188'>188</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_188'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/util/Incrementor::resetCount : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_190'>190</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_190'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_191'>191</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_191'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/events/EventHandler::init : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_194'>194</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_194'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_195'>195</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_195'/> 
+
+<p class='SURVIVED'>removed call to org/apache/commons/math3/ode/sampling/StepHandler::init : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_198'>198</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_198'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/AbstractIntegrator::setStateInitialized : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_215'>215</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_215'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_218'>218</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_218'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_224'>224</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_224'/> 
+
+<p class='TIMED_OUT'>removed call to org/apache/commons/math3/ode/ExpandableStatefulODE::setTime : TIMED_OUT</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_225'>225</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_225'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/ExpandableStatefulODE::setPrimaryState : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_228'>228</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_228'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/AbstractIntegrator::integrate : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_231'>231</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_231'/> 
+
+<p class='KILLED'>removed call to java/lang/System::arraycopy : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_232'>232</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_232'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::integrate : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_268'>268</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_268'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/util/Incrementor::incrementCount : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_269'>269</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_269'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/ExpandableStatefulODE::computeDerivatives : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_304'>304</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_304'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_305'>305</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_305'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_306'>306</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_306'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/events/EventState::reinitializeBegin : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_312'>312</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_312'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_317'>317</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_317'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_322'>322</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_322'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_323'>323</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_323'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_329'>329</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_329'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_334'>334</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_334'/> 
+
+<p class='KILLED'>removed call to java/util/Iterator::remove : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_338'>338</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_338'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setSoftPreviousTime : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_339'>339</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_339'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setSoftCurrentTime : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_342'>342</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_342'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setInterpolatedTime : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_344'>344</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_344'/> 
+
+<p class='TIMED_OUT'>removed call to org/apache/commons/math3/ode/events/EventState::stepAccepted : TIMED_OUT</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_348'>348</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_348'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_349'>349</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_349'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/StepHandler::handleStep : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_352'>352</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_352'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_354'>354</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_354'/> 
+
+<p class='KILLED'>removed call to java/lang/System::arraycopy : KILLED -> org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents1(org.apache.commons.math3.ode.events.OverlappingEventsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_355'>355</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_355'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents1(org.apache.commons.math3.ode.events.OverlappingEventsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_356'>356</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_356'/> 
+
+<p class='SURVIVED'>removed call to org/apache/commons/math3/ode/events/EventState::stepAccepted : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_358'>358</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_358'/> 
+
+<p class='TIMED_OUT'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::acceptStep : TIMED_OUT</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_361'>361</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_361'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_364'>364</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_364'/> 
+
+<p class='KILLED'>removed call to java/lang/System::arraycopy : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_365'>365</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_365'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/AbstractIntegrator::computeDerivatives : KILLED -> org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_367'>367</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_367'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_368'>368</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_368'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/events/EventState::stepAccepted : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_370'>370</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_370'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::acceptStep : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_375'>375</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_375'/> 
+
+<p class='SURVIVED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setSoftPreviousTime : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_376'>376</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_376'/> 
+
+<p class='SURVIVED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setSoftCurrentTime : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_379'>379</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_379'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_386'>386</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_386'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/AbstractStepInterpolator::setInterpolatedTime : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_388'>388</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_388'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_389'>389</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_389'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/events/EventState::stepAccepted : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_390'>390</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_390'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_392'>392</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_392'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_395'>395</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_395'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_396'>396</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_396'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/ode/sampling/StepHandler::handleStep : KILLED -> org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_399'>399</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_399'/> 
+
+<p class='TIMED_OUT'>replaced return of double value with -(x + 1) for org/apache/commons/math3/ode/AbstractIntegrator::acceptStep : TIMED_OUT</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_413'>413</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_413'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_415'>415</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_415'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@79d23b06_416'>416</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@79d23b06_416'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest.checkClone(org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest) (24 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncLastRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.ThreeEighthesStepInterpolatorTest) (18 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testDecreasingSteps(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (630 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncNeither(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testWrongDerivative(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncLastRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testDecreasingSteps(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (959 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (115 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest) (6 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testAnalyticalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (1666 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (325 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaStepInterpolatorTest) (303 ms)</li><li>org.apache.commons.math3.ode.FirstOrderConverterTest.testSmallStep(org.apache.commons.math3.ode.FirstOrderConverterTest) (358 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (89 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (17 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testFinalResult(org.apache.commons.math3.ode.JacobianMatricesTest) (23 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest) (6 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (2 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulLast(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (41 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest) (33 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncLast(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (0 ms)</li><li>org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents0(org.apache.commons.math3.ode.events.OverlappingEventsTest) (20 ms)</li><li>org.apache.commons.math3.ode.events.ReappearingEventTest.testDormandPrince(org.apache.commons.math3.ode.events.ReappearingEventTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (48 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (119 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testTooLargeFirstStep(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulFirstRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (7 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testInternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (1245 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testDecreasingSteps(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (245 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testSmallStep(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (35 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (64 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (21 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest) (17 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.GillStepInterpolatorTest) (210 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testVariableSteps(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (14 ms)</li><li>org.apache.commons.math3.ode.ContinuousOutputModelTest.testBoundaries(org.apache.commons.math3.ode.ContinuousOutputModelTest) (36 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest.noReset(org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulFirst(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.DormandPrince54StepInterpolatorTest) (70 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testSmallStep(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (63 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.serialization(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (20 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (6 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncNeither(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulFirstRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (2 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulBoth(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (88 ms)</li><li>org.apache.commons.math3.ode.ContinuousOutputModelTest.testModelsMerging(org.apache.commons.math3.ode.ContinuousOutputModelTest) (12 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (18 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest) (72 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (156 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (5 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncNeitherRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (41 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest.checklone(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest) (22 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (25 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (91 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncFirst(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testEvents(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (31 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest.testDerivativesConsistency(org.apache.commons.math3.ode.nonstiff.MidpointStepInterpolatorTest) (12 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (85 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulLastRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testSmallLastStep(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (89 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testHighAccuracyExternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (3335 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testVariableSteps(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (12 ms)</li><li>org.apache.commons.math3.ode.events.EventStateTest.testIssue695(org.apache.commons.math3.ode.events.EventStateTest) (5 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncFirstRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulBothRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulNeitherRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncBoth(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (2 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulNeither(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest.interpolationAtBounds(org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (105 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulBoth(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.ContinuousOutputModelTest.testRandomAccess(org.apache.commons.math3.ode.ContinuousOutputModelTest) (82 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest.interpolationInside(org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testMulFirst(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaStepInterpolatorTest) (21 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (70 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testParameterizable(org.apache.commons.math3.ode.JacobianMatricesTest) (27 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testNullIntervalCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testSmallStep(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (42 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest) (16 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (199 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulBothRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testLowAccuracyExternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (380 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testEventsErrors(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (4 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (156 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.ContinuousOutputModelTest.testErrorConditions(org.apache.commons.math3.ode.ContinuousOutputModelTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (136 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest) (17 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.nonstiff.EulerStepInterpolatorTest) (34 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSmallStep(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (41 ms)</li><li>org.apache.commons.math3.ode.FirstOrderConverterTest.testBigStep(org.apache.commons.math3.ode.FirstOrderConverterTest) (3 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulNeither(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest.checklone(org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest) (22 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testIssue596(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (407 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerTest.testBeforeEnd(org.apache.commons.math3.ode.sampling.StepNormalizerTest) (10 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulNeitherRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.ThreeEighthesStepInterpolatorTest) (80 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.DormandPrince853StepInterpolatorTest) (61 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testDecreasingSteps(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (794 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillStepInterpolatorTest.testDerivativesConsistency(org.apache.commons.math3.ode.nonstiff.GillStepInterpolatorTest) (29 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testDecreasingSteps(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (661 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testStepSize(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (4 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncFirst(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncLast(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncFirstRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.FirstOrderConverterTest.testDecreasingSteps(org.apache.commons.math3.ode.FirstOrderConverterTest) (70 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncBothRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testVariableSteps(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (15 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testUnstableDerivative(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testTooLargeFirstStep(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testBackward(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (104 ms)</li><li>org.apache.commons.math3.ode.events.ReappearingEventTest.testGragg(org.apache.commons.math3.ode.events.ReappearingEventTest) (4 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testSmallStep(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (107 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerTest.testBoundaries(org.apache.commons.math3.ode.sampling.StepNormalizerTest) (13 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testKepler(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (82 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulLast(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents1(org.apache.commons.math3.ode.events.OverlappingEventsTest) (11 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (223 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testBigStep(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest.checkClone(org.apache.commons.math3.ode.nonstiff.HighamHall54StepInterpolatorTest) (91 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testMissedEndEvent(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testIntegratorControls(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (2569 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testNullIntervalCheck(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testMulLastRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest.serialization(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerStepInterpolatorTest) (59 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncNeitherRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest.testIncBothRev(org.apache.commons.math3.ode.sampling.StepNormalizerOutputOverlapTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest.testIncBoth(org.apache.commons.math3.ode.sampling.StepNormalizerOutputTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (29 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testEventsNoConvergence(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (5 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

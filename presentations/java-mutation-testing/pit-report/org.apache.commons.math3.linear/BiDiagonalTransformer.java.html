@@ -1,0 +1,5597 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>BiDiagonalTransformer.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.linear;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_20'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_21'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_22'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_23'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_24'></a>
+</td>
+<td class=''><pre><span  class=''> * Class transforming any matrix to bi-diagonal shape.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_25'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Any m &#38;times; n matrix A can be written as the product of three matrices:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_26'></a>
+</td>
+<td class=''><pre><span  class=''> * A = U &#38;times; B &#38;times; V&#60;sup&#62;T&#60;/sup&#62; with U an m &#38;times; m orthogonal matrix,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_27'></a>
+</td>
+<td class=''><pre><span  class=''> * B an m &#38;times; n bi-diagonal matrix (lower diagonal if m &#38;lt; n, upper diagonal</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_28'></a>
+</td>
+<td class=''><pre><span  class=''> * otherwise), and V an n &#38;times; n orthogonal matrix.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_29'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Transformation to bi-diagonal shape is often not a goal by itself, but it is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_30'></a>
+</td>
+<td class=''><pre><span  class=''> * an intermediate step in more general decomposition algorithms like {@link</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_31'></a>
+</td>
+<td class=''><pre><span  class=''> * SingularValueDecomposition Singular Value Decomposition}. This class is therefore</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_32'></a>
+</td>
+<td class=''><pre><span  class=''> * intended for internal use by the library and is not public. As a consequence of</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_33'></a>
+</td>
+<td class=''><pre><span  class=''> * this explicitly limited scope, many methods directly returns references to</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_34'></a>
+</td>
+<td class=''><pre><span  class=''> * internal arrays, not copies.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_35'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: BiDiagonalTransformer.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_36'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_37'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_38'></a>
+</td>
+<td class=''><pre><span  class=''>class BiDiagonalTransformer {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_39'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_40'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Householder vectors. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_41'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double householderVectors[][];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_42'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_43'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Main diagonal. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_44'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[] main;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_45'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_46'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Secondary diagonal. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_47'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[] secondary;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_48'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_49'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of U. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_50'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedU;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_51'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_52'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of B. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_53'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedB;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_54'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_55'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of V. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_56'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedV;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_57'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_58'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_59'></a>
+</td>
+<td class=''><pre><span  class=''>     * Build the transformation to bi-diagonal shape of a matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_60'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param matrix the matrix to transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_61'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_62'></a>
+</td>
+<td class='covered'><pre><span  class=''>    public BiDiagonalTransformer(RealMatrix matrix) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_63'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_64'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int m = matrix.getRowDimension();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_65'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int n = matrix.getColumnDimension();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_66'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int p = FastMath.min(m, n);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_67'></a>
+</td>
+<td class='covered'><pre><span  class=''>        householderVectors = matrix.getData();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_68'></a>
+</td>
+<td class='covered'><pre><span  class=''>        main      = new double[p];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_69'/>
+69
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_69'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        secondary = new double[p - 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_70'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedU   = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_71'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedB   = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_72'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedV   = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_73'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_74'></a>
+</td>
+<td class=''><pre><span  class=''>        // transform matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_75'/>
+75
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_75'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (m &#62;= n) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_76'/>
+76
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_76'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            transformToUpperBiDiagonal();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_77'></a>
+</td>
+<td class=''><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_78'/>
+78
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_78'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            transformToLowerBiDiagonal();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_79'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_80'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_81'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_82'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_83'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_84'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the matrix U of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_85'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;U is an orthogonal matrix, i.e. its transpose is also its inverse.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_86'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the U matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_87'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_88'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getU() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_89'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_90'/>
+90
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_90'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (cachedU == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_91'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_92'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = householderVectors.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_93'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int n = householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_94'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int p = main.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_95'/>
+95
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_95'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final int diagOffset    = (m &#62;= n) ? 0 : 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_96'/>
+96
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_96'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] diagonal = (m &#62;= n) ? main : secondary;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_97'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double[][] ua = new double[m][m];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_98'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_99'></a>
+</td>
+<td class=''><pre><span  class=''>            // fill up the part of the matrix not affected by Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_100'/>
+100
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_100'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int k = m - 1; k &#62;= p; --k) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_101'></a>
+</td>
+<td class='covered'><pre><span  class=''>                ua[k][k] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_102'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_103'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_104'></a>
+</td>
+<td class=''><pre><span  class=''>            // build up first part of the matrix by applying Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_105'/>
+105
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_105'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int k = p - 1; k &#62;= diagOffset; --k) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_106'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] hK = householderVectors[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_107'></a>
+</td>
+<td class='covered'><pre><span  class=''>                ua[k][k] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_108'/>
+108
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_108'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (hK[k - diagOffset] != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_109'/>
+109
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_109'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = k; j &#60; m; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_110'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        double alpha = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_111'/>
+111
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_111'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_112'/>
+112
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_112'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            alpha -= ua[i][j] * householderVectors[i][k - diagOffset];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_113'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_114'/>
+114
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_114'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        alpha /= diagonal[k - diagOffset] * hK[k - diagOffset];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_115'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_116'/>
+116
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_116'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_117'/>
+117
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_117'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            ua[i][j] += -alpha * householderVectors[i][k - diagOffset];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_118'/>
+118
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_118'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_119'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_120'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_121'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_122'/>
+122
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_122'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (diagOffset &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_123'></a>
+</td>
+<td class='covered'><pre><span  class=''>                ua[0][0] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_124'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_125'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedU = MatrixUtils.createRealMatrix(ua);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_126'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_127'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_128'></a>
+</td>
+<td class=''><pre><span  class=''>        // return the cached matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_129'/>
+129
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_129'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedU;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_130'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_131'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_132'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_133'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_134'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the bi-diagonal matrix B of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_135'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the B matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_136'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_137'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getB() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_138'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_139'/>
+139
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_139'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (cachedB == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_140'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_141'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = householderVectors.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_142'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int n = householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_143'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double[][] ba = new double[m][n];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_144'/>
+144
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_144'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = 0; i &#60; main.length; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_145'></a>
+</td>
+<td class='covered'><pre><span  class=''>                ba[i][i] = main[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_146'/>
+146
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_146'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (m &#60; n) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_147'/>
+147
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_147'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (i &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_148'/>
+148
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_148'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        ba[i][i-1] = secondary[i - 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_149'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_150'></a>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_151'/>
+151
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_151'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (i &#60; main.length - 1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_152'/>
+152
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_152'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        ba[i][i+1] = secondary[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_153'/>
+153
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_153'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_154'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_155'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_156'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedB = MatrixUtils.createRealMatrix(ba);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_157'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_158'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_159'></a>
+</td>
+<td class=''><pre><span  class=''>        // return the cached matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_160'/>
+160
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_160'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedB;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_161'/>
+161
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_161'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_162'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_163'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_164'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_165'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the matrix V of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_166'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;V is an orthogonal matrix, i.e. its transpose is also its inverse.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_167'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the V matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_168'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_169'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getV() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_170'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_171'/>
+171
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_171'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (cachedV == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_172'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_173'/>
+173
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_173'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = householderVectors.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_174'/>
+174
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_174'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int n = householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_175'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int p = main.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_176'/>
+176
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_176'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final int diagOffset    = (m &#62;= n) ? 1 : 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_177'/>
+177
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_177'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] diagonal = (m &#62;= n) ? secondary : main;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_178'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double[][] va = new double[n][n];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_179'/>
+179
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_179'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_180'></a>
+</td>
+<td class=''><pre><span  class=''>            // fill up the part of the matrix not affected by Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_181'/>
+181
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_181'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int k = n - 1; k &#62;= p; --k) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_182'></a>
+</td>
+<td class='covered'><pre><span  class=''>                va[k][k] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_183'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_184'/>
+184
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_184'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_185'></a>
+</td>
+<td class=''><pre><span  class=''>            // build up first part of the matrix by applying Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_186'/>
+186
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_186'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int k = p - 1; k &#62;= diagOffset; --k) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_187'/>
+187
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_187'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                final double[] hK = householderVectors[k - diagOffset];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_188'/>
+188
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_188'></a>
+</td>
+<td class='covered'><pre><span  class=''>                va[k][k] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_189'/>
+189
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_189'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (hK[k] != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_190'/>
+190
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_190'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = k; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_191'/>
+191
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_191'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        double beta = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_192'/>
+192
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_192'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k; i &#60; n; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_193'/>
+193
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_193'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            beta -= va[i][j] * hK[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_194'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_195'/>
+195
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_195'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        beta /= diagonal[k - diagOffset] * hK[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_196'/>
+196
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_196'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_197'/>
+197
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_197'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k; i &#60; n; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_198'/>
+198
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_198'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            va[i][j] += -beta * hK[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_199'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_200'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_201'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_202'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_203'/>
+203
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_203'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (diagOffset &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_204'></a>
+</td>
+<td class='covered'><pre><span  class=''>                va[0][0] = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_205'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_206'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedV = MatrixUtils.createRealMatrix(va);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_207'/>
+207
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_207'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_208'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_209'></a>
+</td>
+<td class=''><pre><span  class=''>        // return the cached matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_210'/>
+210
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_210'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedV;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_211'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_212'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_213'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_214'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_215'/>
+215
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_215'></a>
+</td>
+<td class=''><pre><span  class=''>     * Get the Householder vectors of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_216'/>
+216
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_216'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Note that since this class is only intended for internal use,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_217'/>
+217
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_217'></a>
+</td>
+<td class=''><pre><span  class=''>     * it returns directly a reference to its internal arrays, not a copy.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_218'/>
+218
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_218'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the main diagonal elements of the B matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_219'/>
+219
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_219'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_220'></a>
+</td>
+<td class=''><pre><span  class=''>    double[][] getHouseholderVectorsRef() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_221'/>
+221
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_221'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return householderVectors;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_222'/>
+222
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_222'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_223'/>
+223
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_223'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_224'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_225'/>
+225
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_225'></a>
+</td>
+<td class=''><pre><span  class=''>     * Get the main diagonal elements of the matrix B of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_226'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Note that since this class is only intended for internal use,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_227'/>
+227
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_227'></a>
+</td>
+<td class=''><pre><span  class=''>     * it returns directly a reference to its internal arrays, not a copy.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_228'/>
+228
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_228'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the main diagonal elements of the B matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_229'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_230'/>
+230
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_230'></a>
+</td>
+<td class=''><pre><span  class=''>    double[] getMainDiagonalRef() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_231'/>
+231
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_231'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return main;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_232'/>
+232
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_232'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_233'/>
+233
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_233'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_234'/>
+234
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_234'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_235'></a>
+</td>
+<td class=''><pre><span  class=''>     * Get the secondary diagonal elements of the matrix B of the transform.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_236'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Note that since this class is only intended for internal use,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_237'></a>
+</td>
+<td class=''><pre><span  class=''>     * it returns directly a reference to its internal arrays, not a copy.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_238'/>
+238
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_238'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the secondary diagonal elements of the B matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_239'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_240'/>
+240
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_240'></a>
+</td>
+<td class=''><pre><span  class=''>    double[] getSecondaryDiagonalRef() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_241'/>
+241
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_241'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return secondary;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_242'/>
+242
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_242'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_243'/>
+243
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_243'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_244'/>
+244
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_244'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_245'/>
+245
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_245'></a>
+</td>
+<td class=''><pre><span  class=''>     * Check if the matrix is transformed to upper bi-diagonal.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_246'/>
+246
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_246'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return true if the matrix is transformed to upper bi-diagonal</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_247'/>
+247
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_247'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_248'/>
+248
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_248'></a>
+</td>
+<td class=''><pre><span  class=''>    boolean isUpperBiDiagonal() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_249'/>
+249
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_249'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return householderVectors.length &#62;=  householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_250'/>
+250
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_250'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_251'/>
+251
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_251'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_252'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_253'/>
+253
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_253'></a>
+</td>
+<td class=''><pre><span  class=''>     * Transform original matrix to upper bi-diagonal form.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_254'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Transformation is done using alternate Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_255'/>
+255
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_255'></a>
+</td>
+<td class=''><pre><span  class=''>     * on columns and rows.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_256'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_257'></a>
+</td>
+<td class=''><pre><span  class=''>    private void transformToUpperBiDiagonal() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_258'/>
+258
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_258'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_259'/>
+259
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_259'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int m = householderVectors.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_260'/>
+260
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_260'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int n = householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_261'/>
+261
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_261'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int k = 0; k &#60; n; k++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_262'/>
+262
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_262'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_263'/>
+263
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_263'></a>
+</td>
+<td class=''><pre><span  class=''>            //zero-out a column</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_264'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double xNormSqr = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_265'/>
+265
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_265'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = k; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_266'/>
+266
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_266'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double c = householderVectors[i][k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_267'/>
+267
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_267'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                xNormSqr += c * c;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_268'/>
+268
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_268'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_269'/>
+269
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_269'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] hK = householderVectors[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_270'/>
+270
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_270'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            final double a = (hK[k] &#62; 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_271'/>
+271
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_271'></a>
+</td>
+<td class='covered'><pre><span  class=''>            main[k] = a;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_272'/>
+272
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_272'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (a != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_273'/>
+273
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_273'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                hK[k] -= a;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_274'/>
+274
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_274'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int j = k + 1; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_275'/>
+275
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_275'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    double alpha = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_276'/>
+276
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_276'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int i = k; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_277'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_278'/>
+278
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_278'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        alpha -= hI[j] * hI[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_279'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_280'/>
+280
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_280'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    alpha /= a * householderVectors[k][k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_281'/>
+281
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_281'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int i = k; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_282'/>
+282
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_282'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_283'/>
+283
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_283'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        hI[j] -= alpha * hI[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_284'/>
+284
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_284'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_285'/>
+285
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_285'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_286'/>
+286
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_286'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_287'/>
+287
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_287'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_288'/>
+288
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_288'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (k &#60; n - 1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_289'/>
+289
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_289'></a>
+</td>
+<td class=''><pre><span  class=''>                //zero-out a row</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_290'/>
+290
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_290'></a>
+</td>
+<td class='covered'><pre><span  class=''>                xNormSqr = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_291'/>
+291
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_291'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int j = k + 1; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_292'/>
+292
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_292'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double c = hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_293'/>
+293
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_293'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    xNormSqr += c * c;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_294'/>
+294
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_294'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_295'/>
+295
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_295'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                final double b = (hK[k + 1] &#62; 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_296'/>
+296
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_296'></a>
+</td>
+<td class='covered'><pre><span  class=''>                secondary[k] = b;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_297'/>
+297
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_297'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (b != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_298'/>
+298
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_298'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    hK[k + 1] -= b;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_299'/>
+299
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_299'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int i = k + 1; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_300'/>
+300
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_300'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_301'/>
+301
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_301'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        double beta = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_302'/>
+302
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_302'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int j = k + 1; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_303'/>
+303
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_303'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            beta -= hI[j] * hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_304'/>
+304
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_304'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_305'/>
+305
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_305'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        beta /= b * hK[k + 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_306'/>
+306
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_306'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int j = k + 1; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_307'/>
+307
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_307'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            hI[j] -= beta * hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_308'/>
+308
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_308'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_309'/>
+309
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_309'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_310'/>
+310
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_310'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_311'/>
+311
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_311'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_312'/>
+312
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_312'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_313'/>
+313
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_313'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_314'/>
+314
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_314'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_315'/>
+315
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_315'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_316'/>
+316
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_316'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_317'/>
+317
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_317'></a>
+</td>
+<td class=''><pre><span  class=''>     * Transform original matrix to lower bi-diagonal form.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_318'/>
+318
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_318'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Transformation is done using alternate Householder transforms</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_319'/>
+319
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_319'></a>
+</td>
+<td class=''><pre><span  class=''>     * on rows and columns.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_320'/>
+320
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_320'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_321'/>
+321
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_321'></a>
+</td>
+<td class=''><pre><span  class=''>    private void transformToLowerBiDiagonal() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_322'/>
+322
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_322'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_323'/>
+323
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_323'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int m = householderVectors.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_324'/>
+324
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_324'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int n = householderVectors[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_325'/>
+325
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_325'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int k = 0; k &#60; m; k++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_326'/>
+326
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_326'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_327'/>
+327
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_327'></a>
+</td>
+<td class=''><pre><span  class=''>            //zero-out a row</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_328'/>
+328
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_328'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] hK = householderVectors[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_329'/>
+329
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_329'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double xNormSqr = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_330'/>
+330
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_330'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int j = k; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_331'/>
+331
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_331'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double c = hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_332'/>
+332
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_332'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                xNormSqr += c * c;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_333'/>
+333
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_333'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_334'/>
+334
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_334'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            final double a = (hK[k] &#62; 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_335'/>
+335
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_335'></a>
+</td>
+<td class='covered'><pre><span  class=''>            main[k] = a;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_336'/>
+336
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_336'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (a != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_337'/>
+337
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_337'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                hK[k] -= a;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_338'/>
+338
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_338'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = k + 1; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_339'/>
+339
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_339'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_340'/>
+340
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_340'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    double alpha = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_341'/>
+341
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_341'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = k; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_342'/>
+342
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_342'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        alpha -= hI[j] * hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_343'/>
+343
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_343'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_344'/>
+344
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_344'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    alpha /= a * householderVectors[k][k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_345'/>
+345
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_345'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = k; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_346'/>
+346
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_346'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        hI[j] -= alpha * hK[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_347'/>
+347
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_347'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_348'/>
+348
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_348'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_349'/>
+349
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_349'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_350'/>
+350
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_350'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_351'/>
+351
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_351'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (k &#60; m - 1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_352'/>
+352
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_352'></a>
+</td>
+<td class=''><pre><span  class=''>                //zero-out a column</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_353'/>
+353
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_353'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                final double[] hKp1 = householderVectors[k + 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_354'/>
+354
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_354'></a>
+</td>
+<td class='covered'><pre><span  class=''>                xNormSqr = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_355'/>
+355
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_355'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = k + 1; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_356'/>
+356
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_356'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double c = householderVectors[i][k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_357'/>
+357
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_357'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    xNormSqr += c * c;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_358'/>
+358
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_358'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_359'/>
+359
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_359'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                final double b = (hKp1[k] &#62; 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_360'/>
+360
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_360'></a>
+</td>
+<td class='covered'><pre><span  class=''>                secondary[k] = b;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_361'/>
+361
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_361'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (b != 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_362'/>
+362
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_362'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    hKp1[k] -= b;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_363'/>
+363
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_363'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = k + 1; j &#60; n; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_364'/>
+364
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_364'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        double beta = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_365'/>
+365
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_365'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k + 1; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_366'/>
+366
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_366'></a>
+</td>
+<td class='covered'><pre><span  class=''>                            final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_367'/>
+367
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_367'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            beta -= hI[j] * hI[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_368'/>
+368
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_368'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_369'/>
+369
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_369'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        beta /= b * hKp1[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_370'/>
+370
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_370'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        for (int i = k + 1; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_371'/>
+371
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_371'></a>
+</td>
+<td class='covered'><pre><span  class=''>                            final double[] hI = householderVectors[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_372'/>
+372
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_372'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                            hI[j] -= beta * hI[k];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_373'/>
+373
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_373'></a>
+</td>
+<td class=''><pre><span  class=''>                        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_374'/>
+374
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_374'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_375'/>
+375
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_375'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_376'/>
+376
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_376'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_377'/>
+377
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_377'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_378'/>
+378
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_378'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_379'/>
+379
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_379'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_380'/>
+380
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_380'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3aaa1269_381'/>
+381
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_381'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_69'>69</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_69'/> 
+
+<p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_75'>75</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_75'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_76'>76</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_76'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/BiDiagonalTransformer::transformToUpperBiDiagonal : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_78'>78</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_78'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/BiDiagonalTransformer::transformToLowerBiDiagonal : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_90'>90</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_90'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_95'>95</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_95'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_96'>96</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_96'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_100'>100</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_100'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testDimensions(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_105'>105</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_105'/> 
+
+<p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_108'>108</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_108'/> 
+
+<p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_109'>109</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_109'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_111'>111</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_111'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_112'>112</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_112'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_114'>114</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_114'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testDimensions(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_116'>116</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_116'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_117'>117</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_117'/> 
+
+<p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_122'>122</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_122'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_129'>129</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_129'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getU to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_139'>139</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_139'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_144'>144</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_144'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_146'>146</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_146'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_147'>147</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_147'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_148'>148</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_148'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_151'>151</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_151'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_152'>152</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_152'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_160'>160</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_160'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getB to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_171'>171</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_171'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_176'>176</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_176'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_177'>177</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_177'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_181'>181</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_181'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testDimensions(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_186'>186</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_186'/> 
+
+<p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_187'>187</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_187'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_189'>189</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_189'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_190'>190</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_190'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_192'>192</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_192'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_193'>193</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_193'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_195'>195</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_195'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_197'>197</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_197'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_198'>198</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_198'/> 
+
+<p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_203'>203</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_203'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_210'>210</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_210'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getV to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_221'>221</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_221'/> 
+
+<p class='NO_COVERAGE'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getHouseholderVectorsRef to ( if (x != null) null else throw new RuntimeException ) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_231'>231</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_231'/> 
+
+<p class='NO_COVERAGE'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getMainDiagonalRef to ( if (x != null) null else throw new RuntimeException ) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_241'>241</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_241'/> 
+
+<p class='NO_COVERAGE'>mutated return of Object value for org/apache/commons/math3/linear/BiDiagonalTransformer::getSecondaryDiagonalRef to ( if (x != null) null else throw new RuntimeException ) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_249'>249</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_249'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_261'>261</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_261'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_265'>265</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_265'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_267'>267</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_267'/> 
+
+<p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_270'>270</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_270'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_272'>272</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_272'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_273'>273</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_273'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_274'>274</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_274'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_276'>276</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_276'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_278'>278</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_278'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_280'>280</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_280'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_281'>281</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_281'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_283'>283</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_283'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_288'>288</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_288'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_291'>291</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_291'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_293'>293</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_293'/> 
+
+<p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_295'>295</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_295'/> 
+
+<p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testSingularMatrix(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_297'>297</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_297'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_298'>298</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_298'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_299'>299</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_299'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_302'>302</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_302'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_303'>303</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_303'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_305'>305</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_305'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_306'>306</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_306'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_307'>307</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_307'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_325'>325</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_325'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_330'>330</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_330'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_332'>332</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_332'/> 
+
+<p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_334'>334</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_334'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='SURVIVED'>removed negation : SURVIVED</p> <p class='SURVIVED'>negated conditional : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_336'>336</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_336'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_337'>337</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_337'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_338'>338</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_338'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_341'>341</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_341'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_342'>342</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_342'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_344'>344</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_344'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_345'>345</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_345'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_346'>346</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_346'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_351'>351</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_351'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_353'>353</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_353'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_355'>355</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_355'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_357'>357</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_357'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_359'>359</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_359'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='SURVIVED'>removed negation : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_361'>361</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_361'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_362'>362</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_362'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_363'>363</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_363'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_365'>365</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_365'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_367'>367</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_367'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_369'>369</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_369'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_370'>370</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_370'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3aaa1269_372'>372</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3aaa1269_372'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testDimensions(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testSingularMatrix(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (2 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testMatricesValues(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (1 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

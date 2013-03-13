@@ -1,0 +1,4525 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>AdamsNordsieckTransformer.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.ode.nonstiff;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_20'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Arrays;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_21'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.HashMap;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_22'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Map;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_23'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_24'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.fraction.BigFraction;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_25'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.Array2DRowFieldMatrix;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_26'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.Array2DRowRealMatrix;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_27'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.ArrayFieldVector;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_28'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.FieldDecompositionSolver;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_29'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.FieldLUDecomposition;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_30'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.FieldMatrix;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_31'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.MatrixUtils;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_32'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.QRDecomposition;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_33'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.linear.RealMatrix;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_34'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_35'></a>
+</td>
+<td class=''><pre><span  class=''>/** Transformer to Nordsieck vectors for Adams integrators.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_36'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;This class is used by {@link AdamsBashforthIntegrator Adams-Bashforth} and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_37'></a>
+</td>
+<td class=''><pre><span  class=''> * {@link AdamsMoultonIntegrator Adams-Moulton} integrators to convert between</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_38'></a>
+</td>
+<td class=''><pre><span  class=''> * classical representation with several previous first derivatives and Nordsieck</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_39'></a>
+</td>
+<td class=''><pre><span  class=''> * representation with higher order scaled derivatives.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_40'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_41'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;We define scaled derivatives s&#60;sub&#62;i&#60;/sub&#62;(n) at step n as:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_42'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_43'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;1&#60;/sub&#62;(n) = h y&#39;&#60;sub&#62;n&#60;/sub&#62; for first derivative</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_44'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;2&#60;/sub&#62;(n) = h&#60;sup&#62;2&#60;/sup&#62;/2 y&#39;&#39;&#60;sub&#62;n&#60;/sub&#62; for second derivative</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_45'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;3&#60;/sub&#62;(n) = h&#60;sup&#62;3&#60;/sup&#62;/6 y&#39;&#39;&#39;&#60;sub&#62;n&#60;/sub&#62; for third derivative</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_46'></a>
+</td>
+<td class=''><pre><span  class=''> * ...</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_47'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;k&#60;/sub&#62;(n) = h&#60;sup&#62;k&#60;/sup&#62;/k! y&#60;sup&#62;(k)&#60;/sup&#62;&#60;sub&#62;n&#60;/sub&#62; for k&#60;sup&#62;th&#60;/sup&#62; derivative</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_48'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_49'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_50'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;With the previous definition, the classical representation of multistep methods</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_51'></a>
+</td>
+<td class=''><pre><span  class=''> * uses first derivatives only, i.e. it handles y&#60;sub&#62;n&#60;/sub&#62;, s&#60;sub&#62;1&#60;/sub&#62;(n) and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_52'></a>
+</td>
+<td class=''><pre><span  class=''> * q&#60;sub&#62;n&#60;/sub&#62; where q&#60;sub&#62;n&#60;/sub&#62; is defined as:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_53'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_54'></a>
+</td>
+<td class=''><pre><span  class=''> *   q&#60;sub&#62;n&#60;/sub&#62; = [ s&#60;sub&#62;1&#60;/sub&#62;(n-1) s&#60;sub&#62;1&#60;/sub&#62;(n-2) ... s&#60;sub&#62;1&#60;/sub&#62;(n-(k-1)) ]&#60;sup&#62;T&#60;/sup&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_55'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_56'></a>
+</td>
+<td class=''><pre><span  class=''> * (we omit the k index in the notation for clarity).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_57'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_58'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Another possible representation uses the Nordsieck vector with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_59'></a>
+</td>
+<td class=''><pre><span  class=''> * higher degrees scaled derivatives all taken at the same step, i.e it handles y&#60;sub&#62;n&#60;/sub&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_60'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;1&#60;/sub&#62;(n) and r&#60;sub&#62;n&#60;/sub&#62;) where r&#60;sub&#62;n&#60;/sub&#62; is defined as:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_61'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_62'></a>
+</td>
+<td class=''><pre><span  class=''> * r&#60;sub&#62;n&#60;/sub&#62; = [ s&#60;sub&#62;2&#60;/sub&#62;(n), s&#60;sub&#62;3&#60;/sub&#62;(n) ... s&#60;sub&#62;k&#60;/sub&#62;(n) ]&#60;sup&#62;T&#60;/sup&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_63'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_64'></a>
+</td>
+<td class=''><pre><span  class=''> * (here again we omit the k index in the notation for clarity)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_65'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_66'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_67'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Taylor series formulas show that for any index offset i, s&#60;sub&#62;1&#60;/sub&#62;(n-i) can be</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_68'></a>
+</td>
+<td class=''><pre><span  class=''> * computed from s&#60;sub&#62;1&#60;/sub&#62;(n), s&#60;sub&#62;2&#60;/sub&#62;(n) ... s&#60;sub&#62;k&#60;/sub&#62;(n), the formula being exact</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_69'></a>
+</td>
+<td class=''><pre><span  class=''> * for degree k polynomials.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_70'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_71'></a>
+</td>
+<td class=''><pre><span  class=''> * s&#60;sub&#62;1&#60;/sub&#62;(n-i) = s&#60;sub&#62;1&#60;/sub&#62;(n) + &#38;sum;&#60;sub&#62;j&#38;gt;1&#60;/sub&#62; j (-i)&#60;sup&#62;j-1&#60;/sup&#62; s&#60;sub&#62;j&#60;/sub&#62;(n)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_72'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_73'></a>
+</td>
+<td class=''><pre><span  class=''> * The previous formula can be used with several values for i to compute the transform between</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_74'></a>
+</td>
+<td class=''><pre><span  class=''> * classical representation and Nordsieck vector at step end. The transform between r&#60;sub&#62;n&#60;/sub&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_75'></a>
+</td>
+<td class=''><pre><span  class=''> * and q&#60;sub&#62;n&#60;/sub&#62; resulting from the Taylor series formulas above is:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_76'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_77'></a>
+</td>
+<td class=''><pre><span  class=''> * q&#60;sub&#62;n&#60;/sub&#62; = s&#60;sub&#62;1&#60;/sub&#62;(n) u + P r&#60;sub&#62;n&#60;/sub&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_78'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_79'></a>
+</td>
+<td class=''><pre><span  class=''> * where u is the [ 1 1 ... 1 ]&#60;sup&#62;T&#60;/sup&#62; vector and P is the (k-1)&#38;times;(k-1) matrix built</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_80'></a>
+</td>
+<td class=''><pre><span  class=''> * with the j (-i)&#60;sup&#62;j-1&#60;/sup&#62; terms:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_81'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_82'></a>
+</td>
+<td class=''><pre><span  class=''> *        [  -2   3   -4    5  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_83'></a>
+</td>
+<td class=''><pre><span  class=''> *        [  -4  12  -32   80  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_84'></a>
+</td>
+<td class=''><pre><span  class=''> *   P =  [  -6  27 -108  405  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_85'></a>
+</td>
+<td class=''><pre><span  class=''> *        [  -8  48 -256 1280  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_86'></a>
+</td>
+<td class=''><pre><span  class=''> *        [          ...           ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_87'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_88'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_89'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Changing -i into +i in the formula above can be used to compute a similar transform between</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_90'></a>
+</td>
+<td class=''><pre><span  class=''> * classical representation and Nordsieck vector at step start. The resulting matrix is simply</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_91'></a>
+</td>
+<td class=''><pre><span  class=''> * the absolute value of matrix P.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_92'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_93'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;For {@link AdamsBashforthIntegrator Adams-Bashforth} method, the Nordsieck vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_94'></a>
+</td>
+<td class=''><pre><span  class=''> * at step n+1 is computed from the Nordsieck vector at step n as follows:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_95'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_96'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;y&#60;sub&#62;n+1&#60;/sub&#62; = y&#60;sub&#62;n&#60;/sub&#62; + s&#60;sub&#62;1&#60;/sub&#62;(n) + u&#60;sup&#62;T&#60;/sup&#62; r&#60;sub&#62;n&#60;/sub&#62;&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_97'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;s&#60;sub&#62;1&#60;/sub&#62;(n+1) = h f(t&#60;sub&#62;n+1&#60;/sub&#62;, y&#60;sub&#62;n+1&#60;/sub&#62;)&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_98'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;r&#60;sub&#62;n+1&#60;/sub&#62; = (s&#60;sub&#62;1&#60;/sub&#62;(n) - s&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u + P&#60;sup&#62;-1&#60;/sup&#62; A P r&#60;sub&#62;n&#60;/sub&#62;&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_99'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_100'></a>
+</td>
+<td class=''><pre><span  class=''> * where A is a rows shifting matrix (the lower left part is an identity matrix):</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_101'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_102'></a>
+</td>
+<td class=''><pre><span  class=''> *        [ 0 0   ...  0 0 | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_103'></a>
+</td>
+<td class=''><pre><span  class=''> *        [ ---------------+---]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_104'></a>
+</td>
+<td class=''><pre><span  class=''> *        [ 1 0   ...  0 0 | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_105'></a>
+</td>
+<td class=''><pre><span  class=''> *    A = [ 0 1   ...  0 0 | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_106'></a>
+</td>
+<td class=''><pre><span  class=''> *        [       ...      | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_107'></a>
+</td>
+<td class=''><pre><span  class=''> *        [ 0 0   ...  1 0 | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_108'></a>
+</td>
+<td class=''><pre><span  class=''> *        [ 0 0   ...  0 1 | 0 ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_109'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_110'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_111'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;For {@link AdamsMoultonIntegrator Adams-Moulton} method, the predicted Nordsieck vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_112'></a>
+</td>
+<td class=''><pre><span  class=''> * at step n+1 is computed from the Nordsieck vector at step n as follows:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_113'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_114'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;Y&#60;sub&#62;n+1&#60;/sub&#62; = y&#60;sub&#62;n&#60;/sub&#62; + s&#60;sub&#62;1&#60;/sub&#62;(n) + u&#60;sup&#62;T&#60;/sup&#62; r&#60;sub&#62;n&#60;/sub&#62;&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_115'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;S&#60;sub&#62;1&#60;/sub&#62;(n+1) = h f(t&#60;sub&#62;n+1&#60;/sub&#62;, Y&#60;sub&#62;n+1&#60;/sub&#62;)&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_116'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;R&#60;sub&#62;n+1&#60;/sub&#62; = (s&#60;sub&#62;1&#60;/sub&#62;(n) - s&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u + P&#60;sup&#62;-1&#60;/sup&#62; A P r&#60;sub&#62;n&#60;/sub&#62;&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_117'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_118'/>
+118
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_118'></a>
+</td>
+<td class=''><pre><span  class=''> * From this predicted vector, the corrected vector is computed as follows:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_119'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_120'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;y&#60;sub&#62;n+1&#60;/sub&#62; = y&#60;sub&#62;n&#60;/sub&#62; + S&#60;sub&#62;1&#60;/sub&#62;(n+1) + [ -1 +1 -1 +1 ... &#38;plusmn;1 ] r&#60;sub&#62;n+1&#60;/sub&#62;&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_121'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;s&#60;sub&#62;1&#60;/sub&#62;(n+1) = h f(t&#60;sub&#62;n+1&#60;/sub&#62;, y&#60;sub&#62;n+1&#60;/sub&#62;)&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_122'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;r&#60;sub&#62;n+1&#60;/sub&#62; = R&#60;sub&#62;n+1&#60;/sub&#62; + (s&#60;sub&#62;1&#60;/sub&#62;(n+1) - S&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_123'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_124'></a>
+</td>
+<td class=''><pre><span  class=''> * where the upper case Y&#60;sub&#62;n+1&#60;/sub&#62;, S&#60;sub&#62;1&#60;/sub&#62;(n+1) and R&#60;sub&#62;n+1&#60;/sub&#62; represent the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_125'></a>
+</td>
+<td class=''><pre><span  class=''> * predicted states whereas the lower case y&#60;sub&#62;n+1&#60;/sub&#62;, s&#60;sub&#62;n+1&#60;/sub&#62; and r&#60;sub&#62;n+1&#60;/sub&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_126'></a>
+</td>
+<td class=''><pre><span  class=''> * represent the corrected states.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_127'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_128'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;We observe that both methods use similar update formulas. In both cases a P&#60;sup&#62;-1&#60;/sup&#62;u</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_129'></a>
+</td>
+<td class=''><pre><span  class=''> * vector and a P&#60;sup&#62;-1&#60;/sup&#62; A P matrix are used that do not depend on the state,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_130'></a>
+</td>
+<td class=''><pre><span  class=''> * they only depend on k. This class handles these transformations.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_131'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_132'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: AdamsNordsieckTransformer.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_133'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_134'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_135'></a>
+</td>
+<td class=''><pre><span  class=''>public class AdamsNordsieckTransformer {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_136'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_137'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cache for already computed coefficients. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_138'></a>
+</td>
+<td class='covered'><pre><span  class=''>    private static final Map&#60;Integer, AdamsNordsieckTransformer&#62; CACHE =</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_139'></a>
+</td>
+<td class=''><pre><span  class=''>        new HashMap&#60;Integer, AdamsNordsieckTransformer&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_140'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_141'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Update matrix for the higher order derivatives h&#60;sup&#62;2&#60;/sup&#62;/2y&#39;&#39;, h&#60;sup&#62;3&#60;/sup&#62;/6 y&#39;&#39;&#39; ... */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_142'></a>
+</td>
+<td class=''><pre><span  class=''>    private final Array2DRowRealMatrix update;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_143'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_144'/>
+144
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_144'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Update coefficients of the higher order derivatives wrt y&#39;. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_145'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[] c1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_146'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_147'/>
+147
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_147'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Simple constructor.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_148'/>
+148
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_148'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param nSteps number of steps of the multistep method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_149'></a>
+</td>
+<td class=''><pre><span  class=''>     * (excluding the one being computed)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_150'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_151'/>
+151
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_151'></a>
+</td>
+<td class='covered'><pre><span  class=''>    private AdamsNordsieckTransformer(final int nSteps) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_152'/>
+152
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_152'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_153'/>
+153
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_153'></a>
+</td>
+<td class=''><pre><span  class=''>        // compute exact coefficients</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_154'></a>
+</td>
+<td class='covered'><pre><span  class=''>        FieldMatrix&#60;BigFraction&#62; bigP = buildP(nSteps);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_155'></a>
+</td>
+<td class='covered'><pre><span  class=''>        FieldDecompositionSolver&#60;BigFraction&#62; pSolver =</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_156'></a>
+</td>
+<td class=''><pre><span  class=''>            new FieldLUDecomposition&#60;BigFraction&#62;(bigP).getSolver();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_157'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_158'></a>
+</td>
+<td class='covered'><pre><span  class=''>        BigFraction[] u = new BigFraction[nSteps];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_159'/>
+159
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_159'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        Arrays.fill(u, BigFraction.ONE);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_160'></a>
+</td>
+<td class='covered'><pre><span  class=''>        BigFraction[] bigC1 = pSolver</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_161'/>
+161
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_161'></a>
+</td>
+<td class=''><pre><span  class=''>            .solve(new ArrayFieldVector&#60;BigFraction&#62;(u, false)).toArray();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_162'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_163'></a>
+</td>
+<td class=''><pre><span  class=''>        // update coefficients are computed by combining transform from</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_164'></a>
+</td>
+<td class=''><pre><span  class=''>        // Nordsieck to multistep, then shifting rows to represent step advance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_165'></a>
+</td>
+<td class=''><pre><span  class=''>        // then applying inverse transform</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_166'></a>
+</td>
+<td class='covered'><pre><span  class=''>        BigFraction[][] shiftedP = bigP.getData();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_167'/>
+167
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_167'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = shiftedP.length - 1; i &#62; 0; --i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_168'></a>
+</td>
+<td class=''><pre><span  class=''>            // shift rows</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_169'/>
+169
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_169'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            shiftedP[i] = shiftedP[i - 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_170'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_171'></a>
+</td>
+<td class='covered'><pre><span  class=''>        shiftedP[0] = new BigFraction[nSteps];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_172'/>
+172
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_172'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        Arrays.fill(shiftedP[0], BigFraction.ZERO);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_173'/>
+173
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_173'></a>
+</td>
+<td class='covered'><pre><span  class=''>        FieldMatrix&#60;BigFraction&#62; bigMSupdate =</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_174'/>
+174
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_174'></a>
+</td>
+<td class=''><pre><span  class=''>            pSolver.solve(new Array2DRowFieldMatrix&#60;BigFraction&#62;(shiftedP, false));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_175'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_176'/>
+176
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_176'></a>
+</td>
+<td class=''><pre><span  class=''>        // convert coefficients to double</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_177'></a>
+</td>
+<td class='covered'><pre><span  class=''>        update         = MatrixUtils.bigFractionMatrixToRealMatrix(bigMSupdate);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_178'></a>
+</td>
+<td class='covered'><pre><span  class=''>        c1             = new double[nSteps];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_179'/>
+179
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_179'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = 0; i &#60; nSteps; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_180'></a>
+</td>
+<td class='covered'><pre><span  class=''>            c1[i] = bigC1[i].doubleValue();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_181'/>
+181
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_181'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_182'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_183'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_184'/>
+184
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_184'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_185'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Get the Nordsieck transformer for a given number of steps.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_186'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param nSteps number of steps of the multistep method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_187'></a>
+</td>
+<td class=''><pre><span  class=''>     * (excluding the one being computed)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_188'/>
+188
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_188'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return Nordsieck transformer for the specified number of steps</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_189'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_190'></a>
+</td>
+<td class=''><pre><span  class=''>    public static AdamsNordsieckTransformer getInstance(final int nSteps) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_191'/>
+191
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_191'></a>
+</td>
+<td class='covered'><pre><span  class=''>        synchronized(CACHE) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_192'/>
+192
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_192'></a>
+</td>
+<td class='covered'><pre><span  class=''>            AdamsNordsieckTransformer t = CACHE.get(nSteps);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_193'/>
+193
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_193'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (t == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_194'></a>
+</td>
+<td class='covered'><pre><span  class=''>                t = new AdamsNordsieckTransformer(nSteps);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_195'/>
+195
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_195'></a>
+</td>
+<td class='covered'><pre><span  class=''>                CACHE.put(nSteps, t);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_196'/>
+196
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_196'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_197'/>
+197
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_197'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return t;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_198'/>
+198
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_198'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_199'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_200'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_201'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Get the number of steps of the method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_202'></a>
+</td>
+<td class=''><pre><span  class=''>     * (excluding the one being computed).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_203'/>
+203
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_203'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return number of steps of the method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_204'></a>
+</td>
+<td class=''><pre><span  class=''>     * (excluding the one being computed)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_205'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_206'></a>
+</td>
+<td class=''><pre><span  class=''>    public int getNSteps() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_207'/>
+207
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_207'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return c1.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_208'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_209'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_210'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Build the P matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_211'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The P matrix general terms are shifted j (-i)&#60;sup&#62;j-1&#60;/sup&#62; terms:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_212'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_213'></a>
+</td>
+<td class=''><pre><span  class=''>     *        [  -2   3   -4    5  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_214'></a>
+</td>
+<td class=''><pre><span  class=''>     *        [  -4  12  -32   80  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_215'/>
+215
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_215'></a>
+</td>
+<td class=''><pre><span  class=''>     *   P =  [  -6  27 -108  405  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_216'/>
+216
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_216'></a>
+</td>
+<td class=''><pre><span  class=''>     *        [  -8  48 -256 1280  ... ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_217'/>
+217
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_217'></a>
+</td>
+<td class=''><pre><span  class=''>     *        [          ...           ]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_218'/>
+218
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_218'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_219'/>
+219
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_219'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param nSteps number of steps of the multistep method</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_220'></a>
+</td>
+<td class=''><pre><span  class=''>     * (excluding the one being computed)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_221'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return P matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_222'/>
+222
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_222'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_223'/>
+223
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_223'></a>
+</td>
+<td class=''><pre><span  class=''>    private FieldMatrix&#60;BigFraction&#62; buildP(final int nSteps) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_224'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_225'/>
+225
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_225'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final BigFraction[][] pData = new BigFraction[nSteps][nSteps];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_226'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_227'/>
+227
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_227'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = 0; i &#60; pData.length; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_228'/>
+228
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_228'></a>
+</td>
+<td class=''><pre><span  class=''>            // build the P matrix elements from Taylor series formulas</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_229'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final BigFraction[] pI = pData[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_230'/>
+230
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_230'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final int factor = -(i + 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_231'/>
+231
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_231'></a>
+</td>
+<td class='covered'><pre><span  class=''>            int aj = factor;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_232'/>
+232
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_232'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int j = 0; j &#60; pI.length; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_233'/>
+233
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_233'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                pI[j] = new BigFraction(aj * (j + 2));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_234'/>
+234
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_234'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                aj *= factor;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_235'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_236'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_237'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_238'/>
+238
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_238'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return new Array2DRowFieldMatrix&#60;BigFraction&#62;(pData, false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_239'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_240'/>
+240
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_240'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_241'/>
+241
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_241'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_242'/>
+242
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_242'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Initialize the high order scaled derivatives at step start.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_243'/>
+243
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_243'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param h step size to use for scaling</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_244'/>
+244
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_244'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param t first steps times</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_245'/>
+245
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_245'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param y first steps states</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_246'/>
+246
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_246'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param yDot first steps derivatives</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_247'/>
+247
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_247'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return Nordieck vector at first step (h&#60;sup&#62;2&#60;/sup&#62;/2 y&#39;&#39;&#60;sub&#62;n&#60;/sub&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_248'/>
+248
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_248'></a>
+</td>
+<td class=''><pre><span  class=''>     * h&#60;sup&#62;3&#60;/sup&#62;/6 y&#39;&#39;&#39;&#60;sub&#62;n&#60;/sub&#62; ... h&#60;sup&#62;k&#60;/sup&#62;/k! y&#60;sup&#62;(k)&#60;/sup&#62;&#60;sub&#62;n&#60;/sub&#62;)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_249'/>
+249
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_249'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_250'/>
+250
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_250'></a>
+</td>
+<td class=''><pre><span  class=''>    public Array2DRowRealMatrix initializeHighOrderDerivatives(final double h, final double[] t,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_251'/>
+251
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_251'></a>
+</td>
+<td class=''><pre><span  class=''>                                                               final double[][] y,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_252'></a>
+</td>
+<td class=''><pre><span  class=''>                                                               final double[][] yDot) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_253'/>
+253
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_253'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_254'></a>
+</td>
+<td class=''><pre><span  class=''>        // using Taylor series with di = ti - t0, we get:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_255'/>
+255
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_255'></a>
+</td>
+<td class=''><pre><span  class=''>        //  y(ti)  - y(t0)  - di y&#39;(t0) =   di^2 / h^2 s2 + ... +   di^k     / h^k sk + O(h^(k+1))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_256'></a>
+</td>
+<td class=''><pre><span  class=''>        //  y&#39;(ti) - y&#39;(t0)             = 2 di   / h^2 s2 + ... + k di^(k-1) / h^k sk + O(h^k)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_257'></a>
+</td>
+<td class=''><pre><span  class=''>        // we write these relations for i = 1 to i= n-1 as a set of 2(n-1) linear</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_258'/>
+258
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_258'></a>
+</td>
+<td class=''><pre><span  class=''>        // equations depending on the Nordsieck vector [s2 ... sk]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_259'/>
+259
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_259'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final double[][] a     = new double[2 * (y.length - 1)][c1.length];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_260'/>
+260
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_260'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final double[][] b     = new double[2 * (y.length - 1)][y[0].length];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_261'/>
+261
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_261'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double[]   y0    = y[0];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_262'/>
+262
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_262'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double[]   yDot0 = yDot[0];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_263'/>
+263
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_263'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = 1; i &#60; y.length; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_264'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_265'/>
+265
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_265'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double di    = t[i] - t[0];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_266'/>
+266
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_266'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double ratio = di / h;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_267'/>
+267
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_267'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            double dikM1Ohk    =  1 / h;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_268'/>
+268
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_268'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_269'/>
+269
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_269'></a>
+</td>
+<td class=''><pre><span  class=''>            // linear coefficients of equations</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_270'/>
+270
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_270'></a>
+</td>
+<td class=''><pre><span  class=''>            // y(ti) - y(t0) - di y&#39;(t0) and y&#39;(ti) - y&#39;(t0)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_271'/>
+271
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_271'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] aI    = a[2 * i - 2];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_272'/>
+272
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_272'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] aDotI = a[2 * i - 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_273'/>
+273
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_273'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int j = 0; j &#60; aI.length; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_274'/>
+274
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_274'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                dikM1Ohk *= ratio;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_275'/>
+275
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_275'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                aI[j]     = di      * dikM1Ohk;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_276'/>
+276
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_276'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                aDotI[j]  = (j + 2) * dikM1Ohk;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_277'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_278'/>
+278
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_278'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_279'></a>
+</td>
+<td class=''><pre><span  class=''>            // expected value of the previous equations</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_280'/>
+280
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_280'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] yI    = y[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_281'/>
+281
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_281'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] yDotI = yDot[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_282'/>
+282
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_282'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] bI    = b[2 * i - 2];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_283'/>
+283
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_283'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double[] bDotI = b[2 * i - 1];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_284'/>
+284
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_284'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int j = 0; j &#60; yI.length; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_285'/>
+285
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_285'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                bI[j]    = yI[j] - y0[j] - di * yDot0[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_286'/>
+286
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_286'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                bDotI[j] = yDotI[j] - yDot0[j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_287'/>
+287
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_287'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_288'/>
+288
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_288'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_289'/>
+289
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_289'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_290'/>
+290
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_290'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_291'/>
+291
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_291'></a>
+</td>
+<td class=''><pre><span  class=''>        // solve the rectangular system in the least square sense</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_292'/>
+292
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_292'></a>
+</td>
+<td class=''><pre><span  class=''>        // to get the best estimate of the Nordsieck vector [s2 ... sk]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_293'/>
+293
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_293'></a>
+</td>
+<td class=''><pre><span  class=''>        QRDecomposition decomposition;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_294'/>
+294
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_294'></a>
+</td>
+<td class='covered'><pre><span  class=''>        decomposition = new QRDecomposition(new Array2DRowRealMatrix(a, false));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_295'/>
+295
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_295'></a>
+</td>
+<td class='covered'><pre><span  class=''>        RealMatrix x = decomposition.getSolver().solve(new Array2DRowRealMatrix(b, false));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_296'/>
+296
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_296'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return new Array2DRowRealMatrix(x.getData(), false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_297'/>
+297
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_297'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_298'/>
+298
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_298'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_299'/>
+299
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_299'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Update the high order scaled derivatives for Adams integrators (phase 1).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_300'/>
+300
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_300'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The complete update of high order derivatives has a form similar to:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_301'/>
+301
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_301'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_302'/>
+302
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_302'></a>
+</td>
+<td class=''><pre><span  class=''>     * r&#60;sub&#62;n+1&#60;/sub&#62; = (s&#60;sub&#62;1&#60;/sub&#62;(n) - s&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u + P&#60;sup&#62;-1&#60;/sup&#62; A P r&#60;sub&#62;n&#60;/sub&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_303'/>
+303
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_303'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_304'/>
+304
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_304'></a>
+</td>
+<td class=''><pre><span  class=''>     * this method computes the P&#60;sup&#62;-1&#60;/sup&#62; A P r&#60;sub&#62;n&#60;/sub&#62; part.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_305'/>
+305
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_305'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param highOrder high order scaled derivatives</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_306'/>
+306
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_306'></a>
+</td>
+<td class=''><pre><span  class=''>     * (h&#60;sup&#62;2&#60;/sup&#62;/2 y&#39;&#39;, ... h&#60;sup&#62;k&#60;/sup&#62;/k! y(k))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_307'/>
+307
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_307'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return updated high order derivatives</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_308'/>
+308
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_308'></a>
+</td>
+<td class=''><pre><span  class=''>     * @see #updateHighOrderDerivativesPhase2(double[], double[], Array2DRowRealMatrix)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_309'/>
+309
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_309'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_310'/>
+310
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_310'></a>
+</td>
+<td class=''><pre><span  class=''>    public Array2DRowRealMatrix updateHighOrderDerivativesPhase1(final Array2DRowRealMatrix highOrder) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_311'/>
+311
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_311'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return update.multiply(highOrder);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_312'/>
+312
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_312'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_313'/>
+313
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_313'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_314'/>
+314
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_314'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Update the high order scaled derivatives Adams integrators (phase 2).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_315'/>
+315
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_315'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The complete update of high order derivatives has a form similar to:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_316'/>
+316
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_316'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_317'/>
+317
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_317'></a>
+</td>
+<td class=''><pre><span  class=''>     * r&#60;sub&#62;n+1&#60;/sub&#62; = (s&#60;sub&#62;1&#60;/sub&#62;(n) - s&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u + P&#60;sup&#62;-1&#60;/sup&#62; A P r&#60;sub&#62;n&#60;/sub&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_318'/>
+318
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_318'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_319'/>
+319
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_319'></a>
+</td>
+<td class=''><pre><span  class=''>     * this method computes the (s&#60;sub&#62;1&#60;/sub&#62;(n) - s&#60;sub&#62;1&#60;/sub&#62;(n+1)) P&#60;sup&#62;-1&#60;/sup&#62; u part.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_320'/>
+320
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_320'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Phase 1 of the update must already have been performed.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_321'/>
+321
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_321'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param start first order scaled derivatives at step start</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_322'/>
+322
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_322'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param end first order scaled derivatives at step end</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_323'/>
+323
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_323'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param highOrder high order scaled derivatives, will be modified</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_324'/>
+324
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_324'></a>
+</td>
+<td class=''><pre><span  class=''>     * (h&#60;sup&#62;2&#60;/sup&#62;/2 y&#39;&#39;, ... h&#60;sup&#62;k&#60;/sup&#62;/k! y(k))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_325'/>
+325
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_325'></a>
+</td>
+<td class=''><pre><span  class=''>     * @see #updateHighOrderDerivativesPhase1(Array2DRowRealMatrix)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_326'/>
+326
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_326'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_327'/>
+327
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_327'></a>
+</td>
+<td class=''><pre><span  class=''>    public void updateHighOrderDerivativesPhase2(final double[] start,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_328'/>
+328
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_328'></a>
+</td>
+<td class=''><pre><span  class=''>                                                 final double[] end,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_329'/>
+329
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_329'></a>
+</td>
+<td class=''><pre><span  class=''>                                                 final Array2DRowRealMatrix highOrder) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_330'/>
+330
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_330'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double[][] data = highOrder.getDataRef();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_331'/>
+331
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_331'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = 0; i &#60; data.length; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_332'/>
+332
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_332'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] dataI = data[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_333'/>
+333
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_333'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double c1I = c1[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_334'/>
+334
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_334'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int j = 0; j &#60; dataI.length; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_335'/>
+335
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_335'>3</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>                dataI[j] += c1I * (start[j] - end[j]);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_336'/>
+336
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_336'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_337'/>
+337
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_337'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_338'/>
+338
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_338'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_339'/>
+339
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_339'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@77f47f2e_340'/>
+340
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_340'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_159'>159</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_159'/> 
+
+<p class='KILLED'>removed call to java/util/Arrays::fill : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_167'>167</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_167'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_169'>169</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_169'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_172'>172</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_172'/> 
+
+<p class='KILLED'>removed call to java/util/Arrays::fill : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_179'>179</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_179'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_193'>193</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_193'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_197'>197</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_197'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/nonstiff/AdamsNordsieckTransformer::getInstance to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_207'>207</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_207'/> 
+
+<p class='NO_COVERAGE'>replaced return of integer sized value with (x == 0 ? 1 : 0) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_227'>227</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_227'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_230'>230</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_230'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_232'>232</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_232'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_233'>233</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_233'/> 
+
+<p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_234'>234</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_234'/> 
+
+<p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_238'>238</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_238'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/nonstiff/AdamsNordsieckTransformer::buildP to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_259'>259</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_259'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_260'>260</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_260'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_263'>263</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_263'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_265'>265</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_265'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_266'>266</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_266'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_267'>267</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_267'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_271'>271</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_271'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_272'>272</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_272'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_273'>273</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_273'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_274'>274</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_274'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_275'>275</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_275'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_276'>276</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_276'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_282'>282</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_282'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_283'>283</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_283'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_284'>284</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_284'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_285'>285</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_285'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_286'>286</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_286'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_296'>296</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_296'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/nonstiff/AdamsNordsieckTransformer::initializeHighOrderDerivatives to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_311'>311</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_311'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/ode/nonstiff/AdamsNordsieckTransformer::updateHighOrderDerivativesPhase1 to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_331'>331</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_331'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_334'>334</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_334'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@77f47f2e_335'>335</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@77f47f2e_335'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> <p class='TIMED_OUT'>Replaced double subtraction with addition : TIMED_OUT</p> <p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (156 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (41 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (199 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.serialization(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (20 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (64 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (136 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (223 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (70 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (325 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (17 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

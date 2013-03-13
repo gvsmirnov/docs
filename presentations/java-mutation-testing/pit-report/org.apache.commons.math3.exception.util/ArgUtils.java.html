@@ -1,0 +1,807 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>ArgUtils.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_17'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.exception.util;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_18'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_19'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.List;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_20'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.ArrayList;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_21'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_22'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_23'></a>
+</td>
+<td class=''><pre><span  class=''> * Utility class for transforming the list of arguments passed to</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_24'></a>
+</td>
+<td class=''><pre><span  class=''> * constructors of exceptions.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_25'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_26'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: ArgUtils.java 1364388 2012-07-22 18:16:43Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_27'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_28'></a>
+</td>
+<td class=''><pre><span  class=''>public class ArgUtils {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_29'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_30'></a>
+</td>
+<td class=''><pre><span  class=''>     * Class contains only static methods.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_31'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_32'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>    private ArgUtils() {}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_33'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_34'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_35'></a>
+</td>
+<td class=''><pre><span  class=''>     * Transform a multidimensional array into a one-dimensional list.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_36'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_37'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param array Array (possibly multidimensional).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_38'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return a list of all the {@code Object} instances contained in</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_39'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@code array}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_40'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_41'></a>
+</td>
+<td class=''><pre><span  class=''>    public static Object[] flatten(Object[] array) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_42'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final List&#60;Object&#62; list = new ArrayList&#60;Object&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_43'/>
+43
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_43'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (array != null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_44'/>
+44
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_44'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (Object o : array) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_45'/>
+45
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_45'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (o instanceof Object[]) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_46'/>
+46
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_46'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (Object oR : flatten((Object[]) o)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_47'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        list.add(oR);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_48'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_49'></a>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_50'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    list.add(o);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_51'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_52'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_53'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_54'/>
+54
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_54'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return list.toArray();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_55'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@5e610b99_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_56'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@5e610b99_43'>43</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_43'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@5e610b99_44'>44</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_44'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@5e610b99_45'>45</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_45'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@5e610b99_46'>46</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_46'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@5e610b99_54'>54</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@5e610b99_54'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/exception/util/ArgUtils::flatten to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.fraction.BigFractionTest.testConstructor(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testUnitVectorNullVector(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testChromosomeListConstructorTooHigh(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testOrthogonal(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage3(org.apache.commons.math3.analysis.function.LogisticTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testSolveRankErrors(org.apache.commons.math3.linear.QRSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testAddDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit02(org.apache.commons.math3.fitting.GaussianFitterTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testProjectionNullVector(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSetSubVectorInvalidIndex2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testOneSampleT(org.apache.commons.math3.stat.inference.TestUtilsTest) (1 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testPreconditions3(org.apache.commons.math3.distribution.TriangularDistributionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntIAE(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testNotPositiveDefinite(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testUnitizeNullVector(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongIAE(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testLcmLong(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.exception.util.ArgUtilsTest.testFlatten(org.apache.commons.math3.exception.util.ArgUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldVectorTest.testMisc(org.apache.commons.math3.linear.SparseFieldVectorTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetRow(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextPoisson(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (83 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testDotProductDimensionMismatchSameType(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCosineLeftNullVector(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetColumn(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (2 ms)</li><li>org.apache.commons.math3.distribution.CauchyDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.CauchyDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldLUSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.FieldLUSolverTest) (0 ms)</li><li>org.apache.commons.math3.util.MathUtilsTest.testCheckNotNull2(org.apache.commons.math3.util.MathUtilsTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testNewSampleInsufficientData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.ChiSquareTestTest.testChiSquareIndependence(org.apache.commons.math3.stat.inference.ChiSquareTestTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testSubAndCheckLong(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveNull(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextHex(org.apache.commons.math3.random.RandomDataGeneratorTest) (37 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testGeometricMean(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateRealMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (1 ms)</li><li>org.apache.commons.math3.exception.MaxCountExceededExceptionTest.testAccessors(org.apache.commons.math3.exception.MaxCountExceededExceptionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformIAE(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetRowMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testGcd(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest.testInsufficientOrder3(org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testSetEntry(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (0 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.FDistributionTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testSingularities(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (53 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testCheckRectangular(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetColumnMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntIAE2(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextPoisson(org.apache.commons.math3.random.Well512aTest) (44 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testConstructors(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.MatrixDimensionMismatchExceptionTest.testAccessors(org.apache.commons.math3.linear.MatrixDimensionMismatchExceptionTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.random.EmpiricalDistributionTest) (185 ms)</li><li>org.apache.commons.math3.analysis.function.HarmonicOscillatorTest.testParametricUsage4(org.apache.commons.math3.analysis.function.HarmonicOscillatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateRowRealMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetRowVector(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testAlphaRangeBelowZero(org.apache.commons.math3.random.StableRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.SigmoidTest.testParametricUsage2(org.apache.commons.math3.analysis.function.SigmoidTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testReciprocal(org.apache.commons.math3.fraction.BigFractionTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest) (9 ms)</li><li>org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest.testEmptySampleValue(org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetSubVectorInvalidIndex3(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.interpolation.HermiteInterpolatorTest.testDuplicatedAbscissa(org.apache.commons.math3.analysis.interpolation.HermiteInterpolatorTest) (2 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testParameters[0](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetColumnMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testBeta(org.apache.commons.math3.distribution.WeibullDistributionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testNewSampleInvalidData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntNeg(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testCompletelyIncorrectBandwidth1(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (2 ms)</li><li>org.apache.commons.math3.special.GammaTest.testLogGamma1pPrecondition2(org.apache.commons.math3.special.GammaTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testWalkInOptimizedOrderChangingVisitor2(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testCheckOrder(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCombineToSelfDimensionMismatchSameType(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionInvalidDataSize[0](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.exception.util.ExceptionContextTest.testNoArgAddMessage(org.apache.commons.math3.exception.util.ExceptionContextTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.NevilleInterpolatorTest.testParameters(org.apache.commons.math3.analysis.interpolation.NevilleInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testConstructorDouble(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testMatrix(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (83 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testConstructorTooLow(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextIntNeg(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetRowMatrix(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionNotStrictlyPositiveNumberOfSamples[0](org.apache.commons.math3.transform.FastSineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextIntIAE2(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testcreateFieldMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testEventManagement(org.apache.commons.math3.linear.ConjugateGradientTest) (5 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testConstructorPopulationLimitNotPositive(org.apache.commons.math3.genetics.ListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNonStrictlyIncreasing2(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testPreconditions1(org.apache.commons.math3.distribution.UniformRealDistributionTest) (0 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testTooLargeOrder(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetRow(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testMultiply(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCombineToSelfDimensionMismatchSameType(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.exception.OutOfRangeExceptionTest.testAccessors(org.apache.commons.math3.exception.OutOfRangeExceptionTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.GTestTest.testZeroExpectedCounts(org.apache.commons.math3.stat.inference.GTestTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testSumLog(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testChromosomeListConstructorPopulationLimitNotPositive(org.apache.commons.math3.genetics.ListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongIAE(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextHex(org.apache.commons.math3.random.Well44497aTest) (36 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddCovarianceDataWithSampleSizeMismatch(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.clustering.DBSCANClustererTest.testNegativeMinPts(org.apache.commons.math3.stat.clustering.DBSCANClustererTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetRowVector(org.apache.commons.math3.linear.FieldMatrixImplTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testNullIntervalCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.ChiSquareTestTest.testChiSquare(org.apache.commons.math3.stat.inference.ChiSquareTestTest) (2 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testCumulativeProbabilityExtremes(org.apache.commons.math3.distribution.FDistributionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testPremultiply(org.apache.commons.math3.linear.SparseFieldMatrixTest) (3 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionNotStrictlyPositiveNumberOfSamples[1](org.apache.commons.math3.transform.FastSineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.ThreeEighthesIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testWrongOrderMatrix(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCosineLeftNullVector(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextExponential(org.apache.commons.math3.random.MersenneTwisterTest) (18 ms)</li><li>org.apache.commons.math3.util.DefaultTransformerTest.testTransformNull(org.apache.commons.math3.util.DefaultTransformerTest) (0 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextIntIAE(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testUnitizeNullVector(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.SecantSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.SecantSolverTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextSample(org.apache.commons.math3.random.RandomDataGeneratorTest) (6 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCheckSymmetric2(org.apache.commons.math3.linear.MatrixUtilsTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testAngle(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntIAE2(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldLUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.FieldLUSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testWalkInOptimizedOrderPreservingVisitor2(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetSubMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testPremultiplyVector(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaSumPrecondition1(org.apache.commons.math3.special.BetaTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage1(org.apache.commons.math3.analysis.function.LogitTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testVectorTwoPairs(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (2 ms)</li><li>org.apache.commons.math3.genetics.NPointCrossoverTest.testCrossoverInvalidFixedLengthChromosomeSecond(org.apache.commons.math3.genetics.NPointCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextPoisson(org.apache.commons.math3.random.BitsStreamGeneratorTest) (74 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongIAE(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.ExponentialDistributionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testPreconditions(org.apache.commons.math3.analysis.function.GaussianTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testAddDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (5 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testTrace(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformIAE(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetRowVector(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testMultiply(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (2 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullFile(org.apache.commons.math3.random.EmpiricalDistributionTest) (141 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testWrongVariableIndex(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetVectors(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntNeg(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testPlusMinus(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testDotProductDimensionMismatchMixedTypes(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.GTestTest.testUnmatchedArrays(org.apache.commons.math3.stat.inference.GTestTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetRowVector(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testProjectionDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testYSampleDataNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.correlation.SpearmansRankCorrelationTest.testInsufficientData(org.apache.commons.math3.stat.correlation.SpearmansRankCorrelationTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionNotStrictlyPositiveNumberOfSamples[0](org.apache.commons.math3.transform.FastCosineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetColumn(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetColumnVector(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionFormatTest.testParseInvalidDenominator(org.apache.commons.math3.fraction.BigFractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetEntry(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.primes.PrimesTest.testPrimeFactors(org.apache.commons.math3.primes.PrimesTest) (16 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetRowVector(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastFourierTransformerTest.testTransformRealSizeNotAPowerOfTwo(org.apache.commons.math3.transform.FastFourierTransformerTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.rank.PercentileTest.testSetQuantile(org.apache.commons.math3.stat.descriptive.rank.PercentileTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextHex(org.apache.commons.math3.random.ISAACTest) (83 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testDimensionMismatchRightHandSide(org.apache.commons.math3.linear.ConjugateGradientTest) (3 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullDoubleArray(org.apache.commons.math3.random.EmpiricalDistributionTest) (146 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntIAE(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testNonInvertible(org.apache.commons.math3.linear.EigenSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest.testInsufficientOrder2(org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testOperate(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testGetLInfDistanceDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetRowMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.GammaDistributionTest) (0 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testDiscard(org.apache.commons.math3.util.ResizableDoubleArrayTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest) (0 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testEbeAddPrecondition(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testBounds(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (0 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntIAE(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformRealInvalidDataSize[0](org.apache.commons.math3.transform.FastSineTransformerTest) (2 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testChiSquare(org.apache.commons.math3.stat.inference.TestUtilsTest) (5 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (64 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testSetEntryInvalidIndex1(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testPremultiply(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testConstructorListOfChromosomesBiggerThanPopulationSize(org.apache.commons.math3.genetics.ListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetLInfDistanceDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest.testDuplicatedAbscissa(org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest) (5 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testSmallDf(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (7 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testCopySubMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetColumnMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testVectorTwoPairs(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (24 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddNullCovarianceData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongIAE(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testCopySubMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetRow(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testIterator(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCosineDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testIllegalArguments(org.apache.commons.math3.random.EmpiricalDistributionTest) (157 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testPercentile(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testAddFail(org.apache.commons.math3.linear.SparseFieldMatrixTest) (0 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextPoisson(org.apache.commons.math3.random.MersenneTwisterTest) (43 ms)</li><li>org.apache.commons.math3.genetics.RandomKeyTest.testConstructor2(org.apache.commons.math3.genetics.RandomKeyTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.MullerSolver2Test.testParameters(org.apache.commons.math3.analysis.solvers.MullerSolver2Test) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testSubAndCheck(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.complex.ComplexTest.testpowNull(org.apache.commons.math3.complex.ComplexTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal2(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testPlusMinus(org.apache.commons.math3.linear.SparseRealMatrixTest) (2 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testMath274(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testGetDistanceDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetRow(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.UniformRealDistributionTest) (2 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCombineDimensionMismatchSameType(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testMismatchedOperatorDimensions(org.apache.commons.math3.linear.ConjugateGradientTest) (0 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.GammaDistributionTest) (1 ms)</li><li>org.apache.commons.math3.exception.NonMonotonicSequenceExceptionTest.testAccessors(org.apache.commons.math3.exception.NonMonotonicSequenceExceptionTest) (0 ms)</li><li>org.apache.commons.math3.complex.QuaternionTest.testWrongDimension(org.apache.commons.math3.complex.QuaternionTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testWalkInDefaultOrderChangingVisitor2(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.complex.RootsOfUnityTest.testMathIllegalState1(org.apache.commons.math3.complex.RootsOfUnityTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.EulerIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testProjectionDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testEbeMultiplyPrecondition(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayFieldVectorTest.testConstructors(org.apache.commons.math3.linear.ArrayFieldVectorTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetVectors(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextGaussian(org.apache.commons.math3.random.Well44497aTest) (42 ms)</li><li>org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest.testInsufficientOrder1(org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.GTestTest.testNegativeObservedCounts(org.apache.commons.math3.stat.inference.GTestTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetRowMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testNonPositiveDefiniteLinearOperator(org.apache.commons.math3.linear.ConjugateGradientTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testBadInitial(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince853IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetSubVectorInvalidIndex2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSquareRootNonPositiveDefinite(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.integration.IterativeLegendreGaussIntegratorTest.testIssue464(org.apache.commons.math3.analysis.integration.IterativeLegendreGaussIntegratorTest) (16291 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testSumSq(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetColumn(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testMulAndCheckLong(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.FDistributionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetRowVector(org.apache.commons.math3.linear.BlockFieldMatrixTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextExponential(org.apache.commons.math3.random.ISAACTest) (38 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSetSubVectorInvalidIndex1(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetDistanceDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextGaussian(org.apache.commons.math3.random.Well19937cTest) (41 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit03(org.apache.commons.math3.fitting.GaussianFitterTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCosineRightNullVector(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonSquarePreconditioner(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntNeg(org.apache.commons.math3.random.Well1024aTest) (0 ms)</li><li>org.apache.commons.math3.primes.PrimesTest.testNextPrime(org.apache.commons.math3.primes.PrimesTest) (50 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSquareRootNonSymmetric(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testGcdLong(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextSample(org.apache.commons.math3.random.Well1024aTest) (5 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformRealFirstElementNotZero[0](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextHex(org.apache.commons.math3.random.Well19937aTest) (33 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextSample(org.apache.commons.math3.random.Well44497bTest) (4 ms)</li><li>org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunctionTest.testValues(org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunctionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetSubVectorInvalidIndex2(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testNonInvertible(org.apache.commons.math3.linear.QRDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testPreconditions(org.apache.commons.math3.distribution.GammaDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntIAE2(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testPreconditions2(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testAddToEntryInvalidIndex2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testAddTooManyChromosomes(org.apache.commons.math3.genetics.ListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (2 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testAxisAngle(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testAddAndCheckLong(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetEntryInvalidIndex1(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testNegativeTestAddObs(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (0 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testWrongOrder(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCombineToSelfDimensionMismatchMixedTypes(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testWrongStepSize(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testProjectionNullVector(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testDotProductDimensionMismatchMixedTypes(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.interpolation.DividedDifferenceInterpolatorTest.testParameters(org.apache.commons.math3.analysis.interpolation.DividedDifferenceInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextSample(org.apache.commons.math3.random.Well44497aTest) (4 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextPoisson(org.apache.commons.math3.random.Well1024aTest) (43 ms)</li><li>org.apache.commons.math3.linear.DiagonalMatrixTest.testSetEntryOutOfRange(org.apache.commons.math3.linear.DiagonalMatrixTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testIssue631(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (7 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntIAE2(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetRowMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSubtractDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.integration.RombergIntegratorTest.testParameters(org.apache.commons.math3.analysis.integration.RombergIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.OrderedCrossoverTest.testCrossoverDimensionMismatchException(org.apache.commons.math3.genetics.OrderedCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testParameters[0](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextPoisson(org.apache.commons.math3.random.RandomDataGeneratorTest) (53 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetColumnMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (2 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaSumPrecondition4(org.apache.commons.math3.special.BetaTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testNonPositiveDefinitePreconditioner(org.apache.commons.math3.linear.ConjugateGradientTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddXSampleData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage1(org.apache.commons.math3.analysis.function.GaussianTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntNeg(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testSubMatrix(org.apache.commons.math3.linear.SparseFieldMatrixTest) (3 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetColumn(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.genetics.CycleCrossoverTest.testCrossoverInvalidFixedLengthChromosomeFirst(org.apache.commons.math3.genetics.CycleCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testNormalize(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (1 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testSetNumberOfElements(org.apache.commons.math3.util.ResizableDoubleArrayTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetEntry(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testWrongDimension(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (1 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testConstructors(org.apache.commons.math3.util.ResizableDoubleArrayTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testUnitizeNullVector(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testNullFunction(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testSetSubMatrix(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testIterator(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testTransitionControlMatrixMismatch(org.apache.commons.math3.filter.KalmanFilterTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.QRSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetEntryInvalidIndex2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddSampleDataWithSizeMismatch(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testCumulativeProbabilityExtremes(org.apache.commons.math3.distribution.ExponentialDistributionTest) (0 ms)</li><li>org.apache.commons.math3.distribution.ZipfDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.ZipfDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetSubMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionInvalidDataSize[1](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testMultiply(org.apache.commons.math3.linear.SparseRealMatrixTest) (3 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.TriangularDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetRowVector(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformIAE(org.apache.commons.math3.random.ISAACTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionInvalidDataSize[1](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.polynomials.PolynomialFunctionNewtonFormTest.testParameters(org.apache.commons.math3.analysis.polynomials.PolynomialFunctionNewtonFormTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testNonSquare(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (199 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage6(org.apache.commons.math3.analysis.function.GaussianTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage4(org.apache.commons.math3.analysis.function.LogisticTest) (0 ms)</li><li>org.apache.commons.math3.util.MathUtilsTest.testCheckFinite(org.apache.commons.math3.util.MathUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testNegativeTestAddMultipleObs(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testPreconditions1(org.apache.commons.math3.analysis.function.LogisticTest) (0 ms)</li><li>org.apache.commons.math3.exception.DimensionMismatchExceptionTest.testAccessors(org.apache.commons.math3.exception.DimensionMismatchExceptionTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.GTestTest.testBadAlpha(org.apache.commons.math3.stat.inference.GTestTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions1(org.apache.commons.math3.analysis.function.StepFunctionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testPremultiplyVector(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ZipfDistributionTest.testPreconditions1(org.apache.commons.math3.distribution.ZipfDistributionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.NormalDistributionTest) (3 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testPreconditions(org.apache.commons.math3.distribution.TDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testPlusMinus(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.RiddersSolverTest.testParameters(org.apache.commons.math3.analysis.solvers.RiddersSolverTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextSample(org.apache.commons.math3.random.ISAACTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextPoisson(org.apache.commons.math3.random.Well19937aTest) (48 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testIntegerOverflow(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.util.BigRealTest.testDivisionByZero(org.apache.commons.math3.util.BigRealTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetDistanceDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testAddDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.LogNormalDistributionTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testPreconditions2(org.apache.commons.math3.analysis.function.LogisticTest) (1 ms)</li><li>org.apache.commons.math3.dfp.BracketingNthOrderBrentSolverDFPTest.testInsufficientOrder3(org.apache.commons.math3.dfp.BracketingNthOrderBrentSolverDFPTest) (3 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntIAE(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.util.PrecisionTest.testRoundFloat(org.apache.commons.math3.util.PrecisionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNonStrictlyIncreasing1(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.FunctionUtilsTest.testSampleNegativeNumberOfPoints(org.apache.commons.math3.analysis.FunctionUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.EigenSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testPremultiplyVector(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testPopulationVariance(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatingFunctionTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatingFunctionTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testSetSubVector(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (0 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testEmptyDigestFile(org.apache.commons.math3.random.ValueServerTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullURL(org.apache.commons.math3.random.EmpiricalDistributionTest) (145 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testWrongDimension(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextSample(org.apache.commons.math3.random.MersenneTwisterTest) (6 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextExponential(org.apache.commons.math3.random.BitsStreamGeneratorTest) (37 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextGaussian(org.apache.commons.math3.random.Well512aTest) (39 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextPoisson(org.apache.commons.math3.random.ISAACTest) (42 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testPremultiplyVector(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.HarmonicOscillatorTest.testParametricUsage3(org.apache.commons.math3.analysis.function.HarmonicOscillatorTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldLUDecompositionTest.testNonSquare(org.apache.commons.math3.linear.FieldLUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testOperate(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextExponential(org.apache.commons.math3.random.Well512aTest) (16 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaMinusLogGammaSumPrecondition1(org.apache.commons.math3.special.BetaTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage4(org.apache.commons.math3.analysis.function.GaussianTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testAngularSeparation(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetColumnMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextGaussian(org.apache.commons.math3.random.Well44497bTest) (42 ms)</li><li>org.apache.commons.math3.util.BigRealTest.testReciprocalOfZero(org.apache.commons.math3.util.BigRealTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntIAE(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.stat.ranking.NaturalRankingTest.testDefault(org.apache.commons.math3.stat.ranking.NaturalRankingTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformRealInvalidDataSize[1](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionFormatTest.testParseProper(org.apache.commons.math3.fraction.BigFractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.AbstractUnivariateStatisticTest.testTestNegative(org.apache.commons.math3.stat.descriptive.AbstractUnivariateStatisticTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testDimensionMismatchSolution(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage6(org.apache.commons.math3.analysis.function.LogisticTest) (0 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testSetElitismRateTooLow(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testPreconditionedResidual(org.apache.commons.math3.linear.ConjugateGradientTest) (9 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testNegate(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testWalkInOptimizedOrderPreservingVisitor2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal6(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testPercentileSetter(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testVariableWithoutDerivative1(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (2 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testOneSampleT(org.apache.commons.math3.stat.inference.TTestTest) (2 ms)</li><li>org.apache.commons.math3.transform.FastFourierTransformerTest.testTransformComplexSizeNotAPowerOfTwo(org.apache.commons.math3.transform.FastFourierTransformerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.ExponentialDistributionTest) (1 ms)</li><li>org.apache.commons.math3.util.DefaultTransformerTest.testTransformObject(org.apache.commons.math3.util.DefaultTransformerTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextPoisson(org.apache.commons.math3.random.Well19937cTest) (48 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateColumnFieldMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testPreconditions1(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testPower(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (8 ms)</li><li>org.apache.commons.math3.distribution.KolmogorovSmirnovDistributionTest.testCumulativeDensityFunction(org.apache.commons.math3.distribution.KolmogorovSmirnovDistributionTest) (463 ms)</li><li>org.apache.commons.math3.distribution.HypergeometricDistributionTest.testPreconditions(org.apache.commons.math3.distribution.HypergeometricDistributionTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testAdd(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testPercentileSetter(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testDerivativeLargeArguments(org.apache.commons.math3.analysis.function.LogitTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetL1DistanceDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntIAE(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveNoRoot(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCombineDimensionMismatchMixedTypes(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testOperate(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.special.GammaTest.testLogGamma1pPrecondition1(org.apache.commons.math3.special.GammaTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions3(org.apache.commons.math3.analysis.function.StepFunctionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testOneOrderConstructor(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (4 ms)</li><li>org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolverTest) (2 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextExponential(org.apache.commons.math3.random.RandomDataGeneratorTest) (20 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextHex(org.apache.commons.math3.random.MersenneTwisterTest) (34 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformRealInvalidDataSize[0](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.exception.NotPositiveExceptionTest.testAccessors(org.apache.commons.math3.exception.NotPositiveExceptionTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatorTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.SingularValueSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage5(org.apache.commons.math3.analysis.function.GaussianTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetRowVector(org.apache.commons.math3.linear.BlockRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCombineDimensionMismatchMixedTypes(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongIAE(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testEmptyReplayFile(org.apache.commons.math3.random.ValueServerTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetSubMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (4 ms)</li><li>org.apache.commons.math3.distribution.PoissonDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.PoissonDistributionTest) (0 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testDivide(org.apache.commons.math3.fraction.FractionTest) (2 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleDataXNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testStirlingS2NegativeN(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testMinStep(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetColumnVector(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testAddFail(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetColumn(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testGoldenRatio(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetColumnVector(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testGetL1DistanceDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntIAE(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextSample(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (20 ms)</li><li>org.apache.commons.math3.distribution.CauchyDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.CauchyDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntIAE2(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.special.GammaTest.testInvGamma1pm1Precondition1(org.apache.commons.math3.special.GammaTest) (0 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateRowFieldMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (1 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testPreconditions1(org.apache.commons.math3.fitting.HarmonicFitterTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetEntryInvalidIndex2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testNewSampleNullData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testNonSquareOperator(org.apache.commons.math3.linear.ConjugateGradientTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.ChiSquareTestTest.testChiSquareDataSetsComparisonBadCounts(org.apache.commons.math3.stat.inference.ChiSquareTestTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextPoisson(org.apache.commons.math3.random.Well44497bTest) (54 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntNeg(org.apache.commons.math3.random.ISAACTest) (1 ms)</li><li>org.apache.commons.math3.exception.NumberIsTooLargeExceptionTest.testAccessors(org.apache.commons.math3.exception.NumberIsTooLargeExceptionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetRowMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testUnpreconditionedResidual(org.apache.commons.math3.linear.ConjugateGradientTest) (5 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testMismatchedOperatorDimensions(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testMax(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddNullYSampleData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testMultiply(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.genetics.CycleCrossoverTest.testCrossoverDimensionMismatchException(org.apache.commons.math3.genetics.CycleCrossoverTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntIAE(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetColumnVector(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextSecureLongIAE(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testConstructorTooHigh(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testPremultiply(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions2(org.apache.commons.math3.analysis.function.StepFunctionTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testAddToEntryInvalidIndex2(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testSetPopulationLimitTooSmall(org.apache.commons.math3.genetics.ListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testWalkInDefaultOrderChangingVisitor2(org.apache.commons.math3.linear.ArrayRealVectorTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntIAE2(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetColumn(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testSetSubMatrix(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testSubtract(org.apache.commons.math3.fraction.BigFractionTest) (2 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions6(org.apache.commons.math3.analysis.function.StepFunctionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.integration.SimpsonIntegratorTest.testParameters(org.apache.commons.math3.analysis.integration.SimpsonIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testUnequalSizeArguments(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLow(org.apache.commons.math3.fitting.PolynomialFitterTest) (857 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testPlusMinus(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testDimension(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.HermiteInterpolatorTest.testEmptySample(org.apache.commons.math3.analysis.interpolation.HermiteInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest.testSanityChecks(org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testMatrix(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetColumnMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testMath844(org.apache.commons.math3.fitting.HarmonicFitterTest) (1 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.TDistributionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleNullData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DSCompilerTest.testIncompatibleOrder(org.apache.commons.math3.analysis.differentiation.DSCompilerTest) (0 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testMath519(org.apache.commons.math3.fitting.GaussianFitterTest) (161 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testTrace(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.SigmoidTest.testParametricUsage3(org.apache.commons.math3.analysis.function.SigmoidTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testXSampleDataNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressExceptions(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testWalkInDefaultOrderChangingVisitor2(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testPremultiply(org.apache.commons.math3.linear.FieldMatrixImplTest) (2 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetColumnMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testTrace(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextGaussian(org.apache.commons.math3.random.Well19937aTest) (39 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntIAE(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.stat.clustering.DBSCANClustererTest.testNullDataset(org.apache.commons.math3.stat.clustering.DBSCANClustererTest) (0 ms)</li><li>org.apache.commons.math3.genetics.RandomKeyTest.testInducedPermutation(org.apache.commons.math3.genetics.RandomKeyTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetVectors(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testSubMatrix(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextSecureHex(org.apache.commons.math3.random.RandomDataGeneratorTest) (178 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testAlpha(org.apache.commons.math3.distribution.WeibullDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetVectors(org.apache.commons.math3.linear.BlockRealMatrixTest) (2 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextHex(org.apache.commons.math3.random.Well512aTest) (32 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetSubMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetSubMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (2 ms)</li><li>org.apache.commons.math3.genetics.OrderedCrossoverTest.testCrossoverInvalidFixedLengthChromosomeSecond(org.apache.commons.math3.genetics.OrderedCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetColumnVector(org.apache.commons.math3.linear.BlockRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testNotSymmetricMatrixException(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.complex.QuaternionTest.testNormalizeFail(org.apache.commons.math3.complex.QuaternionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testWrongOrderVector(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testOperate(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testIterator(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testMean(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testDimensionMismatchRightHandSide(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntNeg(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.distribution.CauchyDistributionTest.testPreconditions(org.apache.commons.math3.distribution.CauchyDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonPositiveDefinitePreconditioner(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testCopySubMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.genetics.NPointCrossoverTest.testCrossoverInvalidFixedLengthChromosomeFirst(org.apache.commons.math3.genetics.NPointCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.stat.ranking.NaturalRankingTest.testNaNsFailed(org.apache.commons.math3.stat.ranking.NaturalRankingTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCombineDimensionMismatchSameType(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.interpolation.TricubicSplineInterpolatorTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.TricubicSplineInterpolatorTest) (15 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextUniformIAE(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testSetPopulationLimit(org.apache.commons.math3.genetics.ListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testTwoSampleTHeterscedastic(org.apache.commons.math3.stat.inference.TTestTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSetEntryInvalidIndex2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetSubVectorInvalidIndex1(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextGaussian(org.apache.commons.math3.random.MersenneTwisterTest) (40 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextPoisson(org.apache.commons.math3.random.Well44497aTest) (49 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testXSampleDataNull(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleInsufficientData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testPreconditions4(org.apache.commons.math3.distribution.TriangularDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetRowMatrix(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetEntryInvalidIndex1(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.genetics.OrderedCrossoverTest.testCrossoverInvalidFixedLengthChromosomeFirst(org.apache.commons.math3.genetics.OrderedCrossoverTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.GTestTest.testGTestSetsComparisonBadCounts(org.apache.commons.math3.stat.inference.GTestTest) (1 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testNonSquare(org.apache.commons.math3.linear.HessenbergTransformerTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.MannWhitneyUTestTest.testMannWhitneyUInputValidation(org.apache.commons.math3.stat.inference.MannWhitneyUTestTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetRowMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testCheckPositive(org.apache.commons.math3.util.MathArraysTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongIAE(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetSubVectorInvalidIndex3(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetEntry(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.analysis.function.HarmonicOscillatorTest.testParametricUsage2(org.apache.commons.math3.analysis.function.HarmonicOscillatorTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.distribution.PascalDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.PascalDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextGaussian(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (34 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testNonSquarePreconditioner(org.apache.commons.math3.linear.ConjugateGradientTest) (1 ms)</li><li>org.apache.commons.math3.special.BetaTest.testSumDeltaMinusDeltaSumPrecondition1(org.apache.commons.math3.special.BetaTest) (0 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaMinusLogGammaSumPrecondition2(org.apache.commons.math3.special.BetaTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.rank.PercentileTest.testNullEmpty(org.apache.commons.math3.stat.descriptive.rank.PercentileTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testIterator(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextExponential(org.apache.commons.math3.random.Well19937aTest) (18 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testChromosomeListConstructorTooLow(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongIAE(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongIAE(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntIAE2(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testPlusMinus(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.fraction.FractionFormatTest.testParseInvalidDenominator(org.apache.commons.math3.fraction.FractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSetSubVectorInvalidIndex3(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.genetics.CycleCrossoverTest.testCrossoverInvalidFixedLengthChromosomeSecond(org.apache.commons.math3.genetics.CycleCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.fraction.FractionFormatTest.testParseProperInvalidMinus(org.apache.commons.math3.fraction.FractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.NormalDistributionTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.OneWayAnovaTest.testAnovaFValue(org.apache.commons.math3.stat.inference.OneWayAnovaTest) (2 ms)</li><li>org.apache.commons.math3.transform.FastFourierTransformerTest.testTransformFunctionSizeNotAPowerOfTwo(org.apache.commons.math3.transform.FastFourierTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCosineRightNullVector(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testLcm(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testSparseIterator(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testMutators(org.apache.commons.math3.util.ResizableDoubleArrayTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testTwoSampleTHeterscedastic(org.apache.commons.math3.stat.inference.TestUtilsTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSetEntryInvalidIndex1(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntNeg(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testSparseIterator(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (3 ms)</li><li>org.apache.commons.math3.linear.ArrayFieldVectorTest.testMisc(org.apache.commons.math3.linear.ArrayFieldVectorTest) (0 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextExponential(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (51 ms)</li><li>org.apache.commons.math3.genetics.UniformCrossoverTest.org.apache.commons.math3.genetics.UniformCrossoverTest (874 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testPlusMinus(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testInference(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (1 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testSubtract(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.complex.RootsOfUnityTest.testZeroNumberOfRoots(org.apache.commons.math3.complex.RootsOfUnityTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testMultiply(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testAddToEntryInvalidIndex2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayFieldVectorTest.testDataInOut(org.apache.commons.math3.linear.ArrayFieldVectorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest.testEventsNoConvergence(org.apache.commons.math3.ode.nonstiff.HighamHall54IntegratorTest) (5 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testPreconditions1(org.apache.commons.math3.distribution.TriangularDistributionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.WeibullDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetColumnMatrix(org.apache.commons.math3.linear.SparseFieldMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testNonSquare(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointOperator(org.apache.commons.math3.linear.SymmLQTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VectorialMeanTest.testMismatch(org.apache.commons.math3.stat.descriptive.moment.VectorialMeanTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testAddFail(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.complex.RootsOfUnityTest.testMathIllegalState3(org.apache.commons.math3.complex.RootsOfUnityTest) (0 ms)</li><li>org.apache.commons.math3.analysis.integration.TrapezoidIntegratorTest.testParameters(org.apache.commons.math3.analysis.integration.TrapezoidIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealMatrixFormatTest.testParseNoComponents(org.apache.commons.math3.linear.RealMatrixFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetSubVectorInvalidIndex4(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testCheckNonNegative(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.UniformRealDistributionTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayFieldVectorTest.testZeroVectors(org.apache.commons.math3.linear.ArrayFieldVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testAddToEntryInvalidIndex1(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testWalkInDefaultOrderPreservingVisitor2(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetRowMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaSumPrecondition3(org.apache.commons.math3.special.BetaTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testVectorOnePair(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (8 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntNeg(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testAddAndCheck(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetSubVectorInvalidIndex1(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testPremultiply(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testAngle(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (1 ms)</li><li>org.apache.commons.math3.linear.CholeskySolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.CholeskySolverTest) (0 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformIAE(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testNonSquare(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testPow(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionFormatTest.testParseInvalid(org.apache.commons.math3.fraction.BigFractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testAddFail(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCosineDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastFourierTransformerTest.testTransformFunctionNotStrictlyPositiveNumberOfSamples(org.apache.commons.math3.transform.FastFourierTransformerTest) (1 ms)</li><li>org.apache.commons.math3.fraction.FractionFormatTest.testParseProper(org.apache.commons.math3.fraction.FractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testWalkInDefaultOrderPreservingVisitor2(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testMath798(org.apache.commons.math3.fitting.GaussianFitterTest) (2 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage6(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetEntry(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testSetEntry(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.special.GammaTest.testInvGamma1pm1Precondition2(org.apache.commons.math3.special.GammaTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetSubMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetColumnMatrix(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testCompletelyIncorrectBandwidth2(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal1(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testModes(org.apache.commons.math3.random.ValueServerTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.rank.PercentileTest.testPercentile(org.apache.commons.math3.stat.descriptive.rank.PercentileTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testAddToEntry(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.FrenchRealVectorFormatTest.testParseNoComponents(org.apache.commons.math3.linear.FrenchRealVectorFormatTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testGetL1DistanceDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonSquareOperator(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testPreconditions(org.apache.commons.math3.distribution.ExponentialDistributionTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testSingularities(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (4 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextSample(org.apache.commons.math3.random.Well512aTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextHex(org.apache.commons.math3.random.Well19937cTest) (37 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCosineRightNullVector(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextHex(org.apache.commons.math3.random.Well44497bTest) (35 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testParameters[1](org.apache.commons.math3.transform.FastCosineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.util.IncrementorTest.testCanIncrement2(org.apache.commons.math3.util.IncrementorTest) (0 ms)</li><li>org.apache.commons.math3.stat.FrequencyTest.testAdd(org.apache.commons.math3.stat.FrequencyTest) (1 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testSubAndCheckErrorMessage(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.UnivariatePeriodicInterpolatorTest.testUnsortedSamples(org.apache.commons.math3.analysis.interpolation.UnivariatePeriodicInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongIAE(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testConstructor(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testOrthogonal(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetVectors(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCosineLeftNullVector(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage5(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testDotProductDimensionMismatchSameType(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetRow(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSubtractDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionInvalidBounds[1](org.apache.commons.math3.transform.FastSineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.fraction.BigFractionFormatTest.testParseProperNegative(org.apache.commons.math3.fraction.BigFractionFormatTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testCopySubMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (4 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testNextDigestFail(org.apache.commons.math3.random.ValueServerTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSetSubVectorInvalidIndex3(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testSmallDf(org.apache.commons.math3.distribution.TDistributionTest) (5 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testPreconditionPositiveWeights(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.special.BetaTest.testLogGammaSumPrecondition2(org.apache.commons.math3.special.BetaTest) (0 ms)</li><li>org.apache.commons.math3.util.MultidimensionalCounterTest.testPreconditions(org.apache.commons.math3.util.MultidimensionalCounterTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest) (80 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCombineDimensionMismatchMixedTypes(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testMultiply(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage5(org.apache.commons.math3.analysis.function.LogisticTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testEmptyData(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.RetryRunnerTest.testRetryFailSometimes(org.apache.commons.math3.RetryRunnerTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testDotProductDimensionMismatchMixedTypes(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testOneParameterConstructor(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (3 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testStirlingS2LargeK(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testTrace(org.apache.commons.math3.linear.SparseRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testDifferenceStats(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LinearInterpolatorTest.testIllegalArguments(org.apache.commons.math3.analysis.interpolation.LinearInterpolatorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetRow(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.special.BetaTest.testSumDeltaMinusDeltaSumPrecondition2(org.apache.commons.math3.special.BetaTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.MullerSolverTest.testParameters(org.apache.commons.math3.analysis.solvers.MullerSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testUnitVectorNullVector(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.transform.FastHadamardTransformerTest.test3Points(org.apache.commons.math3.transform.FastHadamardTransformerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.LaguerreSolverTest.testParameters(org.apache.commons.math3.analysis.solvers.LaguerreSolverTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.MidpointIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGaussian(org.apache.commons.math3.random.BitsStreamGeneratorTest) (41 ms)</li><li>org.apache.commons.math3.complex.QuaternionTest.testGetInverse(org.apache.commons.math3.complex.QuaternionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetRowVector(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testGetColumnVector(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetSubVectorInvalidIndex4(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.exception.NotStrictlyPositiveExceptionTest.testAccessors(org.apache.commons.math3.exception.NotStrictlyPositiveExceptionTest) (0 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testBetaRangeBelowMinusOne(org.apache.commons.math3.random.StableRandomGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testOperate(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testIterator(org.apache.commons.math3.linear.SparseRealVectorTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.RotationTest.testMatrix(org.apache.commons.math3.geometry.euclidean.threed.RotationTest) (1 ms)</li><li>org.apache.commons.math3.genetics.NPointCrossoverTest.testCrossoverDimensionMismatchException(org.apache.commons.math3.genetics.NPointCrossoverTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testWindowSize(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.dimensionCheck(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage1(org.apache.commons.math3.analysis.function.LogisticTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testVariance(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest.testNullIntervalCheck(org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformRealFirstElementNotZero[1](org.apache.commons.math3.transform.FastSineTransformerTest) (2 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testTooLargeStep(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testOneSampleTTest(org.apache.commons.math3.stat.inference.TTestTest) (1 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testAdd(org.apache.commons.math3.fraction.FractionTest) (2 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testChiSquareIndependence(org.apache.commons.math3.stat.inference.TestUtilsTest) (2 ms)</li><li>org.apache.commons.math3.exception.util.ExceptionContextTest.testMessageChain(org.apache.commons.math3.exception.util.ExceptionContextTest) (0 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testGoldenRatio(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.genetics.RandomKeyTest.testConstructor1(org.apache.commons.math3.genetics.RandomKeyTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformRealInvalidDataSize[1](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testInsufficientData(org.apache.commons.math3.stat.correlation.CovarianceTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextExponential(org.apache.commons.math3.random.Well19937cTest) (19 ms)</li><li>org.apache.commons.math3.exception.TooManyEvaluationsExceptionTest.testMessage(org.apache.commons.math3.exception.TooManyEvaluationsExceptionTest) (2 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testAlphaRangeAboveTwo(org.apache.commons.math3.random.StableRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleDataYNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetColumn(org.apache.commons.math3.linear.BlockRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextExponential(org.apache.commons.math3.random.Well44497aTest) (19 ms)</li><li>org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest.testEmptySampleDerivative(org.apache.commons.math3.analysis.interpolation.FieldHermiteInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testArrayIndexConditions(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testFactorialFail(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testProduct(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorFormatTest.testParseNoComponents(org.apache.commons.math3.linear.RealVectorFormatTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage3(org.apache.commons.math3.analysis.function.GaussianTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionInvalidBounds[0](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testDimension(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testInsufficientData(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (3 ms)</li><li>org.apache.commons.math3.distribution.UniformIntegerDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.UniformIntegerDistributionTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastFourierTransformerTest.testTransformFunctionInvalidBounds(org.apache.commons.math3.transform.FastFourierTransformerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.TDistributionTest) (4 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testBinomialCoefficientLarge(org.apache.commons.math3.util.ArithmeticUtilsTest) (1029 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testPower(org.apache.commons.math3.linear.FieldMatrixImplTest) (7 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal5(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testWalkInOptimizedOrderPreservingVisitor2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.distribution.PoissonDistributionTest.testNegativeMean(org.apache.commons.math3.distribution.PoissonDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetVectors(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.util.IncrementorTest.testAlternateException(org.apache.commons.math3.util.IncrementorTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testYSampleDataNull(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testPremultiplyVector(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextExponential(org.apache.commons.math3.random.Well44497bTest) (21 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCombineToSelfDimensionMismatchSameType(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testRedundantUnsolvable(org.apache.commons.math3.fitting.PolynomialFitterTest) (15 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testPreconditions(org.apache.commons.math3.distribution.FDistributionTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.GillIntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.GillIntegratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveAccuracyNull(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeFormTest.testParameters(org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeFormTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetRow(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCosineDimensionMismatch(org.apache.commons.math3.linear.ArrayRealVectorTest) (3 ms)</li><li>org.apache.commons.math3.genetics.RandomKeyTest.testInvalidRepresentation(org.apache.commons.math3.genetics.RandomKeyTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testPremultiply(org.apache.commons.math3.linear.SparseRealMatrixTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformIAE(org.apache.commons.math3.random.RandomDataGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testPreconditions2(org.apache.commons.math3.distribution.TriangularDistributionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testComposeMismatchedDimensions(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (4 ms)</li><li>org.apache.commons.math3.stat.clustering.DBSCANClustererTest.testNegativeEps(org.apache.commons.math3.stat.clustering.DBSCANClustererTest) (1 ms)</li><li>org.apache.commons.math3.analysis.FunctionUtilsTest.testSampleNullNumberOfPoints(org.apache.commons.math3.analysis.FunctionUtilsTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.cannotAddCovarianceDataThatIsNotSquare(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextHex(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (303 ms)</li><li>org.apache.commons.math3.genetics.ElitisticListPopulationTest.testSetElitismRateTooHigh(org.apache.commons.math3.genetics.ElitisticListPopulationTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextSample(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetRow(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextSecureIntIAE(org.apache.commons.math3.random.RandomDataGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testBinomialCoefficientFail(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testNexFail(org.apache.commons.math3.random.EmpiricalDistributionTest) (142 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testPreconditions(org.apache.commons.math3.distribution.LogNormalDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testDotProductDimensionMismatchSameType(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testSetEntryInvalidIndex2(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testNonSquare(org.apache.commons.math3.linear.SchurTransformerTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testBadMaximumIterations(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.genetics.NPointCrossoverTest.testNumberIsTooLargeException(org.apache.commons.math3.genetics.NPointCrossoverTest) (0 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testNormalizeArray(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testWalkInOptimizedOrderChangingVisitor2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal3(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testParameters[1](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testInsufficientBandwidth(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetSubMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testOneSampleTTest(org.apache.commons.math3.stat.inference.TestUtilsTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testOperate(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextHex(org.apache.commons.math3.random.Well1024aTest) (36 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testTrace(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleInvalidData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage4(org.apache.commons.math3.analysis.function.LogitTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testMin(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest.testWrongNumberOfPoints(org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiatorTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.RotationTest.testSingularities(org.apache.commons.math3.geometry.euclidean.threed.RotationTest) (1 ms)</li><li>org.apache.commons.math3.complex.RootsOfUnityTest.testMathIllegalState2(org.apache.commons.math3.complex.RootsOfUnityTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DSCompilerTest.testIncompatibleParams(org.apache.commons.math3.analysis.differentiation.DSCompilerTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.WilcoxonSignedRankTestTest.testWilcoxonSignedRankInputValidation(org.apache.commons.math3.stat.inference.WilcoxonSignedRankTestTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testGetColumnVector(org.apache.commons.math3.linear.FieldMatrixImplTest) (1 ms)</li><li>org.apache.commons.math3.analysis.integration.LegendreGaussIntegratorTest.testIssue464(org.apache.commons.math3.analysis.integration.LegendreGaussIntegratorTest) (4576 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit06(org.apache.commons.math3.fitting.GaussianFitterTest) (2 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testGetColumn(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.util.MathUtilsTest.testCopySignByte2(org.apache.commons.math3.util.MathUtilsTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSetEntryInvalidIndex1(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.distribution.BinomialDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.BinomialDistributionTest) (1 ms)</li><li>org.apache.commons.math3.ode.ContinuousOutputModelTest.testErrorConditions(org.apache.commons.math3.ode.ContinuousOutputModelTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveBadEndpoints(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.RotationTest.testVectorTwoPairs(org.apache.commons.math3.geometry.euclidean.threed.RotationTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.RotationTest.testVectorOnePair(org.apache.commons.math3.geometry.euclidean.threed.RotationTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testGetEntryInvalidIndex2(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions5(org.apache.commons.math3.analysis.function.StepFunctionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testSetRowVector(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit04(org.apache.commons.math3.fitting.GaussianFitterTest) (7 ms)</li><li>org.apache.commons.math3.RetryRunnerTest.testRetryFailAlways(org.apache.commons.math3.RetryRunnerTest) (21 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testGetEntry(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.genetics.BinaryChromosomeTest.testInvalidConstructor(org.apache.commons.math3.genetics.BinaryChromosomeTest) (0 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.LUSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testPremultiplyVector(org.apache.commons.math3.linear.SparseRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.fraction.FractionFormatTest.testParseInvalid(org.apache.commons.math3.fraction.FractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SplineInterpolatorTest.testIllegalArguments(org.apache.commons.math3.analysis.interpolation.SplineInterpolatorTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextGaussian(org.apache.commons.math3.random.ISAACTest) (52 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetEntry(org.apache.commons.math3.linear.SparseFieldMatrixTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformIAE(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testQuantiles(org.apache.commons.math3.distribution.NormalDistributionTest) (5 ms)</li><li>org.apache.commons.math3.exception.util.ExceptionContextTest.testSerialize(org.apache.commons.math3.exception.util.ExceptionContextTest) (5 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testCombineDimensionMismatchSameType(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testReciprocal(org.apache.commons.math3.fraction.FractionTest) (2 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testGetReducedFraction(org.apache.commons.math3.fraction.BigFractionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformIAE(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.util.IncrementorTest.testAboveMaxCount(org.apache.commons.math3.util.IncrementorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.SigmoidTest.testParametricUsage1(org.apache.commons.math3.analysis.function.SigmoidTest) (0 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testStirlingS2Overflow(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest.testDimensionCheck(org.apache.commons.math3.ode.nonstiff.DormandPrince54IntegratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateColumnRealMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetColumnMatrix(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSetSubVectorInvalidIndex2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.fraction.BigFractionTest.testDivide(org.apache.commons.math3.fraction.BigFractionTest) (0 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextGaussian(org.apache.commons.math3.random.RandomDataGeneratorTest) (41 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testSetSubVector(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.GaussianTest.testParametricUsage2(org.apache.commons.math3.analysis.function.GaussianTest) (1 ms)</li><li>org.apache.commons.math3.distribution.DiscreteRealDistributionTest.testExceptions(org.apache.commons.math3.distribution.DiscreteRealDistributionTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionNotStrictlyPositiveNumberOfSamples[1](org.apache.commons.math3.transform.FastCosineTransformerTest) (0 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testEbeSubtractPrecondition(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testVectorOnePair(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (0 ms)</li><li>org.apache.commons.math3.fraction.BigFractionFormatTest.testParseProperInvalidMinus(org.apache.commons.math3.fraction.BigFractionFormatTest) (0 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest.testAllButExcluded(org.apache.commons.math3.linear.UnmodifiableOpenMapRealVectorTest) (88 ms)</li><li>org.apache.commons.math3.fraction.FractionTest.testGetReducedFraction(org.apache.commons.math3.fraction.FractionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.DiscreteIntegerDistributionTest.testExceptions(org.apache.commons.math3.distribution.DiscreteIntegerDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntNeg(org.apache.commons.math3.random.Well512aTest) (0 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntIAE2(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testWeightSumOverFlow(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testEbeDividePrecondition(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testWalkInDefaultOrderPreservingVisitor2(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformIAE(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformIAE(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testProjectionDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (3 ms)</li><li>org.apache.commons.math3.complex.ComplexUtilsTest.testPolar2ComplexIllegalModulus(org.apache.commons.math3.complex.ComplexUtilsTest) (0 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testcreateFieldIdentityMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.StepFunctionTest.testPreconditions4(org.apache.commons.math3.analysis.function.StepFunctionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.notEnoughData(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.correlation.PearsonsCorrelationTest.testInsufficientData(org.apache.commons.math3.stat.correlation.PearsonsCorrelationTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testTrace(org.apache.commons.math3.linear.BlockFieldMatrixTest) (0 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testBetaRangeAboveOne(org.apache.commons.math3.random.StableRandomGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.genetics.ListPopulationTest.testAddTooManyChromosomesSingleCall(org.apache.commons.math3.genetics.ListPopulationTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testCombineToSelfDimensionMismatchMixedTypes(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testAddFail(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.DiagonalMatrixTest.testSetNonDiagonalEntry(org.apache.commons.math3.linear.DiagonalMatrixTest) (0 ms)</li><li>org.apache.commons.math3.exception.util.ExceptionContextTest.testSerializeUnserializable(org.apache.commons.math3.exception.util.ExceptionContextTest) (2 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testAddToEntryInvalidIndex1(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextExponential(org.apache.commons.math3.random.Well1024aTest) (21 ms)</li><li>org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunctionTest.testConstructor(org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunctionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testGetLInfDistanceDimensionMismatch(org.apache.commons.math3.linear.SparseRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testTransitionMeasurementMatrixMismatch(org.apache.commons.math3.filter.KalmanFilterTest) (0 ms)</li><li>org.apache.commons.math3.util.MathUtilsTest.testCheckNotNull1(org.apache.commons.math3.util.MathUtilsTest) (0 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testCheckNonNegative2D(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage2(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.analysis.function.SigmoidTest.testParametricUsage4(org.apache.commons.math3.analysis.function.SigmoidTest) (0 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testPreconditions2(org.apache.commons.math3.distribution.UniformRealDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.OpenMapRealMatrixTest.testMath679(org.apache.commons.math3.linear.OpenMapRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VectorialCovarianceTest.testMismatch(org.apache.commons.math3.stat.descriptive.moment.VectorialCovarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.clustering.KMeansPlusPlusClustererTest.testPerformClusterAnalysisToManyClusters(org.apache.commons.math3.stat.clustering.KMeansPlusPlusClustererTest) (0 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionInvalidBounds[1](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogisticTest.testParametricUsage2(org.apache.commons.math3.analysis.function.LogisticTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.UnivariatePeriodicInterpolatorTest.testTooFewSamples(org.apache.commons.math3.analysis.interpolation.UnivariatePeriodicInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testParametricUsage3(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testMultiply(org.apache.commons.math3.linear.SparseFieldMatrixTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testAxisAngle(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (17 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.TriangularDistributionTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testWindowSize(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testQuantiles(org.apache.commons.math3.distribution.LogNormalDistributionTest) (4 ms)</li><li>org.apache.commons.math3.distribution.ZipfDistributionTest.testPreconditions2(org.apache.commons.math3.distribution.ZipfDistributionTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.RotationTest.testAxisAngle(org.apache.commons.math3.geometry.euclidean.threed.RotationTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testSetRowMatrix(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testSubtractDimensionMismatch(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.WeibullDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextSample(org.apache.commons.math3.random.Well19937aTest) (5 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testAddToEntryInvalidIndex1(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextLongIAE(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastSineTransformerTest.testTransformFunctionInvalidDataSize[0](org.apache.commons.math3.transform.FastSineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testWalkInOptimizedOrderChangingVisitor2(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseFieldMatrixTest.testGetColumnVector(org.apache.commons.math3.linear.SparseFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testAllButExcluded(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (30 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testMulAndCheck(org.apache.commons.math3.util.ArithmeticUtilsTest) (0 ms)</li><li>org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest.testNotAllFiniteReal4(org.apache.commons.math3.analysis.interpolation.LoessInterpolatorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testSetEntryInvalidIndex2(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.distribution.LogNormalDistributionTest) (2 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testPreconditions(org.apache.commons.math3.distribution.NormalDistributionTest) (0 ms)</li><li>org.apache.commons.math3.distribution.HypergeometricDistributionTest.testIllegalArguments(org.apache.commons.math3.distribution.HypergeometricDistributionTest) (0 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testProjectionNullVector(org.apache.commons.math3.linear.ArrayRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testCombineToSelfDimensionMismatchMixedTypes(org.apache.commons.math3.linear.RealVectorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntIAE(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.linear.ConjugateGradientTest.testDimensionMismatchSolution(org.apache.commons.math3.linear.ConjugateGradientTest) (0 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformIAE(org.apache.commons.math3.random.Well1024aTest) (0 ms)</li><li>org.apache.commons.math3.linear.FieldMatrixImplTest.testSetColumnVector(org.apache.commons.math3.linear.FieldMatrixImplTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntIAE2(org.apache.commons.math3.random.ISAACTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testSetSubMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (0 ms)</li><li>org.apache.commons.math3.linear.SparseRealVectorTest.testSetSubVectorInvalidIndex1(org.apache.commons.math3.linear.SparseRealVectorTest) (2 ms)</li><li>org.apache.commons.math3.analysis.FunctionUtilsTest.testSampleWrongBounds(org.apache.commons.math3.analysis.FunctionUtilsTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.TricubicSplineInterpolatingFunctionTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.TricubicSplineInterpolatingFunctionTest) (24 ms)</li><li>org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest.testAddToEntry(org.apache.commons.math3.linear.UnmodifiableArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testNormalize(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongIAE(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.ArrayRealVectorTest.testUnitVectorNullVector(org.apache.commons.math3.linear.ArrayRealVectorTest) (1 ms)</li><li>org.apache.commons.math3.transform.FastCosineTransformerTest.testTransformFunctionInvalidBounds[0](org.apache.commons.math3.transform.FastCosineTransformerTest) (1 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testSortInPlaceFailures(org.apache.commons.math3.util.MathArraysTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextGaussian(org.apache.commons.math3.random.Well1024aTest) (40 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testGetColumnVector(org.apache.commons.math3.linear.BlockFieldMatrixTest) (2 ms)</li><li>org.apache.commons.math3.fraction.FractionFormatTest.testParseProperNegative(org.apache.commons.math3.fraction.FractionFormatTest) (1 ms)</li><li>org.apache.commons.math3.linear.RealVectorTest.testGetEntryInvalidIndex1(org.apache.commons.math3.linear.RealVectorTest) (2 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testMultiply(org.apache.commons.math3.linear.BlockFieldMatrixTest) (4 ms)</li><li>org.apache.commons.math3.analysis.function.HarmonicOscillatorTest.testParametricUsage1(org.apache.commons.math3.analysis.function.HarmonicOscillatorTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.cannotAddSampleDataWithSizeMismatch(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockFieldMatrixTest.testAddFail(org.apache.commons.math3.linear.BlockFieldMatrixTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testMissingOrders(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (2 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testCreateIdentityMatrix(org.apache.commons.math3.linear.MatrixUtilsTest) (0 ms)</li><li>org.apache.commons.math3.exception.NumberIsTooSmallExceptionTest.testAccessors(org.apache.commons.math3.exception.NumberIsTooSmallExceptionTest) (0 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

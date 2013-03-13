@@ -1,17 +1,15 @@
 /*!
- * jmpress.js v0.4.3
- * http://shama.github.com/jmpress.js
+ * jmpress.js v0.4.5
+ * http://jmpressjs.github.com/jmpress.js
  *
  * A jQuery plugin to build a website on the infinite canvas.
  *
- * Copyright 2012 Kyle Robinson Young @shama & Tobias Koppers @sokra
+ * Copyright 2013 Kyle Robinson Young @shama & Tobias Koppers @sokra
  * Licensed MIT
  * http://www.opensource.org/licenses/mit-license.php
  *
  * Based on the foundation laid by Bartek Szopka @bartaz
- */
-
-/*!
+ *//*
  * core.js
  * The core of jmpress.js
  */
@@ -62,6 +60,15 @@
 			return "";
 		}
 		return attribute + ",";
+	}
+	/**
+	 * Return an jquery object only if it's not empty
+	 */
+	function ifNotEmpty(el) {
+		if(el.length > 0) {
+			return el;
+		}
+		return null;
 	}
 
 	/**
@@ -309,14 +316,6 @@
 				return false;
 			}
 
-			// Sometimes it's possible to trigger focus on first link with some keyboard action.
-			// Browser in such a case tries to scroll the page to make this element visible
-			// (even that body overflow is set to hidden) and it breaks our careful positioning.
-			//
-			// So, as a lousy (and lazy) workaround we will make the page scroll back to the top
-			// whenever slide is selected
-			//
-			// If you are reading this and know any better way to handle it, I'll be glad to hear about it!
 			scrollFix.call(this);
 
 			var step = $(el).data('stepData');
@@ -337,11 +336,16 @@
 
 			var delegated = el;
 			if($(el).data("stepData").delegate) {
-				delegated = $(el).parentsUntil(jmpress).filter(settings.stepSelector).filter(step.delegate) ||
-					$(el).near(step.delegate) ||
-					$(el).near(step.delegate, true) ||
-					$(step.delegate, jmpress);
-				step = delegated.data("stepData");
+				delegated = ifNotEmpty($(el).parentsUntil(jmpress).filter(settings.stepSelector).filter(step.delegate)) ||
+					ifNotEmpty($(el).near(step.delegate)) ||
+					ifNotEmpty($(el).near(step.delegate, true)) ||
+					ifNotEmpty($(step.delegate, jmpress));
+				if(delegated) {
+					step = delegated.data("stepData");
+				} else {
+					// Do not delegate if expression not found
+					delegated = el;
+				}
 			}
 			if ( activeDelegated ) {
 				callCallback.call(this, 'setInactive', activeDelegated, {
@@ -400,7 +404,7 @@
 		 * This should fix ANY kind of buggy scrolling
 		 */
 		function scrollFix() {
-			function fix() {
+			(function fix() {
 				if ($(container)[0].tagName === "BODY") {
 					try {
 						window.scrollTo(0, 0);
@@ -419,8 +423,7 @@
 				setTimeout(check, 100);
 				setTimeout(check, 200);
 				setTimeout(check, 400);
-			}
-			fix();
+			}());
 		}
 		/**
 		 * Alias for select
@@ -544,8 +547,7 @@
 		 */
 		function checkSupport() {
 			var ua = navigator.userAgent.toLowerCase();
-			var supported = ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
-			return supported;
+			return (ua.search(/(iphone)|(ipod)|(android)/) === -1) || (ua.search(/(chrome)/) !== -1);
 		}
 
 		// BEGIN INIT
@@ -788,7 +790,8 @@
 	});
 
 }(jQuery, document, window));
-/*!
+
+/*
  * near.js
  * Find steps near each other
  */
@@ -865,7 +868,7 @@
 		return $(array);
 	};
 }(jQuery, document, window));
-/*!
+/*
  * transform.js
  * The engine that powers the transforms or falls back to other methods
  */
@@ -874,9 +877,6 @@
 	'use strict';
 
 	/* FUNCTIONS */
-	function randomString() {
-		return "" + Math.round(Math.random() * 100000, 0);
-	}
 	function toCssNumber(number) {
 		return (Math.round(10000*number)/10000)+"";
 	}
@@ -1171,7 +1171,7 @@
 	});
 
 }(jQuery, document, window));
-/*!
+/*
  * active.js
  * Set the active classes on steps
  */
@@ -1218,7 +1218,7 @@
 	});
 
 }(jQuery, document, window));
-/*!
+/*
  * circular.js
  * Repeat from start after end
  */
@@ -1266,7 +1266,160 @@
 		return prevOrNext(this, step, eventData);
 	});
 }(jQuery, document, window));
-/*!
+/*
+ * start.js
+ * Set the first step to start on
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+
+	/* HOOKS */
+	$.jmpress( 'selectInitialStep', function( nil, eventData ) {
+		return eventData.settings.start;
+	});
+
+}(jQuery, document, window));
+/*
+ * ways.js
+ * Control the flow of the steps
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+	var $jmpress = $.jmpress;
+
+	/* FUNCTIONS */
+	function routeFunc( jmpress, route, type ) {
+		for(var i = 0; i < route.length - 1; i++) {
+			var from = route[i];
+			var to = route[i+1];
+			if($(jmpress).jmpress("initialized")) {
+				$(from, jmpress).data("stepData")[type] = to;
+			} else {
+				$(from, jmpress).attr('data-' + type, to);
+			}
+		}
+	}
+	function selectPrevOrNext( step, eventData, attr, prev ) {
+		var stepData = eventData.stepData;
+		if(stepData[attr]) {
+			var near = $(step).near(stepData[attr], prev);
+			if(near && near.length) {
+				return near;
+			}
+			near = $(stepData[attr], this)[prev?"last":"first"]();
+			if(near && near.length) {
+				return near;
+			}
+		}
+	}
+
+	/* EXPORTED FUNCTIONS */
+	$jmpress( 'register', 'route', function( route, unidirectional, reversedRoute ) {
+		if( typeof route === "string" ) {
+			route = [route, route];
+		}
+		routeFunc(this, route, reversedRoute ? "prev" : "next");
+		if (!unidirectional) {
+			routeFunc(this, route.reverse(), reversedRoute ? "next" : "prev");
+		}
+	});
+
+	/* HOOKS */
+	$jmpress( 'initStep', function( step, eventData ) {
+		for(var attr in {next:1,prev:1}) {
+			eventData.stepData[attr] = eventData.data[attr];
+		}
+	});
+	$jmpress( 'selectNext', function( step, eventData ) {
+		return selectPrevOrNext.call(this, step, eventData, "next");
+	});
+	$jmpress( 'selectPrev', function( step, eventData ) {
+		return selectPrevOrNext.call(this, step, eventData, "prev", true);
+	});
+
+}(jQuery, document, window));
+/*
+ * ajax.js
+ * Load steps via ajax
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+	var $jmpress = $.jmpress;
+
+	/* DEFINES */
+	var afterStepLoaded = 'ajax:afterStepLoaded',
+		loadStep = 'ajax:loadStep';
+
+	/* REGISTER EVENTS */
+	$jmpress('register', loadStep);
+	$jmpress('register', afterStepLoaded);
+
+	/* DEFAULTS */
+	$jmpress('defaults').ajaxLoadedClass = "loaded";
+
+	/* HOOKS */
+	$jmpress('initStep', function( step, eventData ) {
+		eventData.stepData.src = $(step).attr('href') || eventData.data.src || false;
+		eventData.stepData.srcLoaded = false;
+	});
+	$jmpress(loadStep, function( step, eventData ) {
+		var stepData = eventData.stepData,
+			href = stepData && stepData.src,
+			settings = eventData.settings;
+		if ( href ) {
+			$(step).addClass( settings.ajaxLoadedClass );
+			stepData.srcLoaded = true;
+			$(step).load(href, function(response, status, xhr) {
+				$(eventData.jmpress).jmpress('fire', afterStepLoaded, step, $.extend({}, eventData, {
+					response: response
+					,status: status
+					,xhr: xhr
+				}));
+			});
+		}
+	});
+	$jmpress('idle', function( step, eventData ) {
+		if (!step) {
+			return;
+		}
+		var settings = eventData.settings,
+			jmpress = $(this),
+			stepData = eventData.stepData;
+		var siblings = $(step)
+			.add( $(step).near( settings.stepSelector ) )
+			.add( $(step).near( settings.stepSelector, true) )
+			.add( jmpress.jmpress('fire', 'selectPrev', step, {
+				stepData: $(step).data('stepData')
+			}))
+			.add( jmpress.jmpress('fire', 'selectNext', step, {
+				stepData: $(step).data('stepData')
+			}));
+		siblings.each(function() {
+			var step = this,
+				stepData = $(step).data("stepData");
+			if(!stepData.src || stepData.srcLoaded) {
+				return;
+			}
+			jmpress.jmpress('fire', loadStep, step, {
+				stepData: $(step).data('stepData')
+			});
+		});
+	});
+	$jmpress("setActive", function(step, eventData) {
+		var stepData = $(step).data("stepData");
+		if(!stepData.src || stepData.srcLoaded) {
+			return;
+		}
+		$(this).jmpress('fire', loadStep, step, {
+			stepData: $(step).data('stepData')
+		});
+	});
+
+}(jQuery, document, window));
+/*
  * hash.js
  * Detect and set the URL hash
  */
@@ -1374,7 +1527,7 @@
 	});
 
 }(jQuery, document, window));
-/*!
+/*
  * keyboard.js
  * Keyboard event mapping and default keyboard actions
  */
@@ -1537,7 +1690,214 @@
 
 
 }(jQuery, document, window));
-/*!
+/*
+ * viewport.js
+ * Scale to fit a given viewport
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+
+	function randomString() {
+		return "" + Math.round(Math.random() * 100000, 0);
+	}
+
+	var browser = (function() {
+		var ua = navigator.userAgent.toLowerCase();
+		var match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+			/(webkit)[ \/]([\w.]+)/.exec(ua) ||
+			/(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
+			/(msie) ([\w.]+)/.exec(ua) ||
+			ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
+			[];
+		return match[1] || "";
+	}());
+
+	var defaults = $.jmpress("defaults");
+	defaults.viewPort = {
+		width: false
+		,height: false
+		,maxScale: 0
+		,minScale: 0
+		,zoomable: 0
+		,zoomBindMove: true
+		,zoomBindWheel: true
+	};
+	var keys = defaults.keyboard.keys;
+	keys[browser === 'mozilla' ? 107 : 187] = "zoomIn";  // +
+	keys[browser === 'mozilla' ? 109 : 189] = "zoomOut"; // -
+	defaults.reasonableAnimation.resize = {
+		transitionDuration: '0s'
+		,transitionDelay: '0ms'
+	};
+	defaults.reasonableAnimation.zoom = {
+		transitionDuration: '0s'
+		,transitionDelay: '0ms'
+	};
+	$.jmpress("initStep", function( step, eventData ) {
+		for(var variable in {"viewPortHeight":1, "viewPortWidth":1, "viewPortMinScale":1, "viewPortMaxScale":1, "viewPortZoomable":1}) {
+			eventData.stepData[variable] = eventData.data[variable] && parseFloat(eventData.data[variable]);
+		}
+	});
+	$.jmpress("afterInit", function( nil, eventData ) {
+		var jmpress = this;
+		eventData.current.viewPortNamespace = ".jmpress-"+randomString();
+		$(window).bind("resize"+eventData.current.viewPortNamespace, function (event) {
+			$(jmpress).jmpress("reselect", "resize");
+		});
+		eventData.current.userZoom = 0;
+		eventData.current.userTranslateX = 0;
+		eventData.current.userTranslateY = 0;
+		if(eventData.settings.viewPort.zoomBindWheel) {
+			$(eventData.settings.fullscreen ? document : this)
+				.bind("mousewheel"+eventData.current.viewPortNamespace+" DOMMouseScroll"+eventData.current.viewPortNamespace, function( event, delta ) {
+				delta = delta || event.originalEvent.wheelDelta || -event.originalEvent.detail /* mozilla */;
+				var direction = (delta / Math.abs(delta));
+				if(direction < 0) {
+					$(eventData.jmpress).jmpress("zoomOut", event.originalEvent.x, event.originalEvent.y);
+				} else if(direction > 0) {
+					$(eventData.jmpress).jmpress("zoomIn", event.originalEvent.x, event.originalEvent.y);
+				}
+				return false;
+			});
+		}
+		if(eventData.settings.viewPort.zoomBindMove) {
+			$(eventData.settings.fullscreen ? document : this).bind("mousedown"+eventData.current.viewPortNamespace, function (event) {
+				if(eventData.current.userZoom) {
+					eventData.current.userTranslating = { x: event.clientX, y: event.clientY };
+					event.preventDefault();
+					event.stopImmediatePropagation();
+				}
+			}).bind("mousemove"+eventData.current.viewPortNamespace, function (event) {
+				var userTranslating = eventData.current.userTranslating;
+				if(userTranslating) {
+					$(jmpress).jmpress("zoomTranslate", event.clientX - userTranslating.x, event.clientY - userTranslating.y);
+					userTranslating.x = event.clientX;
+					userTranslating.y = event.clientY;
+					event.preventDefault();
+					event.stopImmediatePropagation();
+				}
+			}).bind("mouseup"+eventData.current.viewPortNamespace, function (event) {
+				if(eventData.current.userTranslating) {
+					eventData.current.userTranslating = undefined;
+					event.preventDefault();
+					event.stopImmediatePropagation();
+				}
+			});
+		}
+	});
+	function maxAbs(value, range) {
+		return Math.max(Math.min(value, range), -range);
+	}
+	function zoom(x, y, direction) {
+		var current = $(this).jmpress("current"),
+			settings = $(this).jmpress("settings"),
+			stepData = $(this).jmpress("active").data("stepData"),
+			container = $(this).jmpress("container");
+		if(current.userZoom === 0 && direction < 0) {
+			return;
+		}
+		var zoomableSteps = stepData.viewPortZoomable || settings.viewPort.zoomable;
+		if(current.userZoom === zoomableSteps && direction > 0) {
+			return;
+		}
+		current.userZoom += direction;
+
+		var halfWidth = $(container).innerWidth()/2,
+			halfHeight = $(container).innerHeight()/2;
+
+		x = x ? x - halfWidth : x;
+		y = y ? y - halfHeight : y;
+
+		// TODO this is not perfect... too much math... :(
+		current.userTranslateX =
+			maxAbs(current.userTranslateX - direction * x / current.zoomOriginWindowScale / zoomableSteps,
+			halfWidth * current.userZoom * current.userZoom / zoomableSteps);
+		current.userTranslateY =
+			maxAbs(current.userTranslateY - direction * y / current.zoomOriginWindowScale / zoomableSteps,
+			halfHeight * current.userZoom * current.userZoom / zoomableSteps);
+
+		$(this).jmpress("reselect", "zoom");
+	}
+	$.jmpress("register", "zoomIn", function(x, y) {
+		zoom.call(this, x||0, y||0, 1);
+	});
+	$.jmpress("register", "zoomOut", function(x, y) {
+		zoom.call(this, x||0, y||0, -1);
+	});
+	$.jmpress("register", "zoomTranslate", function(x, y) {
+		var current = $(this).jmpress("current"),
+			settings = $(this).jmpress("settings"),
+			stepData = $(this).jmpress("active").data("stepData"),
+			container = $(this).jmpress("container");
+		var zoomableSteps = stepData.viewPortZoomable || settings.viewPort.zoomable;
+		var halfWidth = $(container).innerWidth(),
+			halfHeight = $(container).innerHeight();
+		current.userTranslateX =
+			maxAbs(current.userTranslateX + x / current.zoomOriginWindowScale,
+			halfWidth * current.userZoom * current.userZoom / zoomableSteps);
+		current.userTranslateY =
+			maxAbs(current.userTranslateY + y / current.zoomOriginWindowScale,
+			halfHeight * current.userZoom * current.userZoom / zoomableSteps);
+		$(this).jmpress("reselect", "zoom");
+	});
+	$.jmpress('afterDeinit', function( nil, eventData ) {
+		$(eventData.settings.fullscreen ? document : this).unbind(eventData.current.viewPortNamespace);
+		$(window).unbind(eventData.current.viewPortNamespace);
+	});
+	$.jmpress("setActive", function( step, eventData ) {
+		var viewPort = eventData.settings.viewPort;
+		var viewPortHeight = eventData.stepData.viewPortHeight || viewPort.height;
+		var viewPortWidth = eventData.stepData.viewPortWidth || viewPort.width;
+		var viewPortMaxScale = eventData.stepData.viewPortMaxScale || viewPort.maxScale;
+		var viewPortMinScale = eventData.stepData.viewPortMinScale || viewPort.minScale;
+		// Correct the scale based on the window's size
+		var windowScaleY = viewPortHeight && $(eventData.container).innerHeight()/viewPortHeight;
+		var windowScaleX = viewPortWidth && $(eventData.container).innerWidth()/viewPortWidth;
+		var windowScale = (windowScaleX || windowScaleY) && Math.min( windowScaleX || windowScaleY, windowScaleY || windowScaleX );
+
+		if(windowScale) {
+			windowScale = windowScale || 1;
+			if(viewPortMaxScale) {
+				windowScale = Math.min(windowScale, viewPortMaxScale);
+			}
+			if(viewPortMinScale) {
+				windowScale = Math.max(windowScale, viewPortMinScale);
+			}
+
+			var zoomableSteps = eventData.stepData.viewPortZoomable || eventData.settings.viewPort.zoomable;
+			if(zoomableSteps) {
+				var diff = (1/windowScale) - (1/viewPortMaxScale);
+				diff /= zoomableSteps;
+				windowScale = 1/((1/windowScale) - diff * eventData.current.userZoom);
+			}
+
+			eventData.target.transform.reverse();
+			if(eventData.current.userTranslateX && eventData.current.userTranslateY) {
+				eventData.target.transform.push(["translate", eventData.current.userTranslateX, eventData.current.userTranslateY, 0]);
+			} else {
+				eventData.target.transform.push(["translate"]);
+			}
+			eventData.target.transform.push(["scale",
+				windowScale,
+				windowScale,
+				1]);
+			eventData.target.transform.reverse();
+			eventData.target.perspectiveScale /= windowScale;
+		}
+		eventData.current.zoomOriginWindowScale = windowScale;
+	});
+	$.jmpress("setInactive", function( step, eventData ) {
+		if(!eventData.nextStep || !step || $(eventData.nextStep).attr("id") !== $(step).attr("id")) {
+			eventData.current.userZoom = 0;
+			eventData.current.userTranslateX = 0;
+			eventData.current.userTranslateY = 0;
+		}
+	});
+
+}(jQuery, document, window));
+
+/*
  * mouse.js
  * Clicking to select a step
  */
@@ -1586,6 +1946,454 @@
 	});
 	$jmpress('afterDeinit', function( nil, eventData ) {
 		$(this).unbind(eventData.current.clickableStepsNamespace);
+	});
+
+}(jQuery, document, window));
+/*
+ * mobile.js
+ * Adds support for swipe on touch supported browsers
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+	var $jmpress = $.jmpress;
+
+	/* FUNCTIONS */
+	function randomString() {
+		return "" + Math.round(Math.random() * 100000, 0);
+	}
+
+	/* HOOKS */
+	$jmpress( 'afterInit', function( step, eventData ) {
+		var settings = eventData.settings,
+			current = eventData.current,
+			jmpress = eventData.jmpress;
+		current.mobileNamespace = ".jmpress-"+randomString();
+		var data, start = [0,0];
+		$(settings.fullscreen ? document : jmpress)
+			.bind("touchstart"+current.mobileNamespace, function( event ) {
+
+			data = event.originalEvent.touches[0];
+			start = [ data.pageX, data.pageY ];
+
+		}).bind("touchmove"+current.mobileNamespace, function( event ) {
+			data = event.originalEvent.touches[0];
+			event.preventDefault();
+			return false;
+		}).bind("touchend"+current.mobileNamespace, function( event ) {
+			var end = [ data.pageX, data.pageY ],
+				diff = [ end[0]-start[0], end[1]-start[1] ];
+
+			if(Math.max(Math.abs(diff[0]), Math.abs(diff[1])) > 50) {
+				diff = Math.abs(diff[0]) > Math.abs(diff[1]) ? diff[0] : diff[1];
+				$(jmpress).jmpress(diff > 0 ? "prev" : "next");
+				event.preventDefault();
+				return false;
+			}
+		});
+	});
+	$jmpress('afterDeinit', function( nil, eventData ) {
+		var settings = eventData.settings,
+			current = eventData.current,
+			jmpress = eventData.jmpress;
+		$(settings.fullscreen ? document : jmpress).unbind(current.mobileNamespace);
+	});
+
+}(jQuery, document, window));
+/*
+ * templates.js
+ * The amazing template engine
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+	var $jmpress = $.jmpress,
+		templateFromParentIdent = "_template_",
+		templateFromApplyIdent = "_applied_template_";
+
+	/* STATIC VARS */
+	var templates = {};
+
+	/* FUNCTIONS */
+	function addUndefined( target, values, prefix ) {
+		for( var name in values ) {
+			var targetName = name;
+			if ( prefix ) {
+				targetName = prefix + targetName.substr(0, 1).toUpperCase() + targetName.substr(1);
+			}
+			if ( $.isPlainObject(values[name]) ) {
+				addUndefined( target, values[name], targetName );
+			} else if( target[targetName] === undefined ) {
+				target[targetName] = values[name];
+			}
+		}
+	}
+	function applyChildrenTemplates( children, templateChildren ) {
+		if ($.isArray(templateChildren)) {
+			if (templateChildren.length < children.length) {
+				$.error("more nested steps than children in template");
+			} else {
+				children.each(function(idx, child) {
+					child = $(child);
+					var tmpl = child.data(templateFromParentIdent) || {};
+					addUndefined(tmpl, templateChildren[idx]);
+					child.data(templateFromParentIdent, tmpl);
+				});
+			}
+		} else if($.isFunction(templateChildren)) {
+			children.each(function(idx, child) {
+				child = $(child);
+				var tmpl = child.data(templateFromParentIdent) || {};
+				addUndefined(tmpl, templateChildren(idx, child, children));
+				child.data(templateFromParentIdent, tmpl);
+			});
+		} // TODO: else if(object)
+	}
+	function applyTemplate( data, element, template, eventData ) {
+		if (template.children) {
+			var children = element.children( eventData.settings.stepSelector );
+			applyChildrenTemplates( children, template.children );
+		}
+		applyTemplateData( data, template );
+	}
+	function applyTemplateData( data, template ) {
+		addUndefined(data, template);
+	}
+
+	/* HOOKS */
+	$jmpress("beforeInitStep", function( step, eventData ) {
+		step = $(step);
+		var data = eventData.data,
+			templateFromAttr = data.template,
+			templateFromApply = step.data(templateFromApplyIdent),
+			templateFromParent = step.data(templateFromParentIdent);
+		if(templateFromAttr) {
+			$.each(templateFromAttr.split(" "), function(idx, tmpl) {
+				var template = templates[tmpl];
+				applyTemplate( data, step, template, eventData );
+			});
+		}
+		if (templateFromApply) {
+			applyTemplate( data, step, templateFromApply, eventData );
+		}
+		if (templateFromParent) {
+			applyTemplate( data, step, templateFromParent, eventData );
+			step.data(templateFromParentIdent, null);
+			if(templateFromParent.template) {
+				$.each(templateFromParent.template.split(" "), function(idx, tmpl) {
+					var template = templates[tmpl];
+					applyTemplate( data, step, template, eventData );
+				});
+			}
+		}
+	});
+	$jmpress("beforeInit", function( nil, eventData ) {
+		var data = $jmpress("dataset", this),
+			dataTemplate = data.template,
+			stepSelector = eventData.settings.stepSelector;
+		if (dataTemplate) {
+			var template = templates[dataTemplate];
+			applyChildrenTemplates( $(this).find(stepSelector).filter(function() {
+				return !$(this).parent().is(stepSelector);
+			}), template.children );
+		}
+	});
+
+	/* EXPORTED FUNCTIONS */
+	$jmpress("register", "template", function( name, tmpl ) {
+		if (templates[name]) {
+			templates[name] = $.extend(true, {}, templates[name], tmpl);
+		} else {
+			templates[name] = $.extend(true, {}, tmpl);
+		}
+	});
+	$jmpress("register", "apply", function( selector, tmpl ) {
+		if( !tmpl ) {
+			// TODO ERROR because settings not found
+			var stepSelector = $(this).jmpress("settings").stepSelector;
+			applyChildrenTemplates( $(this).find(stepSelector).filter(function() {
+				return !$(this).parent().is(stepSelector);
+			}), selector );
+		} else if($.isArray(tmpl)) {
+			applyChildrenTemplates( $(selector), tmpl );
+		} else {
+			var template;
+			if(typeof tmpl === "string") {
+				template = templates[tmpl];
+			} else {
+				template = $.extend(true, {}, tmpl);
+			}
+			$(selector).each(function(idx, element) {
+				element = $(element);
+				var tmpl = element.data(templateFromApplyIdent) || {};
+				addUndefined(tmpl, template);
+				element.data(templateFromApplyIdent, tmpl);
+			});
+		}
+	});
+
+}(jQuery, document, window));
+/*
+ * jqevents.js
+ * Fires jQuery events
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+
+	/* HOOKS */
+	// the events should not bubble up the tree
+	// elsewise nested jmpress would cause buggy behavior
+	$.jmpress("setActive", function( step, eventData ) {
+		if(eventData.prevStep !== step) {
+			$(step).triggerHandler("enterStep");
+		}
+	});
+	$.jmpress("setInactive", function( step, eventData ) {
+		if(eventData.nextStep !== step) {
+			$(step).triggerHandler("leaveStep");
+		}
+	});
+
+}(jQuery, document, window));
+/*
+ * animation.js
+ * Apply custom animations to steps
+ */
+(function( $, document, window, undefined ) {
+
+	'use strict';
+
+	function parseSubstepInfo(str) {
+		var arr = str.split(" ");
+		var className = arr[0];
+		var config = { willClass: "will-"+className, doClass: "do-"+className, hasClass: "has-"+className };
+		var state = "";
+		for(var i = 1; i < arr.length; i++) {
+			var s = arr[i];
+			switch(state) {
+			case "":
+				if(s === "after") {
+					state = "after";
+				} else {
+					$.warn("unknown keyword in '"+str+"'. '"+s+"' unknown.");
+				}
+				break;
+			case "after":
+				if(s.match(/^[1-9][0-9]*m?s?/)) {
+					var value = parseFloat(s);
+					if(s.indexOf("ms") !== -1) {
+						value *= 1;
+					} else if(s.indexOf("s") !== -1) {
+						value *= 1000;
+					} else if(s.indexOf("m") !== -1) {
+						value *= 60000;
+					}
+					config.delay = value;
+				} else {
+					config.after = Array.prototype.slice.call(arr, i).join(" ");
+					i = arr.length;
+				}
+			}
+		}
+		return config;
+	}
+	function find(array, selector, start, end) {
+		end = end || (array.length - 1);
+		start = start || 0;
+		for(var i = start; i < end + 1; i++) {
+			if($(array[i].element).is(selector)) {
+				return i;
+			}
+		}
+	}
+	function addOn(list, substep, delay) {
+		$.each(substep._on, function(idx, child) {
+			list.push({substep: child.substep, delay: child.delay + delay});
+			addOn(list, child.substep, child.delay + delay);
+		});
+	}
+	$.jmpress("defaults").customAnimationDataAttribute = "jmpress";
+	$.jmpress("afterInit", function( nil, eventData ) {
+		eventData.current.animationTimeouts = [];
+		eventData.current.animationCleanupWaiting = [];
+	});
+	$.jmpress("applyStep", function( step, eventData ) {
+		// read custom animation from elements
+		var substepsData = {};
+		var listOfSubsteps = [];
+		$(step).find("[data-"+eventData.settings.customAnimationDataAttribute+"]")
+				.each(function(idx, element) {
+			if($(element).closest(eventData.settings.stepSelector).is(step)) {
+				listOfSubsteps.push({element: element});
+			}
+		});
+		if(listOfSubsteps.length === 0) {
+			return;
+		}
+		$.each(listOfSubsteps, function(idx, substep) {
+			substep.info = parseSubstepInfo(
+				$(substep.element).data(eventData.settings.customAnimationDataAttribute));
+			$(substep.element).addClass(substep.info.willClass);
+			substep._on = [];
+			substep._after = null;
+		});
+		var current = {_after: undefined, _on: [], info: {}}; // virtual zero step
+		$.each(listOfSubsteps, function(idx, substep) {
+			var other = substep.info.after;
+			if(other) {
+				if(other === "step") {
+					other = current;
+				} else if(other === "prev") {
+					other = listOfSubsteps[idx-1];
+				} else {
+					var index = find(listOfSubsteps, other, 0, idx - 1);
+					if(index === undefined) {
+						index = find(listOfSubsteps, other);
+					}
+					other = (index === undefined || index === idx) ? listOfSubsteps[idx-1] : listOfSubsteps[index];
+				}
+			} else {
+				other = listOfSubsteps[idx-1];
+			}
+			if(other) {
+				if(!substep.info.delay) {
+					if(!other._after) {
+						other._after = substep;
+						return;
+					}
+					other = other._after;
+				}
+				other._on.push({substep: substep, delay: substep.info.delay || 0});
+			}
+		});
+		if(current._after === undefined && current._on.length === 0) {
+			var startStep = find(listOfSubsteps, eventData.stepData.startSubstep) || 0;
+			current._after = listOfSubsteps[startStep];
+		}
+		var substepsInOrder = [];
+		function findNextFunc(idx, item) {
+			if(item.substep._after) {
+				current = item.substep._after;
+				return false;
+			}
+		}
+		do {
+			var substepList = [{substep: current, delay: 0}];
+			addOn(substepList, current, 0);
+			substepsInOrder.push(substepList);
+			current = null;
+			$.each(substepList, findNextFunc);
+		} while(current);
+		substepsData.list = substepsInOrder;
+		$(step).data("substepsData", substepsData);
+	});
+	$.jmpress("unapplyStep", function( step, eventData ) {
+		var substepsData = $(step).data("substepsData");
+		if(substepsData) {
+			$.each(substepsData.list, function(idx, activeSubsteps) {
+				$.each(activeSubsteps, function(idx, substep) {
+					if(substep.substep.info.willClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.willClass);
+					}
+					if(substep.substep.info.hasClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.hasClass);
+					}
+					if(substep.substep.info.doClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.doClass);
+					}
+				});
+			});
+		}
+	});
+	$.jmpress("setActive", function(step, eventData) {
+		var substepsData = $(step).data("substepsData");
+		if(!substepsData) {
+			return;
+		}
+		if(eventData.substep === undefined) {
+			eventData.substep =
+				(eventData.reason === "prev" ?
+					substepsData.list.length-1 :
+					0
+				);
+		}
+		var substep = eventData.substep;
+		$.each(eventData.current.animationTimeouts, function(idx, timeout) {
+			clearTimeout(timeout);
+		});
+		eventData.current.animationTimeouts = [];
+		$.each(substepsData.list, function(idx, activeSubsteps) {
+			var applyHas = idx < substep;
+			var applyDo = idx <= substep;
+			$.each(activeSubsteps, function(idx, substep) {
+				if(substep.substep.info.hasClass) {
+					$(substep.substep.element)[(applyHas?"add":"remove")+"Class"](substep.substep.info.hasClass);
+				}
+				function applyIt() {
+					$(substep.substep.element).addClass(substep.substep.info.doClass);
+				}
+				if(applyDo && !applyHas && substep.delay && eventData.reason !== "prev") {
+					if(substep.substep.info.doClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.doClass);
+						eventData.current.animationTimeouts.push(setTimeout(applyIt, substep.delay));
+					}
+				} else {
+					if(substep.substep.info.doClass) {
+						$(substep.substep.element)[(applyDo?"add":"remove")+"Class"](substep.substep.info.doClass);
+					}
+				}
+			});
+		});
+	});
+	$.jmpress("setInactive", function(step, eventData) {
+		if(eventData.nextStep === step) {
+			return;
+		}
+		function cleanupAnimation( substepsData ) {
+			$.each(substepsData.list, function(idx, activeSubsteps) {
+				$.each(activeSubsteps, function(idx, substep) {
+					if(substep.substep.info.hasClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.hasClass);
+					}
+					if(substep.substep.info.doClass) {
+						$(substep.substep.element).removeClass(substep.substep.info.doClass);
+					}
+				});
+			});
+		}
+		$.each(eventData.current.animationCleanupWaiting, function(idx, item) {
+			cleanupAnimation(item);
+		});
+		eventData.current.animationCleanupWaiting = [];
+		var substepsData = $(step).data("substepsData");
+		if(substepsData) {
+			eventData.current.animationCleanupWaiting.push( substepsData );
+		}
+	});
+	$.jmpress("selectNext", function( step, eventData ) {
+		if(eventData.substep === undefined) {
+			return;
+		}
+		var substepsData = $(step).data("substepsData");
+		if(!substepsData) {
+			return;
+		}
+		if(eventData.substep < substepsData.list.length-1) {
+			return {step: step, substep: eventData.substep+1};
+		}
+	});
+	$.jmpress("selectPrev", function( step, eventData ) {
+		if(eventData.substep === undefined) {
+			return;
+		}
+		var substepsData = $(step).data("substepsData");
+		if(!substepsData) {
+			return;
+		}
+		if(eventData.substep > 0) {
+			return {step: step, substep: eventData.substep-1};
+		}
 	});
 
 }(jQuery, document, window));

@@ -1,0 +1,611 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>DefaultRealMatrixPreservingVisitor.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.linear;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_20'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_21'></a>
+</td>
+<td class=''><pre><span  class=''> * Default implementation of the {@link RealMatrixPreservingVisitor} interface.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_22'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_23'></a>
+</td>
+<td class=''><pre><span  class=''> * This class is a convenience to create custom visitors without defining all</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_24'></a>
+</td>
+<td class=''><pre><span  class=''> * methods. This class provides default implementations that do nothing.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_25'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_26'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_27'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: DefaultRealMatrixPreservingVisitor.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_28'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_29'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_30'></a>
+</td>
+<td class='covered'><pre><span  class=''>public class DefaultRealMatrixPreservingVisitor implements RealMatrixPreservingVisitor {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_31'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_32'></a>
+</td>
+<td class=''><pre><span  class=''>    public void start(int rows, int columns,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_33'></a>
+</td>
+<td class=''><pre><span  class=''>                      int startRow, int endRow, int startColumn, int endColumn) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_34'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_35'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_36'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_37'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>    public void visit(int row, int column, double value) {}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_38'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_39'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_40'></a>
+</td>
+<td class=''><pre><span  class=''>    public double end() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_41'/>
+41
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_41'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        return 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_42'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@506301be_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@506301be_43'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@506301be_41'>41</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@506301be_41'/> 
+
+<p class='SURVIVED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/linear/DefaultRealMatrixPreservingVisitor::end : SURVIVED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.linear.QRSolverTest.testRank(org.apache.commons.math3.linear.QRSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueSolverTest.testSolve(org.apache.commons.math3.linear.SingularValueSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testLTTransposed(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testSolve(org.apache.commons.math3.linear.EigenSolverTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.canEstimateResiduals(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testEigenvalues(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testQOrthogonal(org.apache.commons.math3.linear.QRDecompositionTest) (224 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testRandomDataNormalDistribution(org.apache.commons.math3.linear.HessenbergTransformerTest) (465 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testHTrapezoidal(org.apache.commons.math3.linear.QRDecompositionTest) (91 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.EigenSolverTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.canEstimateRegressandVariance(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testSolveRankErrors(org.apache.commons.math3.linear.QRSolverTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleNullData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testAEqualUSVt(org.apache.commons.math3.linear.SingularValueDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testRepeatedEigenvalue(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testDensities(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (5 ms)</li><li>org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testMath226(org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (325 ms)</li><li>org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testSampleWithZeroCovariance(org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest) (321 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSquareRootNonSymmetric(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testYSampleDataNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateResiduals(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testNoAccessBelowDiagonal(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUpperOrLower(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testWeightSumOverFlow(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (17 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleDataYNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testXSampleDataNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testAEqualQR(org.apache.commons.math3.linear.QRDecompositionTest) (195 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testDimensions(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testMathpbx02(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testStability2(org.apache.commons.math3.linear.SingularValueDecompositionTest) (4 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSquareRoot(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testSampling(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (2 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testMatricesValues3(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testLongly(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension4WithoutSplit(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension3MultipleRoot(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testAEqualUSVt(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (2 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testYVariance(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateRegressionParameters(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testBigMatrix(org.apache.commons.math3.linear.EigenDecompositionTest) (1826 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testBBiDiagonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testNonInvertible(org.apache.commons.math3.linear.QRDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testNonInvertible(org.apache.commons.math3.linear.EigenSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDistinctEigenvalues(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testZeroDivide(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testAEqualPTPt(org.apache.commons.math3.linear.SchurTransformerTest) (2 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testMath848(org.apache.commons.math3.linear.SchurTransformerTest) (3 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testGetCovarianceMatrix(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testMatricesValues(org.apache.commons.math3.linear.QRDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testQTOrthogonal(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (64 ms)</li><li>org.apache.commons.math3.linear.SingularValueSolverTest.testMath320B(org.apache.commons.math3.linear.SingularValueSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testAEqualVDVt(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testVOrthogonal(org.apache.commons.math3.linear.EigenDecompositionTest) (2 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testMoreColumns(org.apache.commons.math3.linear.SingularValueDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testPOrthogonal(org.apache.commons.math3.linear.HessenbergTransformerTest) (0 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testTransitionMeasurementMatrixMismatch(org.apache.commons.math3.filter.KalmanFilterTest) (0 ms)</li><li>org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest.testMath789(org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testUOrthogonal(org.apache.commons.math3.linear.SingularValueDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testCopySubMatrix(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testTranspose(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testMeanAndCovariance(org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest) (88 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension1(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testGLSEfficiency(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (20316 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.serialization(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (20 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testPTOrthogonal(org.apache.commons.math3.linear.HessenbergTransformerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testSampling(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (3852 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testDimensions(org.apache.commons.math3.linear.CholeskyDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testDensities(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension4WithSplit(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testConstant(org.apache.commons.math3.filter.KalmanFilterTest) (14 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testSolve(org.apache.commons.math3.linear.QRSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testCopySubMatrix(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testPTOrthogonal(org.apache.commons.math3.linear.SchurTransformerTest) (2 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleInsufficientData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDiagonal(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testUOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testHadamard(org.apache.commons.math3.linear.SingularValueDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (156 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.polynomial(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (41 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testWalk(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (71 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testNonUnitWeightSum(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.canEstimateRegressionParameters(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testHat(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (2 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testAEqualLLT(org.apache.commons.math3.linear.CholeskyDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testUnivariateDistribution(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (2 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testQOrthogonal(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSample(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.linear.BiDiagonalTransformerTest.testVOrthogonal(org.apache.commons.math3.linear.BiDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimensions(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testGLSOLSConsistency(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (4 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testMatricesValues(org.apache.commons.math3.linear.CholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testTransitionControlMatrixMismatch(org.apache.commons.math3.filter.KalmanFilterTest) (0 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.QRSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.SingularValueSolverTest.testLeastSquareSolve(org.apache.commons.math3.linear.SingularValueSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testRandomData(org.apache.commons.math3.linear.HessenbergTransformerTest) (315 ms)</li><li>org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testRootMatrix(org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension3(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testUnsymmetric(org.apache.commons.math3.linear.EigenDecompositionTest) (9 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testRandomDataNormalDistribution(org.apache.commons.math3.linear.SchurTransformerTest) (607 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testHdiagConstant(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (178 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testPreconditionPositiveWeights(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.SingularValueSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.CholeskyDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.CholeskyDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testEigenvectors(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testTranspose(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testEqualsAndHashCode(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleInvalidData(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testAEqualQTQt(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSample2(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testGetMean(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (1 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testAEqualPHPt(org.apache.commons.math3.linear.HessenbergTransformerTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testNewSampleDataXNull(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest.derivativesConsistency(org.apache.commons.math3.ode.sampling.NordsieckStepInterpolatorTest) (70 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler2(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testPOrthogonal(org.apache.commons.math3.linear.SchurTransformerTest) (2 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testEqualsAndHashCode(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testPPermutation(org.apache.commons.math3.linear.LUDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testWalk(org.apache.commons.math3.linear.BlockRealMatrixTest) (64 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest.exceedMaxEvaluations(org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegratorTest) (199 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testRandomData(org.apache.commons.math3.linear.SchurTransformerTest) (879 ms)</li><li>org.apache.commons.math3.filter.KalmanFilterTest.testConstantAcceleration(org.apache.commons.math3.filter.KalmanFilterTest) (11 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateRegressionParametersVariance(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testDimension2(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler4(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.backward(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (136 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testDimensions(org.apache.commons.math3.linear.QRDecompositionTest) (167 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testMath848(org.apache.commons.math3.linear.EigenDecompositionTest) (8 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testOverdetermined(org.apache.commons.math3.linear.QRSolverTest) (276 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testHdiag(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (184 ms)</li><li>org.apache.commons.math3.linear.QRSolverTest.testUnderdetermined(org.apache.commons.math3.linear.QRSolverTest) (120 ms)</li><li>org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest.testFullRank(org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testSwissFertility(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testTranspose(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.canEstimateRegressionParametersVariance(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testPerfectFit(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSquareRootNonPositiveDefinite(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenSolverTest.testInvertible(org.apache.commons.math3.linear.EigenSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testMath308(org.apache.commons.math3.linear.EigenDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.TriDiagonalTransformerTest.testMatricesValues5(org.apache.commons.math3.linear.TriDiagonalTransformerTest) (0 ms)</li><li>org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest.testDecomposition3x3(org.apache.commons.math3.linear.RectangularCholeskyDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SingularValueDecompositionTest.testVOrthogonal(org.apache.commons.math3.linear.SingularValueDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testRank(org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest.testIncreasingTolerance(org.apache.commons.math3.ode.nonstiff.AdamsMoultonIntegratorTest) (223 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.cannotAddSampleDataWithSizeMismatch(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testMathpbx03(org.apache.commons.math3.linear.EigenDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testSymmetric(org.apache.commons.math3.linear.EigenDecompositionTest) (2 ms)</li><li>org.apache.commons.math3.linear.MatrixUtilsTest.testBlockInverse(org.apache.commons.math3.linear.MatrixUtilsTest) (6 ms)</li><li>org.apache.commons.math3.linear.QRDecompositionTest.testRUpperTriangular(org.apache.commons.math3.linear.QRDecompositionTest) (93 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testTridiagonal(org.apache.commons.math3.linear.EigenDecompositionTest) (28 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler1(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler3(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

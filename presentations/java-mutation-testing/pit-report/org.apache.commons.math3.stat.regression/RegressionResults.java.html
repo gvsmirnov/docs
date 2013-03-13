@@ -1,0 +1,5739 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>RegressionResults.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_17'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.stat.regression;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_18'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_19'></a>
+</td>
+<td class=''><pre><span  class=''>import java.io.Serializable;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_20'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Arrays;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_21'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_22'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.MathArrays;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_23'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.OutOfRangeException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_24'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_25'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_26'></a>
+</td>
+<td class=''><pre><span  class=''> * Results of a Multiple Linear Regression model fit.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_27'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_28'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: RegressionResults.java 1392342 2012-10-01 14:08:52Z psteitz $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_29'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 3.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_30'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_31'></a>
+</td>
+<td class=''><pre><span  class=''>public class RegressionResults implements Serializable {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_32'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_33'></a>
+</td>
+<td class=''><pre><span  class=''>    /** INDEX of Sum of Squared Errors */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_34'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final int SSE_IDX = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_35'></a>
+</td>
+<td class=''><pre><span  class=''>    /** INDEX of Sum of Squares of Model */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_36'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final int SST_IDX = 1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_37'></a>
+</td>
+<td class=''><pre><span  class=''>    /** INDEX of R-Squared of regression */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_38'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final int RSQ_IDX = 2;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_39'></a>
+</td>
+<td class=''><pre><span  class=''>    /** INDEX of Mean Squared Error */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_40'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final int MSE_IDX = 3;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_41'></a>
+</td>
+<td class=''><pre><span  class=''>    /** INDEX of Adjusted R Squared */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_42'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final int ADJRSQ_IDX = 4;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_43'></a>
+</td>
+<td class=''><pre><span  class=''>    /** UID */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_44'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final long serialVersionUID = 1l;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_45'></a>
+</td>
+<td class=''><pre><span  class=''>    /** regression slope parameters */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_46'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[] parameters;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_47'></a>
+</td>
+<td class=''><pre><span  class=''>    /** variance covariance matrix of parameters */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_48'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[][] varCovData;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_49'></a>
+</td>
+<td class=''><pre><span  class=''>    /** boolean flag for variance covariance matrix in symm compressed storage */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_50'></a>
+</td>
+<td class=''><pre><span  class=''>    private final boolean isSymmetricVCD;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_51'></a>
+</td>
+<td class=''><pre><span  class=''>    /** rank of the solution */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_52'></a>
+</td>
+<td class=''><pre><span  class=''>    @SuppressWarnings(&#34;unused&#34;)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_53'></a>
+</td>
+<td class=''><pre><span  class=''>    private final int rank;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_54'></a>
+</td>
+<td class=''><pre><span  class=''>    /** number of observations on which results are based */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_55'></a>
+</td>
+<td class=''><pre><span  class=''>    private final long nobs;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_56'></a>
+</td>
+<td class=''><pre><span  class=''>    /** boolean flag indicator of whether a constant was included*/</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_57'></a>
+</td>
+<td class=''><pre><span  class=''>    private final boolean containsConstant;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_58'></a>
+</td>
+<td class=''><pre><span  class=''>    /** array storing global results, SSE, MSE, RSQ, adjRSQ */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_59'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[] globalFitInfo;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_60'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_61'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_62'></a>
+</td>
+<td class=''><pre><span  class=''>     *  Set the default constructor to private access</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_63'></a>
+</td>
+<td class=''><pre><span  class=''>     *  to prevent inadvertent instantiation</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_64'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_65'></a>
+</td>
+<td class=''><pre><span  class=''>    @SuppressWarnings(&#34;unused&#34;)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_66'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>    private RegressionResults() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_67'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.parameters = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_68'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.varCovData = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_69'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.rank = -1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_70'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.nobs = -1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_71'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.containsConstant = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_72'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.isSymmetricVCD = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_73'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        this.globalFitInfo = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_74'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_75'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_76'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_77'></a>
+</td>
+<td class=''><pre><span  class=''>     * Constructor for Regression Results.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_78'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_79'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param parameters a double array with the regression slope estimates</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_80'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param varcov the variance covariance matrix, stored either in a square matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_81'></a>
+</td>
+<td class=''><pre><span  class=''>     * or as a compressed</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_82'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param isSymmetricCompressed a flag which denotes that the variance covariance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_83'></a>
+</td>
+<td class=''><pre><span  class=''>     * matrix is in symmetric compressed format</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_84'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param nobs the number of observations of the regression estimation</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_85'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param rank the number of independent variables in the regression</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_86'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param sumy the sum of the independent variable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_87'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param sumysq the sum of the squared independent variable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_88'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param sse sum of squared errors</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_89'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param containsConstant true model has constant,  false model does not have constant</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_90'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param copyData if true a deep copy of all input data is made, if false only references</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_91'></a>
+</td>
+<td class=''><pre><span  class=''>     * are copied and the RegressionResults become mutable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_92'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_93'></a>
+</td>
+<td class=''><pre><span  class=''>    public RegressionResults(</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_94'></a>
+</td>
+<td class=''><pre><span  class=''>            final double[] parameters, final double[][] varcov,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_95'></a>
+</td>
+<td class=''><pre><span  class=''>            final boolean isSymmetricCompressed,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_96'></a>
+</td>
+<td class=''><pre><span  class=''>            final long nobs, final int rank,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_97'></a>
+</td>
+<td class=''><pre><span  class=''>            final double sumy, final double sumysq, final double sse,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_98'></a>
+</td>
+<td class=''><pre><span  class=''>            final boolean containsConstant,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_99'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final boolean copyData) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_100'/>
+100
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_100'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (copyData) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_101'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>            this.parameters = MathArrays.copyOf(parameters);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_102'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>            this.varCovData = new double[varcov.length][];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_103'/>
+103
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_103'>3</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            for (int i = 0; i &#60; varcov.length; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_104'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>                this.varCovData[i] = MathArrays.copyOf(varcov[i]);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_105'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_106'></a>
+</td>
+<td class=''><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_107'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.parameters = parameters;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_108'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.varCovData = varcov;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_109'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_110'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.isSymmetricVCD = isSymmetricCompressed;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_111'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.nobs = nobs;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_112'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.rank = rank;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_113'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.containsConstant = containsConstant;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_114'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.globalFitInfo = new double[5];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_115'/>
+115
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_115'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        Arrays.fill(this.globalFitInfo, Double.NaN);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_116'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_117'/>
+117
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_117'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (rank &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_118'/>
+118
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_118'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            this.globalFitInfo[SST_IDX] = containsConstant ?</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_119'></a>
+</td>
+<td class=''><pre><span  class=''>                    (sumysq - sumy * sumy / nobs) : sumysq;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_120'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_121'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_122'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.globalFitInfo[SSE_IDX] = sse;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_123'/>
+123
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_123'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        this.globalFitInfo[MSE_IDX] = this.globalFitInfo[SSE_IDX] /</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_124'></a>
+</td>
+<td class=''><pre><span  class=''>                (nobs - rank);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_125'/>
+125
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_125'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        this.globalFitInfo[RSQ_IDX] = 1.0 -</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_126'></a>
+</td>
+<td class=''><pre><span  class=''>                this.globalFitInfo[SSE_IDX] /</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_127'></a>
+</td>
+<td class=''><pre><span  class=''>                this.globalFitInfo[SST_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_128'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_129'/>
+129
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_129'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (!containsConstant) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_130'/>
+130
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_130'>5</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            this.globalFitInfo[ADJRSQ_IDX] = 1.0-</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_131'></a>
+</td>
+<td class=''><pre><span  class=''>                    (1.0 - this.globalFitInfo[RSQ_IDX]) *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_132'></a>
+</td>
+<td class=''><pre><span  class=''>                    ( (double) nobs / ( (double) (nobs - rank)));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_133'></a>
+</td>
+<td class=''><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_134'/>
+134
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_134'>6</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            this.globalFitInfo[ADJRSQ_IDX] = 1.0 - (sse * (nobs - 1.0)) /</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_135'></a>
+</td>
+<td class=''><pre><span  class=''>                    (globalFitInfo[SST_IDX] * (nobs - rank));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_136'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_137'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_138'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_139'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_140'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the parameter estimate for the regressor at the given index.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_141'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_142'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;A redundant regressor will have its redundancy flag set, as well as</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_143'></a>
+</td>
+<td class=''><pre><span  class=''>     *  a parameters estimated equal to {@code Double.NaN}&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_144'/>
+144
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_144'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_145'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param index Index.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_146'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the parameters estimated for regressor at index.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_147'/>
+147
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_147'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws OutOfRangeException if {@code index} is not in the interval</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_148'/>
+148
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_148'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@code [0, number of parameters)}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_149'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_150'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getParameterEstimate(int index) throws OutOfRangeException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_151'/>
+151
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_151'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_152'/>
+152
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_152'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_153'/>
+153
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_153'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_154'/>
+154
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_154'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (index &#60; 0 || index &#62;= this.parameters.length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_155'/>
+155
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_155'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            throw new OutOfRangeException(index, 0, this.parameters.length - 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_156'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_157'/>
+157
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_157'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.parameters[index];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_158'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_159'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_160'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_161'/>
+161
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_161'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns a copy of the regression parameters estimates.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_162'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_163'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The parameter estimates are returned in the natural order of the data.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_164'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_165'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;A redundant regressor will have its redundancy flag set, as will</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_166'></a>
+</td>
+<td class=''><pre><span  class=''>     *  a parameter estimate equal to {@code Double.NaN}.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_167'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_168'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return array of parameter estimates, null if no estimation occurred</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_169'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_170'></a>
+</td>
+<td class=''><pre><span  class=''>    public double[] getParameterEstimates() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_171'/>
+171
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_171'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (this.parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_172'/>
+172
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_172'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_173'/>
+173
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_173'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_174'/>
+174
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_174'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return MathArrays.copyOf(parameters);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_175'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_176'/>
+176
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_176'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_177'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_178'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the &#60;a href=&#34;http://www.xycoon.com/standerrorb(1).htm&#34;&#62;standard</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_179'/>
+179
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_179'></a>
+</td>
+<td class=''><pre><span  class=''>     * error of the parameter estimate at index&#60;/a&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_180'></a>
+</td>
+<td class=''><pre><span  class=''>     * usually denoted s(b&#60;sub&#62;index&#60;/sub&#62;).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_181'/>
+181
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_181'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_182'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param index Index.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_183'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the standard errors associated with parameters estimated at index.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_184'/>
+184
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_184'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws OutOfRangeException if {@code index} is not in the interval</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_185'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@code [0, number of parameters)}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_186'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_187'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getStdErrorOfEstimate(int index) throws OutOfRangeException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_188'/>
+188
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_188'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_189'/>
+189
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_189'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_190'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_191'/>
+191
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_191'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (index &#60; 0 || index &#62;= this.parameters.length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_192'/>
+192
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_192'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            throw new OutOfRangeException(index, 0, this.parameters.length - 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_193'/>
+193
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_193'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_194'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double var = this.getVcvElement(index, index);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_195'/>
+195
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_195'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (!Double.isNaN(var) &#38;&#38; var &#62; Double.MIN_VALUE) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_196'/>
+196
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_196'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return FastMath.sqrt(var);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_197'/>
+197
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_197'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_198'/>
+198
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_198'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_199'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_200'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_201'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_202'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the &#60;a href=&#34;http://www.xycoon.com/standerrorb(1).htm&#34;&#62;standard</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_203'/>
+203
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_203'></a>
+</td>
+<td class=''><pre><span  class=''>     * error of the parameter estimates&#60;/a&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_204'></a>
+</td>
+<td class=''><pre><span  class=''>     * usually denoted s(b&#60;sub&#62;i&#60;/sub&#62;).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_205'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_206'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;If there are problems with an ill conditioned design matrix then the regressor</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_207'/>
+207
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_207'></a>
+</td>
+<td class=''><pre><span  class=''>     * which is redundant will be assigned &#60;code&#62;Double.NaN&#60;/code&#62;. &#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_208'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_209'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return an array standard errors associated with parameters estimates,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_210'></a>
+</td>
+<td class=''><pre><span  class=''>     *  null if no estimation occurred</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_211'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_212'></a>
+</td>
+<td class=''><pre><span  class=''>    public double[] getStdErrorOfEstimates() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_213'/>
+213
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_213'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_214'/>
+214
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_214'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_215'/>
+215
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_215'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_216'/>
+216
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_216'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double[] se = new double[this.parameters.length];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_217'/>
+217
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_217'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int i = 0; i &#60; this.parameters.length; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_218'/>
+218
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_218'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double var = this.getVcvElement(i, i);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_219'/>
+219
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_219'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (!Double.isNaN(var) &#38;&#38; var &#62; Double.MIN_VALUE) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_220'></a>
+</td>
+<td class='covered'><pre><span  class=''>                se[i] = FastMath.sqrt(var);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_221'></a>
+</td>
+<td class='covered'><pre><span  class=''>                continue;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_222'/>
+222
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_222'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_223'/>
+223
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_223'></a>
+</td>
+<td class='covered'><pre><span  class=''>            se[i] = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_224'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_225'/>
+225
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_225'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return se;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_226'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_227'/>
+227
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_227'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_228'/>
+228
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_228'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_229'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the covariance between regression parameters i and j.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_230'/>
+230
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_230'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_231'/>
+231
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_231'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;If there are problems with an ill conditioned design matrix then the covariance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_232'/>
+232
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_232'></a>
+</td>
+<td class=''><pre><span  class=''>     * which involves redundant columns will be assigned {@code Double.NaN}. &#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_233'/>
+233
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_233'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_234'/>
+234
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_234'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param i {@code i}th regression parameter.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_235'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param j {@code j}th regression parameter.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_236'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the covariance of the parameter estimates.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_237'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws OutOfRangeException if {@code i} or {@code j} is not in the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_238'/>
+238
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_238'></a>
+</td>
+<td class=''><pre><span  class=''>     * interval {@code [0, number of parameters)}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_239'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_240'/>
+240
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_240'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getCovarianceOfParameters(int i, int j) throws OutOfRangeException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_241'/>
+241
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_241'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_242'/>
+242
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_242'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_243'/>
+243
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_243'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_244'/>
+244
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_244'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (i &#60; 0 || i &#62;= this.parameters.length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_245'/>
+245
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_245'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            throw new OutOfRangeException(i, 0, this.parameters.length - 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_246'/>
+246
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_246'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_247'/>
+247
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_247'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (j &#60; 0 || j &#62;= this.parameters.length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_248'/>
+248
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_248'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            throw new OutOfRangeException(j, 0, this.parameters.length - 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_249'/>
+249
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_249'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_250'/>
+250
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_250'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.getVcvElement(i, j);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_251'/>
+251
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_251'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_252'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_253'/>
+253
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_253'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_254'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the number of parameters estimated in the model.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_255'/>
+255
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_255'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_256'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This is the maximum number of regressors, some techniques may drop</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_257'></a>
+</td>
+<td class=''><pre><span  class=''>     * redundant parameters&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_258'/>
+258
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_258'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_259'/>
+259
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_259'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return number of regressors, -1 if not estimated</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_260'/>
+260
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_260'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_261'/>
+261
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_261'></a>
+</td>
+<td class=''><pre><span  class=''>    public int getNumberOfParameters() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_262'/>
+262
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_262'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        if (this.parameters == null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_263'/>
+263
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_263'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return -1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_264'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_265'/>
+265
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_265'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return this.parameters.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_266'/>
+266
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_266'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_267'/>
+267
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_267'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_268'/>
+268
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_268'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_269'/>
+269
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_269'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the number of observations added to the regression model.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_270'/>
+270
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_270'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_271'/>
+271
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_271'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return Number of observations, -1 if an error condition prevents estimation</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_272'/>
+272
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_272'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_273'/>
+273
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_273'></a>
+</td>
+<td class=''><pre><span  class=''>    public long getN() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_274'/>
+274
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_274'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.nobs;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_275'/>
+275
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_275'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_276'/>
+276
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_276'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_277'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_278'/>
+278
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_278'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the sum of squared deviations of the y values about their mean.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_279'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_280'/>
+280
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_280'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This is defined as SSTO</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_281'/>
+281
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_281'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;a href=&#34;http://www.xycoon.com/SumOfSquares.htm&#34;&#62;here&#60;/a&#62;.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_282'/>
+282
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_282'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_283'/>
+283
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_283'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;If {@code n &#60; 2}, this returns {@code Double.NaN}.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_284'/>
+284
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_284'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_285'/>
+285
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_285'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return sum of squared deviations of y values</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_286'/>
+286
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_286'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_287'/>
+287
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_287'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getTotalSumSquares() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_288'/>
+288
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_288'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return this.globalFitInfo[SST_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_289'/>
+289
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_289'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_290'/>
+290
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_290'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_291'/>
+291
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_291'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_292'/>
+292
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_292'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the sum of squared deviations of the predicted y values about</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_293'/>
+293
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_293'></a>
+</td>
+<td class=''><pre><span  class=''>     * their mean (which equals the mean of y).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_294'/>
+294
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_294'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_295'/>
+295
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_295'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This is usually abbreviated SSR or SSM.  It is defined as SSM</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_296'/>
+296
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_296'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;a href=&#34;http://www.xycoon.com/SumOfSquares.htm&#34;&#62;here&#60;/a&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_297'/>
+297
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_297'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_298'/>
+298
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_298'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;&#60;strong&#62;Preconditions&#60;/strong&#62;: &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_299'/>
+299
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_299'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;li&#62;At least two observations (with at least two different x values)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_300'/>
+300
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_300'></a>
+</td>
+<td class=''><pre><span  class=''>     * must have been added before invoking this method. If this method is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_301'/>
+301
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_301'></a>
+</td>
+<td class=''><pre><span  class=''>     * invoked before a model can be estimated, &#60;code&#62;Double.NaN&#60;/code&#62; is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_302'/>
+302
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_302'></a>
+</td>
+<td class=''><pre><span  class=''>     * returned.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_303'/>
+303
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_303'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/li&#62;&#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_304'/>
+304
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_304'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_305'/>
+305
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_305'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return sum of squared deviations of predicted y values</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_306'/>
+306
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_306'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_307'/>
+307
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_307'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getRegressionSumSquares() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_308'/>
+308
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_308'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.globalFitInfo[SST_IDX] - this.globalFitInfo[SSE_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_309'/>
+309
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_309'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_310'/>
+310
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_310'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_311'/>
+311
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_311'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_312'/>
+312
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_312'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the &#60;a href=&#34;http://www.xycoon.com/SumOfSquares.htm&#34;&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_313'/>
+313
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_313'></a>
+</td>
+<td class=''><pre><span  class=''>     * sum of squared errors&#60;/a&#62; (SSE) associated with the regression</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_314'/>
+314
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_314'></a>
+</td>
+<td class=''><pre><span  class=''>     * model.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_315'/>
+315
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_315'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_316'/>
+316
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_316'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The return value is constrained to be non-negative - i.e., if due to</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_317'/>
+317
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_317'></a>
+</td>
+<td class=''><pre><span  class=''>     * rounding errors the computational formula returns a negative result,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_318'/>
+318
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_318'></a>
+</td>
+<td class=''><pre><span  class=''>     * 0 is returned.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_319'/>
+319
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_319'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_320'/>
+320
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_320'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;&#60;strong&#62;Preconditions&#60;/strong&#62;: &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_321'/>
+321
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_321'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;li&#62;numberOfParameters data pairs</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_322'/>
+322
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_322'></a>
+</td>
+<td class=''><pre><span  class=''>     * must have been added before invoking this method. If this method is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_323'/>
+323
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_323'></a>
+</td>
+<td class=''><pre><span  class=''>     * invoked before a model can be estimated, &#60;code&#62;Double,NaN&#60;/code&#62; is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_324'/>
+324
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_324'></a>
+</td>
+<td class=''><pre><span  class=''>     * returned.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_325'/>
+325
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_325'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/li&#62;&#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_326'/>
+326
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_326'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_327'/>
+327
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_327'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return sum of squared errors associated with the regression model</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_328'/>
+328
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_328'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_329'/>
+329
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_329'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getErrorSumSquares() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_330'/>
+330
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_330'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.globalFitInfo[ SSE_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_331'/>
+331
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_331'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_332'/>
+332
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_332'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_333'/>
+333
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_333'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_334'/>
+334
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_334'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the sum of squared errors divided by the degrees of freedom,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_335'/>
+335
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_335'></a>
+</td>
+<td class=''><pre><span  class=''>     * usually abbreviated MSE.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_336'/>
+336
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_336'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_337'/>
+337
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_337'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;If there are fewer than &#60;strong&#62;numberOfParameters + 1&#60;/strong&#62; data pairs in the model,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_338'/>
+338
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_338'></a>
+</td>
+<td class=''><pre><span  class=''>     * or if there is no variation in &#60;code&#62;x&#60;/code&#62;, this returns</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_339'/>
+339
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_339'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;code&#62;Double.NaN&#60;/code&#62;.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_340'/>
+340
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_340'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_341'/>
+341
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_341'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return sum of squared deviations of y values</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_342'/>
+342
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_342'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_343'/>
+343
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_343'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getMeanSquareError() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_344'/>
+344
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_344'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.globalFitInfo[ MSE_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_345'/>
+345
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_345'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_346'/>
+346
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_346'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_347'/>
+347
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_347'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_348'/>
+348
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_348'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the &#60;a href=&#34;http://www.xycoon.com/coefficient1.htm&#34;&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_349'/>
+349
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_349'></a>
+</td>
+<td class=''><pre><span  class=''>     * coefficient of multiple determination&#60;/a&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_350'/>
+350
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_350'></a>
+</td>
+<td class=''><pre><span  class=''>     * usually denoted r-square.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_351'/>
+351
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_351'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_352'/>
+352
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_352'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;&#60;strong&#62;Preconditions&#60;/strong&#62;: &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_353'/>
+353
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_353'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;li&#62;At least numberOfParameters observations (with at least numberOfParameters different x values)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_354'/>
+354
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_354'></a>
+</td>
+<td class=''><pre><span  class=''>     * must have been added before invoking this method. If this method is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_355'/>
+355
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_355'></a>
+</td>
+<td class=''><pre><span  class=''>     * invoked before a model can be estimated, {@code Double,NaN} is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_356'/>
+356
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_356'></a>
+</td>
+<td class=''><pre><span  class=''>     * returned.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_357'/>
+357
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_357'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/li&#62;&#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_358'/>
+358
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_358'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_359'/>
+359
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_359'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return r-square, a double in the interval [0, 1]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_360'/>
+360
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_360'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_361'/>
+361
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_361'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getRSquared() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_362'/>
+362
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_362'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.globalFitInfo[ RSQ_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_363'/>
+363
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_363'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_364'/>
+364
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_364'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_365'/>
+365
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_365'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_366'/>
+366
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_366'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Returns the adjusted R-squared statistic, defined by the formula &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_367'/>
+367
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_367'></a>
+</td>
+<td class=''><pre><span  class=''>     * R&#60;sup&#62;2&#60;/sup&#62;&#60;sub&#62;adj&#60;/sub&#62; = 1 - [SSR (n - 1)] / [SSTO (n - p)]</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_368'/>
+368
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_368'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_369'/>
+369
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_369'></a>
+</td>
+<td class=''><pre><span  class=''>     * where SSR is the sum of squared residuals},</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_370'/>
+370
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_370'></a>
+</td>
+<td class=''><pre><span  class=''>     * SSTO is the total sum of squares}, n is the number</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_371'/>
+371
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_371'></a>
+</td>
+<td class=''><pre><span  class=''>     * of observations and p is the number of parameters estimated (including the intercept).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_372'/>
+372
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_372'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_373'/>
+373
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_373'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;If the regression is estimated without an intercept term, what is returned is &#60;pre&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_374'/>
+374
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_374'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;code&#62; 1 - (1 - {@link #getRSquared()} ) * (n / (n - p)) &#60;/code&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_375'/>
+375
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_375'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_376'/>
+376
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_376'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_377'/>
+377
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_377'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return adjusted R-Squared statistic</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_378'/>
+378
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_378'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_379'/>
+379
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_379'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getAdjustedRSquared() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_380'/>
+380
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_380'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return this.globalFitInfo[ ADJRSQ_IDX];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_381'/>
+381
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_381'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_382'/>
+382
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_382'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_383'/>
+383
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_383'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_384'/>
+384
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_384'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns true if the regression model has been computed including an intercept.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_385'/>
+385
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_385'></a>
+</td>
+<td class=''><pre><span  class=''>     * In this case, the coefficient of the intercept is the first element of the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_386'/>
+386
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_386'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@link #getParameterEstimates() parameter estimates}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_387'/>
+387
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_387'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return true if the model has an intercept term</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_388'/>
+388
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_388'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_389'/>
+389
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_389'></a>
+</td>
+<td class=''><pre><span  class=''>    public boolean hasIntercept() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_390'/>
+390
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_390'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return this.containsConstant;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_391'/>
+391
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_391'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_392'/>
+392
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_392'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_393'/>
+393
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_393'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_394'/>
+394
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_394'></a>
+</td>
+<td class=''><pre><span  class=''>     * Gets the i-jth element of the variance-covariance matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_395'/>
+395
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_395'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_396'/>
+396
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_396'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param i first variable index</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_397'/>
+397
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_397'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param j second variable index</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_398'/>
+398
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_398'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the requested variance-covariance matrix entry</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_399'/>
+399
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_399'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_400'/>
+400
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_400'></a>
+</td>
+<td class=''><pre><span  class=''>    private double getVcvElement(int i, int j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_401'/>
+401
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_401'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (this.isSymmetricVCD) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_402'/>
+402
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_402'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (this.varCovData.length &#62; 1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_403'/>
+403
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_403'></a>
+</td>
+<td class=''><pre><span  class=''>                //could be stored in upper or lower triangular</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_404'/>
+404
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_404'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                if (i == j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_405'/>
+405
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_405'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    return varCovData[i][i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_406'/>
+406
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_406'>2</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                } else if (i &#62;= varCovData[j].length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_407'/>
+407
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_407'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    return varCovData[i][j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_408'/>
+408
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_408'></a>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_409'/>
+409
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_409'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    return varCovData[j][i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_410'/>
+410
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_410'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_411'/>
+411
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_411'></a>
+</td>
+<td class=''><pre><span  class=''>            } else {//could be in single array</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_412'/>
+412
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_412'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (i &#62; j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_413'/>
+413
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_413'>5</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    return varCovData[0][(i + 1) * i / 2 + j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_414'/>
+414
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_414'></a>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_415'/>
+415
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_415'>5</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return varCovData[0][(j + 1) * j / 2 + i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_416'/>
+416
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_416'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_417'/>
+417
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_417'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_418'/>
+418
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_418'></a>
+</td>
+<td class=''><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_419'/>
+419
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_419'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return this.varCovData[i][j];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_420'/>
+420
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_420'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_421'/>
+421
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_421'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@158f26b1_422'/>
+422
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_422'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_100'>100</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_100'/> 
+
+<p class='SURVIVED'>negated conditional : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_103'>103</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_103'/> 
+
+<p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> <p class='NO_COVERAGE'>changed conditional boundary : NO_COVERAGE</p> <p class='NO_COVERAGE'>Changed increment from 1 to -1 : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_115'>115</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_115'/> 
+
+<p class='SURVIVED'>removed call to java/util/Arrays::fill : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_117'>117</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_117'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_118'>118</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_118'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_123'>123</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_123'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced long subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_125'>125</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_125'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_129'>129</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_129'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_130'>130</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_130'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced long subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_134'>134</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_134'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced long subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_151'>151</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_151'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_152'>152</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_152'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getParameterEstimate : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_154'>154</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_154'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_155'>155</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_155'/> 
+
+<p class='NO_COVERAGE'>Replaced integer subtraction with addition : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_157'>157</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_157'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getParameterEstimate : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_171'>171</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_171'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_172'>172</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_172'/> 
+
+<p class='NO_COVERAGE'>mutated return of Object value for org/apache/commons/math3/stat/regression/RegressionResults::getParameterEstimates to ( if (x != null) null else throw new RuntimeException ) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_174'>174</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_174'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/stat/regression/RegressionResults::getParameterEstimates to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_188'>188</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_188'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_189'>189</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_189'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getStdErrorOfEstimate : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_191'>191</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_191'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_192'>192</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_192'/> 
+
+<p class='NO_COVERAGE'>Replaced integer subtraction with addition : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_195'>195</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_195'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_196'>196</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_196'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getStdErrorOfEstimate : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_198'>198</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_198'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getStdErrorOfEstimate : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_213'>213</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_213'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_214'>214</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_214'/> 
+
+<p class='NO_COVERAGE'>mutated return of Object value for org/apache/commons/math3/stat/regression/RegressionResults::getStdErrorOfEstimates to ( if (x != null) null else throw new RuntimeException ) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_217'>217</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_217'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_219'>219</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_219'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_225'>225</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_225'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/stat/regression/RegressionResults::getStdErrorOfEstimates to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_241'>241</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_241'/> 
+
+<p class='SURVIVED'>negated conditional : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_242'>242</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_242'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getCovarianceOfParameters : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_244'>244</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_244'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testThreeRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_245'>245</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_245'/> 
+
+<p class='NO_COVERAGE'>Replaced integer subtraction with addition : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_247'>247</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_247'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_248'>248</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_248'/> 
+
+<p class='NO_COVERAGE'>Replaced integer subtraction with addition : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_250'>250</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_250'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getCovarianceOfParameters : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testThreeRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_262'>262</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_262'/> 
+
+<p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_263'>263</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_263'/> 
+
+<p class='NO_COVERAGE'>replaced return of integer sized value with (x == 0 ? 1 : 0) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_265'>265</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_265'/> 
+
+<p class='NO_COVERAGE'>replaced return of integer sized value with (x == 0 ? 1 : 0) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_274'>274</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_274'/> 
+
+<p class='KILLED'>replaced return of long value with value + 1 for org/apache/commons/math3/stat/regression/RegressionResults::getN : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_288'>288</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_288'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getTotalSumSquares : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_308'>308</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_308'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getRegressionSumSquares : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_330'>330</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_330'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getErrorSumSquares : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_344'>344</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_344'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getMeanSquareError : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_362'>362</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_362'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getRSquared : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_380'>380</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_380'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getAdjustedRSquared : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_390'>390</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_390'/> 
+
+<p class='NO_COVERAGE'>replaced return of integer sized value with (x == 0 ? 1 : 0) : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_401'>401</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_401'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_402'>402</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_402'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_404'>404</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_404'/> 
+
+<p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_405'>405</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_405'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_406'>406</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_406'/> 
+
+<p class='NO_COVERAGE'>changed conditional boundary : NO_COVERAGE</p> <p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_407'>407</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_407'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_409'>409</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_409'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_412'>412</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_412'/> 
+
+<p class='SURVIVED'>negated conditional : SURVIVED</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_413'>413</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_413'/> 
+
+<p class='KILLED'>Replaced integer division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='SURVIVED'>Replaced integer addition with subtraction : SURVIVED</p> <p class='SURVIVED'>Replaced integer addition with subtraction : SURVIVED</p> <p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : KILLED -> org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testThreeRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest)</p> <p class='SURVIVED'>Replaced integer multiplication with division : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_415'>415</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_415'/> 
+
+<p class='KILLED'>Replaced integer multiplication with division : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced integer division with multiplication : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@158f26b1_419'>419</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@158f26b1_419'/> 
+
+<p class='NO_COVERAGE'>replaced return of double value with -(x + 1) for org/apache/commons/math3/stat/regression/RegressionResults::getVcvElement : NO_COVERAGE</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantExternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRegressIfaceMethod(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testFilippelli(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (9 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testWampler1(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testLongly(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (3 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testWampler2(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testOneRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (3 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testWampler3(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testRegressAirlineConstantInternal(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testThreeRedundantColumn(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (4 ms)</li><li>org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest.testSubsetRegression(org.apache.commons.math3.stat.regression.MillerUpdatingRegressionTest) (2 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

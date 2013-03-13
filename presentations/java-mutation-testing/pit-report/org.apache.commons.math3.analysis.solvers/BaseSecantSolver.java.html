@@ -1,0 +1,3753 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>BaseSecantSolver.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.analysis.solvers;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_20'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_21'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.analysis.UnivariateFunction;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_22'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.ConvergenceException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_23'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.MathInternalError;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_24'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_25'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_26'></a>
+</td>
+<td class=''><pre><span  class=''> * Base class for all bracketing &#60;em&#62;Secant&#60;/em&#62;-based methods for root-finding</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_27'></a>
+</td>
+<td class=''><pre><span  class=''> * (approximating a zero of a univariate real function).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_28'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_29'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Implementation of the {@link RegulaFalsiSolver &#60;em&#62;Regula Falsi&#60;/em&#62;} and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_30'></a>
+</td>
+<td class=''><pre><span  class=''> * {@link IllinoisSolver &#60;em&#62;Illinois&#60;/em&#62;} methods is based on the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_31'></a>
+</td>
+<td class=''><pre><span  class=''> * following article: M. Dowell and P. Jarratt,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_32'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;em&#62;A modified regula falsi method for computing the root of an</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_33'></a>
+</td>
+<td class=''><pre><span  class=''> * equation&#60;/em&#62;, BIT Numerical Mathematics, volume 11, number 2,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_34'></a>
+</td>
+<td class=''><pre><span  class=''> * pages 168-174, Springer, 1971.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_35'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_36'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;Implementation of the {@link PegasusSolver &#60;em&#62;Pegasus&#60;/em&#62;} method is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_37'></a>
+</td>
+<td class=''><pre><span  class=''> * based on the following article: M. Dowell and P. Jarratt,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_38'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;em&#62;The &#34;Pegasus&#34; method for computing the root of an equation&#60;/em&#62;,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_39'></a>
+</td>
+<td class=''><pre><span  class=''> * BIT Numerical Mathematics, volume 12, number 4, pages 503-508, Springer,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_40'></a>
+</td>
+<td class=''><pre><span  class=''> * 1972.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_41'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_42'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;The {@link SecantSolver &#60;em&#62;Secant&#60;/em&#62;} method is &#60;em&#62;not&#60;/em&#62; a</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_43'></a>
+</td>
+<td class=''><pre><span  class=''> * bracketing method, so it is not implemented here. It has a separate</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_44'></a>
+</td>
+<td class=''><pre><span  class=''> * implementation.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_45'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_46'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 3.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_47'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: BaseSecantSolver.java 1455194 2013-03-11 15:45:54Z luc $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_48'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_49'></a>
+</td>
+<td class=''><pre><span  class=''>public abstract class BaseSecantSolver</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_50'></a>
+</td>
+<td class=''><pre><span  class=''>    extends AbstractUnivariateSolver</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_51'></a>
+</td>
+<td class=''><pre><span  class=''>    implements BracketedUnivariateSolver&#60;UnivariateFunction&#62; {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_52'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_53'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Default absolute accuracy. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_54'></a>
+</td>
+<td class=''><pre><span  class=''>    protected static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_55'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_56'></a>
+</td>
+<td class=''><pre><span  class=''>    /** The kinds of solutions that the algorithm may accept. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_57'></a>
+</td>
+<td class=''><pre><span  class=''>    private AllowedSolution allowed;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_58'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_59'></a>
+</td>
+<td class=''><pre><span  class=''>    /** The &#60;em&#62;Secant&#60;/em&#62;-based root-finding method to use. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_60'></a>
+</td>
+<td class=''><pre><span  class=''>    private final Method method;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_61'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_62'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_63'></a>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_64'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_65'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Absolute accuracy.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_66'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param method &#60;em&#62;Secant&#60;/em&#62;-based root-finding method to use.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_67'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_68'></a>
+</td>
+<td class=''><pre><span  class=''>    protected BaseSecantSolver(final double absoluteAccuracy, final Method method) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_69'></a>
+</td>
+<td class='covered'><pre><span  class=''>        super(absoluteAccuracy);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_70'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.allowed = AllowedSolution.ANY_SIDE;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_71'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.method = method;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_72'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_73'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_74'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_75'></a>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_76'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_77'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param relativeAccuracy Relative accuracy.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_78'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Absolute accuracy.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_79'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param method &#60;em&#62;Secant&#60;/em&#62;-based root-finding method to use.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_80'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_81'></a>
+</td>
+<td class=''><pre><span  class=''>    protected BaseSecantSolver(final double relativeAccuracy,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_82'></a>
+</td>
+<td class=''><pre><span  class=''>                               final double absoluteAccuracy,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_83'></a>
+</td>
+<td class=''><pre><span  class=''>                               final Method method) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_84'></a>
+</td>
+<td class='covered'><pre><span  class=''>        super(relativeAccuracy, absoluteAccuracy);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_85'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.allowed = AllowedSolution.ANY_SIDE;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_86'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.method = method;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_87'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_88'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_89'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_90'></a>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_91'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_92'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param relativeAccuracy Maximum relative error.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_93'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Maximum absolute error.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_94'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param functionValueAccuracy Maximum function value error.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_95'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param method &#60;em&#62;Secant&#60;/em&#62;-based root-finding method to use</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_96'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_97'></a>
+</td>
+<td class=''><pre><span  class=''>    protected BaseSecantSolver(final double relativeAccuracy,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_98'></a>
+</td>
+<td class=''><pre><span  class=''>                               final double absoluteAccuracy,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_99'></a>
+</td>
+<td class=''><pre><span  class=''>                               final double functionValueAccuracy,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_100'></a>
+</td>
+<td class=''><pre><span  class=''>                               final Method method) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_101'></a>
+</td>
+<td class='covered'><pre><span  class=''>        super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_102'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.allowed = AllowedSolution.ANY_SIDE;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_103'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.method = method;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_104'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_105'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_106'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_107'></a>
+</td>
+<td class=''><pre><span  class=''>    public double solve(final int maxEval, final UnivariateFunction f,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_108'></a>
+</td>
+<td class=''><pre><span  class=''>                        final double min, final double max,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_109'></a>
+</td>
+<td class=''><pre><span  class=''>                        final AllowedSolution allowedSolution) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_110'/>
+110
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_110'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        return solve(maxEval, f, min, max, min + 0.5 * (max - min), allowedSolution);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_111'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_112'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_113'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_114'></a>
+</td>
+<td class=''><pre><span  class=''>    public double solve(final int maxEval, final UnivariateFunction f,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_115'></a>
+</td>
+<td class=''><pre><span  class=''>                        final double min, final double max, final double startValue,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_116'></a>
+</td>
+<td class=''><pre><span  class=''>                        final AllowedSolution allowedSolution) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_117'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this.allowed = allowedSolution;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_118'/>
+118
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_118'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return super.solve(maxEval, f, min, max, startValue);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_119'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_120'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_121'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_122'></a>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_123'></a>
+</td>
+<td class=''><pre><span  class=''>    public double solve(final int maxEval, final UnivariateFunction f,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_124'></a>
+</td>
+<td class=''><pre><span  class=''>                        final double min, final double max, final double startValue) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_125'/>
+125
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_125'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return solve(maxEval, f, min, max, startValue, AllowedSolution.ANY_SIDE);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_126'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_127'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_128'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_129'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_130'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_131'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws ConvergenceException if the algorithm failed due to finite</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_132'></a>
+</td>
+<td class=''><pre><span  class=''>     * precision.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_133'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_134'></a>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_135'></a>
+</td>
+<td class=''><pre><span  class=''>    protected final double doSolve()</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_136'></a>
+</td>
+<td class=''><pre><span  class=''>        throws ConvergenceException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_137'></a>
+</td>
+<td class=''><pre><span  class=''>        // Get initial solution</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_138'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double x0 = getMin();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_139'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double x1 = getMax();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_140'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double f0 = computeObjectiveValue(x0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_141'></a>
+</td>
+<td class='covered'><pre><span  class=''>        double f1 = computeObjectiveValue(x1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_142'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_143'></a>
+</td>
+<td class=''><pre><span  class=''>        // If one of the bounds is the exact root, return it. Since these are</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_144'/>
+144
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_144'></a>
+</td>
+<td class=''><pre><span  class=''>        // not under-approximations or over-approximations, we can return them</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_145'></a>
+</td>
+<td class=''><pre><span  class=''>        // regardless of the allowed solutions.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_146'/>
+146
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_146'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (f0 == 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_147'/>
+147
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_147'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return x0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_148'/>
+148
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_148'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_149'/>
+149
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_149'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (f1 == 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_150'/>
+150
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_150'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_151'/>
+151
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_151'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_152'/>
+152
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_152'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_153'/>
+153
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_153'></a>
+</td>
+<td class=''><pre><span  class=''>        // Verify bracketing of initial solution.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_154'/>
+154
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_154'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        verifyBracketing(x0, x1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_155'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_156'></a>
+</td>
+<td class=''><pre><span  class=''>        // Get accuracies.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_157'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double ftol = getFunctionValueAccuracy();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_158'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double atol = getAbsoluteAccuracy();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_159'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final double rtol = getRelativeAccuracy();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_160'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_161'/>
+161
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_161'></a>
+</td>
+<td class=''><pre><span  class=''>        // Keep track of inverted intervals, meaning that the left bound is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_162'></a>
+</td>
+<td class=''><pre><span  class=''>        // larger than the right bound.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_163'></a>
+</td>
+<td class='covered'><pre><span  class=''>        boolean inverted = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_164'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_165'></a>
+</td>
+<td class=''><pre><span  class=''>        // Keep finding better approximations.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_166'></a>
+</td>
+<td class=''><pre><span  class=''>        while (true) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_167'></a>
+</td>
+<td class=''><pre><span  class=''>            // Calculate the next approximation.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_168'/>
+168
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_168'>5</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double x = x1 - ((f1 * (x1 - x0)) / (f1 - f0));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_169'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double fx = computeObjectiveValue(x);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_170'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_171'></a>
+</td>
+<td class=''><pre><span  class=''>            // If the new approximation is the exact root, return it. Since</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_172'></a>
+</td>
+<td class=''><pre><span  class=''>            // this is not an under-approximation or an over-approximation,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_173'/>
+173
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_173'></a>
+</td>
+<td class=''><pre><span  class=''>            // we can return it regardless of the allowed solutions.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_174'/>
+174
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_174'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (fx == 0.0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_175'/>
+175
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_175'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                return x;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_176'/>
+176
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_176'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_177'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_178'></a>
+</td>
+<td class=''><pre><span  class=''>            // Update the bounds with the new approximation.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_179'/>
+179
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_179'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (f1 * fx &#60; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_180'></a>
+</td>
+<td class=''><pre><span  class=''>                // The value of x1 has switched to the other bound, thus inverting</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_181'/>
+181
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_181'></a>
+</td>
+<td class=''><pre><span  class=''>                // the interval.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_182'></a>
+</td>
+<td class='covered'><pre><span  class=''>                x0 = x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_183'></a>
+</td>
+<td class='covered'><pre><span  class=''>                f0 = f1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_184'/>
+184
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_184'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                inverted = !inverted;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_185'></a>
+</td>
+<td class=''><pre><span  class=''>            } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_186'></a>
+</td>
+<td class='covered'><pre><span  class=''>                switch (method) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_187'></a>
+</td>
+<td class=''><pre><span  class=''>                case ILLINOIS:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_188'/>
+188
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_188'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    f0 *= 0.5;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_189'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_190'></a>
+</td>
+<td class=''><pre><span  class=''>                case PEGASUS:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_191'/>
+191
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_191'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    f0 *= f1 / (f1 + fx);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_192'/>
+192
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_192'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_193'/>
+193
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_193'></a>
+</td>
+<td class=''><pre><span  class=''>                case REGULA_FALSI:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_194'></a>
+</td>
+<td class=''><pre><span  class=''>                    // Detect early that algorithm is stuck, instead of waiting</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_195'/>
+195
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_195'></a>
+</td>
+<td class=''><pre><span  class=''>                    // for the maximum number of iterations to be exceeded.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_196'/>
+196
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_196'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (x == x1) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_197'/>
+197
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_197'></a>
+</td>
+<td class='covered'><pre><span  class=''>                        throw new ConvergenceException();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_198'/>
+198
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_198'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_199'></a>
+</td>
+<td class=''><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_200'></a>
+</td>
+<td class=''><pre><span  class=''>                default:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_201'></a>
+</td>
+<td class=''><pre><span  class=''>                    // Should never happen.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_202'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>                    throw new MathInternalError();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_203'/>
+203
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_203'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_204'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_205'></a>
+</td>
+<td class=''><pre><span  class=''>            // Update from [x0, x1] to [x0, x].</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_206'></a>
+</td>
+<td class='covered'><pre><span  class=''>            x1 = x;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_207'/>
+207
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_207'></a>
+</td>
+<td class='covered'><pre><span  class=''>            f1 = fx;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_208'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_209'></a>
+</td>
+<td class=''><pre><span  class=''>            // If the function value of the last approximation is too small,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_210'></a>
+</td>
+<td class=''><pre><span  class=''>            // given the function value accuracy, then we can&#39;t get closer to</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_211'></a>
+</td>
+<td class=''><pre><span  class=''>            // the root than we already are.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_212'/>
+212
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_212'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(f1) &#60;= ftol) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_213'></a>
+</td>
+<td class='covered'><pre><span  class=''>                switch (allowed) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_214'></a>
+</td>
+<td class=''><pre><span  class=''>                case ANY_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_215'/>
+215
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_215'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_216'/>
+216
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_216'></a>
+</td>
+<td class=''><pre><span  class=''>                case LEFT_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_217'/>
+217
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_217'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (inverted) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_218'/>
+218
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_218'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                        return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_219'/>
+219
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_219'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_220'></a>
+</td>
+<td class=''><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_221'></a>
+</td>
+<td class=''><pre><span  class=''>                case RIGHT_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_222'/>
+222
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_222'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (!inverted) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_223'/>
+223
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_223'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_224'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_225'/>
+225
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_225'></a>
+</td>
+<td class=''><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_226'></a>
+</td>
+<td class=''><pre><span  class=''>                case BELOW_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_227'/>
+227
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_227'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    if (f1 &#60;= 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_228'/>
+228
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_228'>1</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                        return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_229'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_230'/>
+230
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_230'></a>
+</td>
+<td class=''><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_231'/>
+231
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_231'></a>
+</td>
+<td class=''><pre><span  class=''>                case ABOVE_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_232'/>
+232
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_232'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    if (f1 &#62;= 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_233'/>
+233
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_233'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_234'/>
+234
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_234'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_235'></a>
+</td>
+<td class=''><pre><span  class=''>                    break;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_236'></a>
+</td>
+<td class=''><pre><span  class=''>                default:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_237'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>                    throw new MathInternalError();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_238'/>
+238
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_238'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_239'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_240'/>
+240
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_240'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_241'/>
+241
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_241'></a>
+</td>
+<td class=''><pre><span  class=''>            // If the current interval is within the given accuracies, we</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_242'/>
+242
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_242'></a>
+</td>
+<td class=''><pre><span  class=''>            // are satisfied with the current approximation.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_243'/>
+243
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_243'>4</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(x1 - x0) &#60; FastMath.max(rtol * FastMath.abs(x1),</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_244'/>
+244
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_244'></a>
+</td>
+<td class=''><pre><span  class=''>                                                     atol)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_245'/>
+245
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_245'></a>
+</td>
+<td class='covered'><pre><span  class=''>                switch (allowed) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_246'/>
+246
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_246'></a>
+</td>
+<td class=''><pre><span  class=''>                case ANY_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_247'/>
+247
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_247'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_248'/>
+248
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_248'></a>
+</td>
+<td class=''><pre><span  class=''>                case LEFT_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_249'/>
+249
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_249'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    return inverted ? x1 : x0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_250'/>
+250
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_250'></a>
+</td>
+<td class=''><pre><span  class=''>                case RIGHT_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_251'/>
+251
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_251'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return inverted ? x0 : x1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_252'></a>
+</td>
+<td class=''><pre><span  class=''>                case BELOW_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_253'/>
+253
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_253'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    return (f1 &#60;= 0) ? x1 : x0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_254'></a>
+</td>
+<td class=''><pre><span  class=''>                case ABOVE_SIDE:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_255'/>
+255
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_255'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                    return (f1 &#62;= 0) ? x1 : x0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_256'></a>
+</td>
+<td class=''><pre><span  class=''>                default:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_257'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>                    throw new MathInternalError();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_258'/>
+258
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_258'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_259'/>
+259
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_259'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_260'/>
+260
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_260'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_261'/>
+261
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_261'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_262'/>
+262
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_262'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_263'/>
+263
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_263'></a>
+</td>
+<td class=''><pre><span  class=''>    /** &#60;em&#62;Secant&#60;/em&#62;-based root-finding methods. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_264'></a>
+</td>
+<td class=''><pre><span  class=''>    protected enum Method {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_265'/>
+265
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_265'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_266'/>
+266
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_266'></a>
+</td>
+<td class=''><pre><span  class=''>        /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_267'/>
+267
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_267'></a>
+</td>
+<td class=''><pre><span  class=''>         * The {@link RegulaFalsiSolver &#60;em&#62;Regula Falsi&#60;/em&#62;} or</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_268'/>
+268
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_268'></a>
+</td>
+<td class=''><pre><span  class=''>         * &#60;em&#62;False Position&#60;/em&#62; method.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_269'/>
+269
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_269'></a>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_270'/>
+270
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_270'></a>
+</td>
+<td class=''><pre><span  class=''>        REGULA_FALSI,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_271'/>
+271
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_271'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_272'/>
+272
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_272'></a>
+</td>
+<td class=''><pre><span  class=''>        /** The {@link IllinoisSolver &#60;em&#62;Illinois&#60;/em&#62;} method. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_273'/>
+273
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_273'></a>
+</td>
+<td class=''><pre><span  class=''>        ILLINOIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_274'/>
+274
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_274'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_275'/>
+275
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_275'></a>
+</td>
+<td class=''><pre><span  class=''>        /** The {@link PegasusSolver &#60;em&#62;Pegasus&#60;/em&#62;} method. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_276'/>
+276
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_276'></a>
+</td>
+<td class=''><pre><span  class=''>        PEGASUS;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_277'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_278'/>
+278
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_278'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@66cca014_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_279'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_110'>110</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_110'/> 
+
+<p class='SURVIVED'>Replaced double subtraction with addition : SURVIVED</p> <p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::solve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='SURVIVED'>Replaced double addition with subtraction : SURVIVED</p> <p class='SURVIVED'>Replaced double multiplication with division : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_118'>118</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_118'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::solve : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_125'>125</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_125'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::solve : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_146'>146</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_146'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_147'>147</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_147'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_149'>149</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_149'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_150'>150</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_150'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_154'>154</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_154'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/analysis/solvers/BaseSecantSolver::verifyBracketing : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_168'>168</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_168'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_174'>174</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_174'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_175'>175</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_175'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_179'>179</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_179'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='SURVIVED'>Replaced double multiplication with division : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_184'>184</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_184'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_188'>188</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_188'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_191'>191</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_191'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double addition with subtraction : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_196'>196</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_196'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_212'>212</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_212'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_215'>215</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_215'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_217'>217</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_217'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_218'>218</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_218'/> 
+
+<p class='SURVIVED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_222'>222</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_222'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_223'>223</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_223'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_227'>227</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_227'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_228'>228</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_228'/> 
+
+<p class='SURVIVED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_232'>232</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_232'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_233'>233</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_233'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_243'>243</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_243'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents1(org.apache.commons.math3.ode.events.OverlappingEventsTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_247'>247</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_247'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_249'>249</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_249'/> 
+
+<p class='SURVIVED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_251'>251</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_251'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_253'>253</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_253'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='SURVIVED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : SURVIVED</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@66cca014_255'>255</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@66cca014_255'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/analysis/solvers/BaseSecantSolver::doSolve : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.SecantSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.SecantSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testIssue631(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (7 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.SecantSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.SecantSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (2 ms)</li><li>org.apache.commons.math3.ode.events.EventStateTest.closeEvents(org.apache.commons.math3.ode.events.EventStateTest) (4 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (1 ms)</li><li>org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents1(org.apache.commons.math3.ode.events.OverlappingEventsTest) (11 ms)</li><li>org.apache.commons.math3.analysis.solvers.SecantSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.SecantSolverTest) (0 ms)</li><li>org.apache.commons.math3.ode.events.OverlappingEventsTest.testOverlappingEvents0(org.apache.commons.math3.ode.events.OverlappingEventsTest) (20 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionAboveSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testSolutionLeftSide(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.PegasusSolverTest.testSolutionRightSide(org.apache.commons.math3.analysis.solvers.PegasusSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.IllinoisSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.IllinoisSolverTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.SecantSolverTest.testSolutionBelowSide(org.apache.commons.math3.analysis.solvers.SecantSolverTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.RegulaFalsiSolverTest) (2 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>
