@@ -1,0 +1,1605 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>SubHyperplane.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_17'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.geometry.partitioning;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_18'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_19'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.geometry.Space;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_20'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_21'></a>
+</td>
+<td class=''><pre><span  class=''>/** This interface represents the remaining parts of an hyperplane after</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_22'></a>
+</td>
+<td class=''><pre><span  class=''> * other parts have been chopped off.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_23'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_24'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;sub-hyperplanes are obtained when parts of an {@link</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_25'></a>
+</td>
+<td class=''><pre><span  class=''> * Hyperplane hyperplane} are chopped off by other hyperplanes that</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_26'></a>
+</td>
+<td class=''><pre><span  class=''> * intersect it. The remaining part is a convex region. Such objects</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_27'></a>
+</td>
+<td class=''><pre><span  class=''> * appear in {@link BSPTree BSP trees} as the intersection of a cut</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_28'></a>
+</td>
+<td class=''><pre><span  class=''> * hyperplane with the convex region which it splits, the chopping</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_29'></a>
+</td>
+<td class=''><pre><span  class=''> * hyperplanes are the cut hyperplanes closer to the tree root.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_30'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_31'></a>
+</td>
+<td class=''><pre><span  class=''> * @param &#60;S&#62; Type of the embedding space.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_32'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_33'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: SubHyperplane.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_34'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 3.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_35'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_36'></a>
+</td>
+<td class=''><pre><span  class=''>public interface SubHyperplane&#60;S extends Space&#62; {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_37'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_38'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Copy the instance.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_39'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The instance created is completely independent of the original</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_40'></a>
+</td>
+<td class=''><pre><span  class=''>     * one. A deep copy is used, none of the underlying objects are</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_41'></a>
+</td>
+<td class=''><pre><span  class=''>     * shared (except for the nodes attributes and immutable</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_42'></a>
+</td>
+<td class=''><pre><span  class=''>     * objects).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_43'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return a new sub-hyperplane, copy of the instance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_44'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_45'></a>
+</td>
+<td class=''><pre><span  class=''>    SubHyperplane&#60;S&#62; copySelf();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_46'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_47'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Get the underlying hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_48'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return underlying hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_49'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_50'></a>
+</td>
+<td class=''><pre><span  class=''>    Hyperplane&#60;S&#62; getHyperplane();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_51'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_52'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Check if the instance is empty.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_53'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return true if the instance is empty</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_54'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_55'></a>
+</td>
+<td class=''><pre><span  class=''>    boolean isEmpty();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_56'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_57'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Get the size of the instance.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_58'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the size of the instance (this is a length in 1D, an area</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_59'></a>
+</td>
+<td class=''><pre><span  class=''>     * in 2D, a volume in 3D ...)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_60'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_61'></a>
+</td>
+<td class=''><pre><span  class=''>    double getSize();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_62'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_63'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Compute the relative position of the instance with respect</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_64'></a>
+</td>
+<td class=''><pre><span  class=''>     * to an hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_65'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param hyperplane hyperplane to check instance against</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_66'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return one of {@link Side#PLUS}, {@link Side#MINUS}, {@link Side#BOTH},</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_67'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@link Side#HYPER}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_68'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_69'></a>
+</td>
+<td class=''><pre><span  class=''>    Side side(Hyperplane&#60;S&#62; hyperplane);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_70'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_71'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Split the instance in two parts by an hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_72'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param hyperplane splitting hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_73'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return an object containing both the part of the instance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_74'></a>
+</td>
+<td class=''><pre><span  class=''>     * on the plus side of the instance and the part of the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_75'></a>
+</td>
+<td class=''><pre><span  class=''>     * instance on the minus side of the instance</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_76'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_77'></a>
+</td>
+<td class=''><pre><span  class=''>    SplitSubHyperplane&#60;S&#62; split(Hyperplane&#60;S&#62; hyperplane);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_78'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_79'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Compute the union of the instance and another sub-hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_80'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param other other sub-hyperplane to union (&#60;em&#62;must&#60;/em&#62; be in the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_81'></a>
+</td>
+<td class=''><pre><span  class=''>     * same hyperplane as the instance)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_82'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return a new sub-hyperplane, union of the instance and other</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_83'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_84'></a>
+</td>
+<td class=''><pre><span  class=''>    SubHyperplane&#60;S&#62; reunite(SubHyperplane&#60;S&#62; other);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_85'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_86'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Class holding the results of the {@link #split split} method.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_87'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param &#60;U&#62; Type of the embedding space.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_88'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_89'></a>
+</td>
+<td class=''><pre><span  class=''>    public static class SplitSubHyperplane&#60;U extends Space&#62; {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_90'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_91'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Part of the sub-hyperplane on the plus side of the splitting hyperplane. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_92'></a>
+</td>
+<td class=''><pre><span  class=''>        private final SubHyperplane&#60;U&#62; plus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_93'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_94'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Part of the sub-hyperplane on the minus side of the splitting hyperplane. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_95'></a>
+</td>
+<td class=''><pre><span  class=''>        private final SubHyperplane&#60;U&#62; minus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_96'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_97'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Build a SplitSubHyperplane from its parts.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_98'></a>
+</td>
+<td class=''><pre><span  class=''>         * @param plus part of the sub-hyperplane on the plus side of the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_99'></a>
+</td>
+<td class=''><pre><span  class=''>         * splitting hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_100'></a>
+</td>
+<td class=''><pre><span  class=''>         * @param minus part of the sub-hyperplane on the minus side of the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_101'></a>
+</td>
+<td class=''><pre><span  class=''>         * splitting hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_102'></a>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_103'></a>
+</td>
+<td class=''><pre><span  class=''>        public SplitSubHyperplane(final SubHyperplane&#60;U&#62; plus,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_104'></a>
+</td>
+<td class='covered'><pre><span  class=''>                                  final SubHyperplane&#60;U&#62; minus) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_105'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.plus  = plus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_106'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.minus = minus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_107'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_108'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_109'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Get the part of the sub-hyperplane on the plus side of the splitting hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_110'></a>
+</td>
+<td class=''><pre><span  class=''>         * @return part of the sub-hyperplane on the plus side of the splitting hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_111'></a>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_112'></a>
+</td>
+<td class=''><pre><span  class=''>        public SubHyperplane&#60;U&#62; getPlus() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_113'/>
+113
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_113'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return plus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_114'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_115'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_116'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Get the part of the sub-hyperplane on the minus side of the splitting hyperplane.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_117'></a>
+</td>
+<td class=''><pre><span  class=''>         * @return part of the sub-hyperplane on the minus side of the splitting hyperplane</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_118'/>
+118
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_118'></a>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_119'></a>
+</td>
+<td class=''><pre><span  class=''>        public SubHyperplane&#60;U&#62; getMinus() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_120'/>
+120
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_120'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return minus;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_121'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_122'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_123'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_124'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@765c2c6c_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_125'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@765c2c6c_113'>113</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_113'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/geometry/partitioning/SubHyperplane$SplitSubHyperplane::getPlus to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.geometry.euclidean.threed.SubLineTest.testSeveralSegments(org.apache.commons.math3.geometry.euclidean.threed.SubLineTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@765c2c6c_120'>120</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@765c2c6c_120'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/geometry/partitioning/SubHyperplane$SplitSubHyperplane::getMinus to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.geometry.euclidean.threed.SubLineTest.testSeveralSegments(org.apache.commons.math3.geometry.euclidean.threed.SubLineTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testUnlimitedSubHyperplane(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (6 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testLineIntersection(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (5 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testBuildBox(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (29 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testXor(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (10 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testBug20040520(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (6 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testBug20041003(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testSingularPoint(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testEmptyDifference(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testDifference(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (6 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testDisjointPolygons(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testStair(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (5 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testUnion(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (10 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testIssue880Complete(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (183 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testTetrahedron(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (6 ms)</li><li>org.apache.commons.math3.geometry.euclidean.oned.IntervalsSetTest.testMultiple(org.apache.commons.math3.geometry.euclidean.oned.IntervalsSetTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testIntersection(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (5 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testBox(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (64 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testSimplyConnected(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (9 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testChoppedHexagon(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (2 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.SubLineTest.testSeveralSegments(org.apache.commons.math3.geometry.euclidean.threed.SubLineTest) (1 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testIssue780(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (41 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.SubLineTest.testSeveralSegments(org.apache.commons.math3.geometry.euclidean.twod.SubLineTest) (0 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testHole(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testConcentric(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testIssue880Simplified(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (3 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testOppositeHyperplanes(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testIsometry(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (13 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest.testCross(org.apache.commons.math3.geometry.euclidean.threed.PolyhedronsSetTest) (96 ms)</li><li>org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest.testSqueezedHexa(org.apache.commons.math3.geometry.euclidean.twod.PolygonsSetTest) (1 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

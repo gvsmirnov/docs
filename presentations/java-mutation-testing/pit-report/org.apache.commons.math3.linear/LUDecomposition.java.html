@@ -1,0 +1,5387 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>LUDecomposition.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_17'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_18'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.linear;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_19'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_20'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.DimensionMismatchException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_21'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_22'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_23'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_24'></a>
+</td>
+<td class=''><pre><span  class=''> * Calculates the LUP-decomposition of a square matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_25'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;The LUP-decomposition of a matrix A consists of three matrices L, U and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_26'></a>
+</td>
+<td class=''><pre><span  class=''> * P that satisfy: P&#38;times;A = L&#38;times;U. L is lower triangular (with unit</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_27'></a>
+</td>
+<td class=''><pre><span  class=''> * diagonal terms), U is upper triangular and P is a permutation matrix. All</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_28'></a>
+</td>
+<td class=''><pre><span  class=''> * matrices are m&#38;times;m.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_29'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;As shown by the presence of the P matrix, this decomposition is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_30'></a>
+</td>
+<td class=''><pre><span  class=''> * implemented using partial pivoting.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_31'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;This class is based on the class with similar name from the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_32'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;a href=&#34;http://math.nist.gov/javanumerics/jama/&#34;&#62;JAMA&#60;/a&#62; library.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_33'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_34'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;a {@link #getP() getP} method has been added,&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_35'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;the {@code det} method has been renamed as {@link #getDeterminant()</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_36'></a>
+</td>
+<td class=''><pre><span  class=''> *   getDeterminant},&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_37'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;the {@code getDoublePivot} method has been removed (but the int based</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_38'></a>
+</td>
+<td class=''><pre><span  class=''> *   {@link #getPivot() getPivot} method has been kept),&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_39'></a>
+</td>
+<td class=''><pre><span  class=''> *   &#60;li&#62;the {@code solve} and {@code isNonSingular} methods have been replaced</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_40'></a>
+</td>
+<td class=''><pre><span  class=''> *   by a {@link #getSolver() getSolver} method and the equivalent methods</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_41'></a>
+</td>
+<td class=''><pre><span  class=''> *   provided by the returned {@link DecompositionSolver}.&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_42'></a>
+</td>
+<td class=''><pre><span  class=''> * &#60;/ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_43'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_44'></a>
+</td>
+<td class=''><pre><span  class=''> * @see &#60;a href=&#34;http://mathworld.wolfram.com/LUDecomposition.html&#34;&#62;MathWorld&#60;/a&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_45'></a>
+</td>
+<td class=''><pre><span  class=''> * @see &#60;a href=&#34;http://en.wikipedia.org/wiki/LU_decomposition&#34;&#62;Wikipedia&#60;/a&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_46'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: LUDecomposition.java 1416643 2012-12-03 19:37:14Z tn $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_47'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0 (changed to concrete class in 3.0)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_48'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_49'></a>
+</td>
+<td class=''><pre><span  class=''>public class LUDecomposition {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_50'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Default bound to determine effective singularity in LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_51'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final double DEFAULT_TOO_SMALL = 1e-11;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_52'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Entries of LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_53'></a>
+</td>
+<td class=''><pre><span  class=''>    private final double[][] lu;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_54'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Pivot permutation associated with LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_55'></a>
+</td>
+<td class=''><pre><span  class=''>    private final int[] pivot;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_56'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Parity of the permutation associated with the LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_57'></a>
+</td>
+<td class=''><pre><span  class=''>    private boolean even;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_58'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Singularity indicator. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_59'></a>
+</td>
+<td class=''><pre><span  class=''>    private boolean singular;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_60'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of L. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_61'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedL;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_62'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of U. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_63'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedU;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_64'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Cached value of P. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_65'></a>
+</td>
+<td class=''><pre><span  class=''>    private RealMatrix cachedP;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_66'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_67'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_68'></a>
+</td>
+<td class=''><pre><span  class=''>     * Calculates the LU-decomposition of the given matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_69'></a>
+</td>
+<td class=''><pre><span  class=''>     * This constructor uses 1e-11 as default value for the singularity</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_70'></a>
+</td>
+<td class=''><pre><span  class=''>     * threshold.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_71'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_72'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param matrix Matrix to decompose.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_73'/>
+73
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_73'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws NonSquareMatrixException if matrix is not square.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_74'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_75'></a>
+</td>
+<td class=''><pre><span  class=''>    public LUDecomposition(RealMatrix matrix) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_76'></a>
+</td>
+<td class='covered'><pre><span  class=''>        this(matrix, DEFAULT_TOO_SMALL);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_77'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_78'/>
+78
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_78'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_79'/>
+79
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_79'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_80'></a>
+</td>
+<td class=''><pre><span  class=''>     * Calculates the LU-decomposition of the given matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_81'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param matrix The matrix to decompose.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_82'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param singularityThreshold threshold (based on partial row norm)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_83'></a>
+</td>
+<td class=''><pre><span  class=''>     * under which a matrix is considered singular</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_84'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws NonSquareMatrixException if matrix is not square</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_85'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_86'></a>
+</td>
+<td class='covered'><pre><span  class=''>    public LUDecomposition(RealMatrix matrix, double singularityThreshold) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_87'/>
+87
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_87'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (!matrix.isSquare()) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_88'></a>
+</td>
+<td class='covered'><pre><span  class=''>            throw new NonSquareMatrixException(matrix.getRowDimension(),</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_89'></a>
+</td>
+<td class=''><pre><span  class=''>                                               matrix.getColumnDimension());</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_90'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_91'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_92'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int m = matrix.getColumnDimension();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_93'></a>
+</td>
+<td class='covered'><pre><span  class=''>        lu = matrix.getData();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_94'></a>
+</td>
+<td class='covered'><pre><span  class=''>        pivot = new int[m];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_95'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedL = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_96'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedU = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_97'></a>
+</td>
+<td class='covered'><pre><span  class=''>        cachedP = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_98'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_99'></a>
+</td>
+<td class=''><pre><span  class=''>        // Initialize permutation array and parity</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_100'/>
+100
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_100'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int row = 0; row &#60; m; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_101'></a>
+</td>
+<td class='covered'><pre><span  class=''>            pivot[row] = row;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_102'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_103'></a>
+</td>
+<td class='covered'><pre><span  class=''>        even     = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_104'></a>
+</td>
+<td class='covered'><pre><span  class=''>        singular = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_105'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_106'></a>
+</td>
+<td class=''><pre><span  class=''>        // Loop over columns</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_107'/>
+107
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_107'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int col = 0; col &#60; m; col++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_108'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_109'></a>
+</td>
+<td class=''><pre><span  class=''>            // upper</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_110'/>
+110
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_110'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int row = 0; row &#60; col; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_111'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luRow = lu[row];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_112'></a>
+</td>
+<td class='covered'><pre><span  class=''>                double sum = luRow[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_113'/>
+113
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_113'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = 0; i &#60; row; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_114'/>
+114
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_114'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    sum -= luRow[i] * lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_115'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_116'></a>
+</td>
+<td class='covered'><pre><span  class=''>                luRow[col] = sum;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_117'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_118'/>
+118
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_118'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_119'></a>
+</td>
+<td class=''><pre><span  class=''>            // lower</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_120'></a>
+</td>
+<td class='covered'><pre><span  class=''>            int max = col; // permutation row</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_121'></a>
+</td>
+<td class='covered'><pre><span  class=''>            double largest = Double.NEGATIVE_INFINITY;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_122'/>
+122
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_122'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int row = col; row &#60; m; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_123'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luRow = lu[row];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_124'></a>
+</td>
+<td class='covered'><pre><span  class=''>                double sum = luRow[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_125'/>
+125
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_125'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = 0; i &#60; col; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_126'/>
+126
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_126'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    sum -= luRow[i] * lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_127'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_128'></a>
+</td>
+<td class='covered'><pre><span  class=''>                luRow[col] = sum;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_129'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_130'></a>
+</td>
+<td class=''><pre><span  class=''>                // maintain best permutation choice</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_131'/>
+131
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_131'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (FastMath.abs(sum) &#62; largest) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_132'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    largest = FastMath.abs(sum);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_133'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    max = row;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_134'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_135'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_136'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_137'></a>
+</td>
+<td class=''><pre><span  class=''>            // Singularity check</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_138'/>
+138
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_138'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(lu[max][col]) &#60; singularityThreshold) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_139'></a>
+</td>
+<td class='covered'><pre><span  class=''>                singular = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_140'></a>
+</td>
+<td class='covered'><pre><span  class=''>                return;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_141'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_142'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_143'/>
+143
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_143'></a>
+</td>
+<td class=''><pre><span  class=''>            // Pivot if necessary</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_144'/>
+144
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_144'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (max != col) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_145'></a>
+</td>
+<td class='covered'><pre><span  class=''>                double tmp = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_146'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luMax = lu[max];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_147'/>
+147
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_147'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luCol = lu[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_148'/>
+148
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_148'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = 0; i &#60; m; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_149'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    tmp = luMax[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_150'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    luMax[i] = luCol[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_151'/>
+151
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_151'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    luCol[i] = tmp;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_152'/>
+152
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_152'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_153'/>
+153
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_153'></a>
+</td>
+<td class='covered'><pre><span  class=''>                int temp = pivot[max];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_154'></a>
+</td>
+<td class='covered'><pre><span  class=''>                pivot[max] = pivot[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_155'></a>
+</td>
+<td class='covered'><pre><span  class=''>                pivot[col] = temp;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_156'/>
+156
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_156'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                even = !even;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_157'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_158'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_159'></a>
+</td>
+<td class=''><pre><span  class=''>            // Divide the lower elements by the &#34;winning&#34; diagonal elt.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_160'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double luDiag = lu[col][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_161'/>
+161
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_161'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int row = col + 1; row &#60; m; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_162'/>
+162
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_162'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                lu[row][col] /= luDiag;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_163'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_164'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_165'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_166'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_167'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_168'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the matrix L of the decomposition.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_169'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;L is a lower-triangular matrix&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_170'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the L matrix (or null if decomposed matrix is singular)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_171'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_172'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getL() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_173'/>
+173
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_173'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if ((cachedL == null) &#38;&#38; !singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_174'/>
+174
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_174'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_175'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedL = MatrixUtils.createRealMatrix(m, m);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_176'/>
+176
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_176'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = 0; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_177'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luI = lu[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_178'/>
+178
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_178'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                for (int j = 0; j &#60; i; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_179'/>
+179
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_179'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    cachedL.setEntry(i, j, luI[j]);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_180'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_181'/>
+181
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_181'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                cachedL.setEntry(i, i, 1.0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_182'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_183'/>
+183
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_183'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_184'/>
+184
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_184'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedL;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_185'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_186'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_187'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_188'/>
+188
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_188'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the matrix U of the decomposition.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_189'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;U is an upper-triangular matrix&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_190'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the U matrix (or null if decomposed matrix is singular)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_191'/>
+191
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_191'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_192'/>
+192
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_192'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getU() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_193'/>
+193
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_193'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if ((cachedU == null) &#38;&#38; !singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_194'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_195'/>
+195
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_195'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedU = MatrixUtils.createRealMatrix(m, m);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_196'/>
+196
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_196'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = 0; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_197'/>
+197
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_197'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] luI = lu[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_198'/>
+198
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_198'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int j = i; j &#60; m; ++j) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_199'/>
+199
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_199'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    cachedU.setEntry(i, j, luI[j]);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_200'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_201'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_202'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_203'/>
+203
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_203'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedU;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_204'/>
+204
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_204'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_205'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_206'/>
+206
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_206'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_207'/>
+207
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_207'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the P rows permutation matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_208'/>
+208
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_208'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;P is a sparse matrix with exactly one element set to 1.0 in</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_209'></a>
+</td>
+<td class=''><pre><span  class=''>     * each row and each column, all other elements being set to 0.0.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_210'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;The positions of the 1 elements are given by the {@link #getPivot()</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_211'></a>
+</td>
+<td class=''><pre><span  class=''>     * pivot permutation vector}.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_212'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the P rows permutation matrix (or null if decomposed matrix is singular)</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_213'></a>
+</td>
+<td class=''><pre><span  class=''>     * @see #getPivot()</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_214'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_215'/>
+215
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_215'></a>
+</td>
+<td class=''><pre><span  class=''>    public RealMatrix getP() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_216'/>
+216
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_216'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if ((cachedP == null) &#38;&#38; !singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_217'/>
+217
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_217'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_218'/>
+218
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_218'></a>
+</td>
+<td class='covered'><pre><span  class=''>            cachedP = MatrixUtils.createRealMatrix(m, m);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_219'/>
+219
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_219'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = 0; i &#60; m; ++i) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_220'/>
+220
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_220'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                cachedP.setEntry(i, pivot[i], 1.0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_221'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_222'/>
+222
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_222'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_223'/>
+223
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_223'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return cachedP;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_224'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_225'/>
+225
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_225'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_226'/>
+226
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_226'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_227'/>
+227
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_227'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns the pivot permutation vector.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_228'/>
+228
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_228'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return the pivot permutation vector</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_229'/>
+229
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_229'></a>
+</td>
+<td class=''><pre><span  class=''>     * @see #getP()</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_230'/>
+230
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_230'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_231'/>
+231
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_231'></a>
+</td>
+<td class=''><pre><span  class=''>    public int[] getPivot() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_232'/>
+232
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_232'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return pivot.clone();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_233'/>
+233
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_233'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_234'/>
+234
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_234'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_235'/>
+235
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_235'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_236'/>
+236
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_236'></a>
+</td>
+<td class=''><pre><span  class=''>     * Return the determinant of the matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_237'/>
+237
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_237'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return determinant of the matrix</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_238'/>
+238
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_238'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_239'/>
+239
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_239'></a>
+</td>
+<td class=''><pre><span  class=''>    public double getDeterminant() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_240'/>
+240
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_240'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_241'/>
+241
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_241'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_242'/>
+242
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_242'></a>
+</td>
+<td class=''><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_243'/>
+243
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_243'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_244'/>
+244
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_244'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            double determinant = even ? 1 : -1;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_245'/>
+245
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_245'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = 0; i &#60; m; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_246'/>
+246
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_246'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                determinant *= lu[i][i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_247'/>
+247
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_247'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_248'/>
+248
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_248'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return determinant;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_249'/>
+249
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_249'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_250'/>
+250
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_250'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_251'/>
+251
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_251'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_252'/>
+252
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_252'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_253'/>
+253
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_253'></a>
+</td>
+<td class=''><pre><span  class=''>     * Get a solver for finding the A &#38;times; X = B solution in exact linear</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_254'/>
+254
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_254'></a>
+</td>
+<td class=''><pre><span  class=''>     * sense.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_255'/>
+255
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_255'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return a solver</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_256'/>
+256
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_256'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_257'/>
+257
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_257'></a>
+</td>
+<td class=''><pre><span  class=''>    public DecompositionSolver getSolver() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_258'/>
+258
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_258'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return new Solver(lu, pivot, singular);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_259'/>
+259
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_259'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_260'/>
+260
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_260'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_261'/>
+261
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_261'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Specialized solver. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_262'/>
+262
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_262'></a>
+</td>
+<td class='covered'><pre><span  class=''>    private static class Solver implements DecompositionSolver {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_263'/>
+263
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_263'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_264'/>
+264
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_264'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Entries of LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_265'/>
+265
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_265'></a>
+</td>
+<td class=''><pre><span  class=''>        private final double[][] lu;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_266'/>
+266
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_266'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_267'/>
+267
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_267'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Pivot permutation associated with LU decomposition. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_268'/>
+268
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_268'></a>
+</td>
+<td class=''><pre><span  class=''>        private final int[] pivot;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_269'/>
+269
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_269'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_270'/>
+270
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_270'></a>
+</td>
+<td class=''><pre><span  class=''>        /** Singularity indicator. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_271'/>
+271
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_271'></a>
+</td>
+<td class=''><pre><span  class=''>        private final boolean singular;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_272'/>
+272
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_272'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_273'/>
+273
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_273'></a>
+</td>
+<td class=''><pre><span  class=''>        /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_274'/>
+274
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_274'></a>
+</td>
+<td class=''><pre><span  class=''>         * Build a solver from decomposed matrix.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_275'/>
+275
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_275'></a>
+</td>
+<td class=''><pre><span  class=''>         * @param lu entries of LU decomposition</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_276'/>
+276
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_276'></a>
+</td>
+<td class=''><pre><span  class=''>         * @param pivot pivot permutation associated with LU decomposition</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_277'/>
+277
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_277'></a>
+</td>
+<td class=''><pre><span  class=''>         * @param singular singularity indicator</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_278'/>
+278
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_278'></a>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_279'/>
+279
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_279'></a>
+</td>
+<td class='covered'><pre><span  class=''>        private Solver(final double[][] lu, final int[] pivot, final boolean singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_280'/>
+280
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_280'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.lu       = lu;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_281'/>
+281
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_281'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.pivot    = pivot;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_282'/>
+282
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_282'></a>
+</td>
+<td class='covered'><pre><span  class=''>            this.singular = singular;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_283'/>
+283
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_283'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_284'/>
+284
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_284'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_285'/>
+285
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_285'></a>
+</td>
+<td class=''><pre><span  class=''>        /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_286'/>
+286
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_286'></a>
+</td>
+<td class=''><pre><span  class=''>        public boolean isNonSingular() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_287'/>
+287
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_287'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return !singular;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_288'/>
+288
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_288'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_289'/>
+289
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_289'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_290'/>
+290
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_290'></a>
+</td>
+<td class=''><pre><span  class=''>        /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_291'/>
+291
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_291'></a>
+</td>
+<td class=''><pre><span  class=''>        public RealVector solve(RealVector b) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_292'/>
+292
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_292'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_293'/>
+293
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_293'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (b.getDimension() != m) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_294'/>
+294
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_294'></a>
+</td>
+<td class='covered'><pre><span  class=''>                throw new DimensionMismatchException(b.getDimension(), m);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_295'/>
+295
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_295'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_296'/>
+296
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_296'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_297'/>
+297
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_297'></a>
+</td>
+<td class='covered'><pre><span  class=''>                throw new SingularMatrixException();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_298'/>
+298
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_298'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_299'/>
+299
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_299'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_300'/>
+300
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_300'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[] bp = new double[m];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_301'/>
+301
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_301'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_302'/>
+302
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_302'></a>
+</td>
+<td class=''><pre><span  class=''>            // Apply permutations to b</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_303'/>
+303
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_303'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int row = 0; row &#60; m; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_304'/>
+304
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_304'></a>
+</td>
+<td class='covered'><pre><span  class=''>                bp[row] = b.getEntry(pivot[row]);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_305'/>
+305
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_305'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_306'/>
+306
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_306'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_307'/>
+307
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_307'></a>
+</td>
+<td class=''><pre><span  class=''>            // Solve LY = b</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_308'/>
+308
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_308'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int col = 0; col &#60; m; col++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_309'/>
+309
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_309'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double bpCol = bp[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_310'/>
+310
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_310'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = col + 1; i &#60; m; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_311'/>
+311
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_311'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    bp[i] -= bpCol * lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_312'/>
+312
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_312'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_313'/>
+313
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_313'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_314'/>
+314
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_314'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_315'/>
+315
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_315'></a>
+</td>
+<td class=''><pre><span  class=''>            // Solve UX = Y</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_316'/>
+316
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_316'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int col = m - 1; col &#62;= 0; col--) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_317'/>
+317
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_317'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                bp[col] /= lu[col][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_318'/>
+318
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_318'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double bpCol = bp[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_319'/>
+319
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_319'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = 0; i &#60; col; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_320'/>
+320
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_320'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    bp[i] -= bpCol * lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_321'/>
+321
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_321'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_322'/>
+322
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_322'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_323'/>
+323
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_323'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_324'/>
+324
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_324'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return new ArrayRealVector(bp, false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_325'/>
+325
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_325'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_326'/>
+326
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_326'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_327'/>
+327
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_327'></a>
+</td>
+<td class=''><pre><span  class=''>        /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_328'/>
+328
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_328'></a>
+</td>
+<td class=''><pre><span  class=''>        public RealMatrix solve(RealMatrix b) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_329'/>
+329
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_329'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_330'/>
+330
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_330'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int m = pivot.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_331'/>
+331
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_331'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (b.getRowDimension() != m) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_332'/>
+332
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_332'></a>
+</td>
+<td class='covered'><pre><span  class=''>                throw new DimensionMismatchException(b.getRowDimension(), m);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_333'/>
+333
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_333'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_334'/>
+334
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_334'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (singular) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_335'/>
+335
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_335'></a>
+</td>
+<td class='covered'><pre><span  class=''>                throw new SingularMatrixException();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_336'/>
+336
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_336'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_337'/>
+337
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_337'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_338'/>
+338
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_338'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int nColB = b.getColumnDimension();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_339'/>
+339
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_339'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_340'/>
+340
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_340'></a>
+</td>
+<td class=''><pre><span  class=''>            // Apply permutations to b</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_341'/>
+341
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_341'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double[][] bp = new double[m][nColB];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_342'/>
+342
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_342'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int row = 0; row &#60; m; row++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_343'/>
+343
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_343'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] bpRow = bp[row];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_344'/>
+344
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_344'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final int pRow = pivot[row];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_345'/>
+345
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_345'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int col = 0; col &#60; nColB; col++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_346'/>
+346
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_346'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    bpRow[col] = b.getEntry(pRow, col);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_347'/>
+347
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_347'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_348'/>
+348
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_348'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_349'/>
+349
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_349'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_350'/>
+350
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_350'></a>
+</td>
+<td class=''><pre><span  class=''>            // Solve LY = b</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_351'/>
+351
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_351'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int col = 0; col &#60; m; col++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_352'/>
+352
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_352'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] bpCol = bp[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_353'/>
+353
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_353'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = col + 1; i &#60; m; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_354'/>
+354
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_354'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double[] bpI = bp[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_355'/>
+355
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_355'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double luICol = lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_356'/>
+356
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_356'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = 0; j &#60; nColB; j++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_357'/>
+357
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_357'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        bpI[j] -= bpCol[j] * luICol;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_358'/>
+358
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_358'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_359'/>
+359
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_359'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_360'/>
+360
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_360'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_361'/>
+361
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_361'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_362'/>
+362
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_362'></a>
+</td>
+<td class=''><pre><span  class=''>            // Solve UX = Y</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_363'/>
+363
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_363'>4</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int col = m - 1; col &#62;= 0; col--) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_364'/>
+364
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_364'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double[] bpCol = bp[col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_365'/>
+365
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_365'></a>
+</td>
+<td class='covered'><pre><span  class=''>                final double luDiag = lu[col][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_366'/>
+366
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_366'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int j = 0; j &#60; nColB; j++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_367'/>
+367
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_367'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    bpCol[j] /= luDiag;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_368'/>
+368
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_368'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_369'/>
+369
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_369'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                for (int i = 0; i &#60; col; i++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_370'/>
+370
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_370'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double[] bpI = bp[i];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_371'/>
+371
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_371'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    final double luICol = lu[i][col];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_372'/>
+372
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_372'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    for (int j = 0; j &#60; nColB; j++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_373'/>
+373
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_373'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        bpI[j] -= bpCol[j] * luICol;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_374'/>
+374
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_374'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_375'/>
+375
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_375'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_376'/>
+376
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_376'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_377'/>
+377
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_377'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_378'/>
+378
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_378'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return new Array2DRowRealMatrix(bp, false);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_379'/>
+379
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_379'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_380'/>
+380
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_380'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_381'/>
+381
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_381'></a>
+</td>
+<td class=''><pre><span  class=''>        /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_382'/>
+382
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_382'></a>
+</td>
+<td class=''><pre><span  class=''>        public RealMatrix getInverse() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_383'/>
+383
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_383'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return solve(MatrixUtils.createRealIdentityMatrix(pivot.length));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_384'/>
+384
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_384'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_385'/>
+385
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_385'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_386'/>
+386
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_386'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_87'>87</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_87'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testNonSquare(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_100'>100</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_100'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_107'>107</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_107'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_110'>110</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_110'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_113'>113</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_113'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_114'>114</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_114'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_122'>122</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_122'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_125'>125</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_125'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_126'>126</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_126'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_131'>131</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_131'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_138'>138</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_138'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_144'>144</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_144'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_148'>148</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_148'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_156'>156</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_156'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_161'>161</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_161'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_162'>162</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_162'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_173'>173</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_173'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_176'>176</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_176'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_178'>178</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_178'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_179'>179</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_179'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/RealMatrix::setEntry : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_181'>181</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_181'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/RealMatrix::setEntry : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_184'>184</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_184'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition::getL to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_193'>193</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_193'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_196'>196</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_196'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_198'>198</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_198'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_199'>199</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_199'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/RealMatrix::setEntry : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_203'>203</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_203'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition::getU to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_216'>216</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_216'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_219'>219</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_219'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_220'>220</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_220'/> 
+
+<p class='KILLED'>removed call to org/apache/commons/math3/linear/RealMatrix::setEntry : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_223'>223</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_223'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition::getP to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_232'>232</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_232'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition::getPivot to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_240'>240</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_240'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_241'>241</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_241'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/linear/LUDecomposition::getDeterminant : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_244'>244</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_244'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_245'>245</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_245'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_246'>246</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_246'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_248'>248</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_248'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/linear/LUDecomposition::getDeterminant : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_258'>258</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_258'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition::getSolver to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_287'>287</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_287'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testThreshold(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testThreshold(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_293'>293</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_293'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_296'>296</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_296'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_303'>303</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_303'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_308'>308</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_308'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_310'>310</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_310'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_311'>311</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_311'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_316'>316</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_316'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_317'>317</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_317'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_319'>319</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_319'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_320'>320</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_320'/> 
+
+<p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_324'>324</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_324'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition$Solver::solve to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_331'>331</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_331'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_334'>334</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_334'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_342'>342</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_342'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_345'>345</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_345'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_351'>351</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_351'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_353'>353</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_353'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_356'>356</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_356'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_357'>357</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_357'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_363'>363</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_363'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from -1 to 1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_366'>366</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_366'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_367'>367</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_367'/> 
+
+<p class='KILLED'>Replaced double division with multiplication : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_369'>369</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_369'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_372'>372</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_372'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_373'>373</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_373'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> <p class='KILLED'>Replaced double subtraction with addition : KILLED -> org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_378'>378</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_378'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition$Solver::solve to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_383'>383</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2f3c9d5f_383'/> 
+
+<p class='KILLED'>mutated return of Object value for org/apache/commons/math3/linear/LUDecomposition$Solver::getInverse to ( if (x != null) null else throw new RuntimeException ) : KILLED -> org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest)</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.linear.LUDecompositionTest.testNonSquare(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798(org.apache.commons.math3.fitting.PolynomialFitterTest) (3 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLowButNoException(org.apache.commons.math3.fitting.PolynomialFitterTest) (518 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateRegressionParametersVariance(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testDeterminant(org.apache.commons.math3.linear.LUSolverTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler4(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testSingular(org.apache.commons.math3.linear.LUDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testLLowerTriangular(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testMath848(org.apache.commons.math3.linear.EigenDecompositionTest) (8 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues2(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testThreshold(org.apache.commons.math3.linear.LUSolverTest) (0 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testRedundantUnsolvable(org.apache.commons.math3.fitting.PolynomialFitterTest) (15 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testGLSOLSConsistency(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (4 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testSwissFertility(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (2 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testTranspose(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateResiduals(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.canEstimateRegressionParametersVariance(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSingular(org.apache.commons.math3.linear.LUSolverTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testPAEqualLU(org.apache.commons.math3.linear.LUDecompositionTest) (7 ms)</li><li>org.apache.commons.math3.linear.EigenDecompositionTest.testUnsymmetric(org.apache.commons.math3.linear.EigenDecompositionTest) (9 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSolveDimensionErrors(org.apache.commons.math3.linear.LUSolverTest) (0 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testTranspose(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testExamples(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testPerfectFit(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testMatricesValues1(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testGLSEfficiency(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (20316 ms)</li><li>org.apache.commons.math3.linear.SymmLQTest.testNonSelfAdjointPreconditioner(org.apache.commons.math3.linear.SymmLQTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testLongly(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.Array2DRowRealMatrixTest.testTranspose(org.apache.commons.math3.linear.Array2DRowRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.canEstimateRegressionParameters(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testUUpperTriangular(org.apache.commons.math3.linear.LUDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSolve(org.apache.commons.math3.linear.LUSolverTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler2(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.SparseRealMatrixTest.testExamples(org.apache.commons.math3.linear.SparseRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLow(org.apache.commons.math3.fitting.PolynomialFitterTest) (857 ms)</li><li>org.apache.commons.math3.linear.LUSolverTest.testSolveSingularityErrors(org.apache.commons.math3.linear.LUSolverTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler1(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testNewSample2(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.BlockRealMatrixTest.testExamples(org.apache.commons.math3.linear.BlockRealMatrixTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testWampler3(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testPPermutation(org.apache.commons.math3.linear.LUDecompositionTest) (1 ms)</li><li>org.apache.commons.math3.linear.LUDecompositionTest.testDimensions(org.apache.commons.math3.linear.LUDecompositionTest) (0 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>

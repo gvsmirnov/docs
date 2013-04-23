@@ -1,0 +1,2821 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>BitsStreamGenerator.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_2'></a>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_3'></a>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_4'></a>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_5'></a>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_6'></a>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_7'></a>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_8'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_9'></a>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_10'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_11'></a>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_12'></a>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_13'></a>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_14'></a>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_15'></a>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_16'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_17'></a>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.random;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_18'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_19'></a>
+</td>
+<td class=''><pre><span  class=''>import java.io.Serializable;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_20'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_21'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NotStrictlyPositiveException;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_22'></a>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_23'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_24'></a>
+</td>
+<td class=''><pre><span  class=''>/** Base class for random number generators that generates bits streams.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_25'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_26'></a>
+</td>
+<td class=''><pre><span  class=''> * @version $Id: BitsStreamGenerator.java 1454897 2013-03-10 19:02:54Z luc $</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_27'></a>
+</td>
+<td class=''><pre><span  class=''> * @since 2.0</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_28'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_29'></a>
+</td>
+<td class=''><pre><span  class=''>public abstract class BitsStreamGenerator</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_30'></a>
+</td>
+<td class=''><pre><span  class=''>    implements RandomGenerator,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_31'></a>
+</td>
+<td class=''><pre><span  class=''>               Serializable {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_32'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Serializable version identifier */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_33'></a>
+</td>
+<td class=''><pre><span  class=''>    private static final long serialVersionUID = 20130104L;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_34'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Next gaussian. */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_35'></a>
+</td>
+<td class=''><pre><span  class=''>    private double nextGaussian;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_36'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_37'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_38'></a>
+</td>
+<td class=''><pre><span  class=''>     * Creates a new random number generator.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_39'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_40'></a>
+</td>
+<td class='covered'><pre><span  class=''>    public BitsStreamGenerator() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_41'></a>
+</td>
+<td class='covered'><pre><span  class=''>        nextGaussian = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_42'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_43'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_44'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_45'></a>
+</td>
+<td class=''><pre><span  class=''>    public abstract void setSeed(int seed);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_46'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_47'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_48'></a>
+</td>
+<td class=''><pre><span  class=''>    public abstract void setSeed(int[] seed);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_49'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_50'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_51'></a>
+</td>
+<td class=''><pre><span  class=''>    public abstract void setSeed(long seed);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_52'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_53'></a>
+</td>
+<td class=''><pre><span  class=''>    /** Generate next pseudorandom number.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_54'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This method is the core generation algorithm. It is used by all the</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_55'></a>
+</td>
+<td class=''><pre><span  class=''>     * public generation methods for the various primitive types {@link</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_56'></a>
+</td>
+<td class=''><pre><span  class=''>     * #nextBoolean()}, {@link #nextBytes(byte[])}, {@link #nextDouble()},</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_57'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@link #nextFloat()}, {@link #nextGaussian()}, {@link #nextInt()},</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_58'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@link #next(int)} and {@link #nextLong()}.&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_59'/>
+59
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_59'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param bits number of random bits to produce</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_60'/>
+60
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_60'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return random bits generated</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_61'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_62'></a>
+</td>
+<td class=''><pre><span  class=''>    protected abstract int next(int bits);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_63'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_64'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_65'></a>
+</td>
+<td class=''><pre><span  class=''>    public boolean nextBoolean() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_66'/>
+66
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_66'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        return next(1) != 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_67'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_68'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_69'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_70'></a>
+</td>
+<td class=''><pre><span  class=''>    public void nextBytes(byte[] bytes) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_71'></a>
+</td>
+<td class='covered'><pre><span  class=''>        int i = 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_72'/>
+72
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_72'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final int iEnd = bytes.length - 3;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_73'/>
+73
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_73'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        while (i &#60; iEnd) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_74'/>
+74
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_74'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final int random = next(32);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_75'/>
+75
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_75'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            bytes[i]     = (byte) (random &#38; 0xff);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_76'/>
+76
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_76'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            bytes[i + 1] = (byte) ((random &#62;&#62;  8) &#38; 0xff);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_77'/>
+77
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_77'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            bytes[i + 2] = (byte) ((random &#62;&#62; 16) &#38; 0xff);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_78'/>
+78
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_78'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            bytes[i + 3] = (byte) ((random &#62;&#62; 24) &#38; 0xff);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_79'/>
+79
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_79'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            i += 4;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_80'/>
+80
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_80'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_81'></a>
+</td>
+<td class='covered'><pre><span  class=''>        int random = next(32);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_82'/>
+82
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_82'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        while (i &#60; bytes.length) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_83'/>
+83
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_83'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            bytes[i++] = (byte) (random &#38; 0xff);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_84'/>
+84
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_84'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            random     = random &#62;&#62; 8;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_85'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_86'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_87'/>
+87
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_87'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_88'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_89'/>
+89
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_89'></a>
+</td>
+<td class=''><pre><span  class=''>    public double nextDouble() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_90'/>
+90
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_90'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final long high = ((long) next(26)) &#60;&#60; 26;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_91'></a>
+</td>
+<td class='covered'><pre><span  class=''>        final int  low  = next(26);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_92'/>
+92
+</td>
+<td class='uncertain'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_92'>3</a>
+</td>
+<td class='covered'><pre><span  class='uncertain'>        return (high | low) * 0x1.0p-52d;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_93'/>
+93
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_93'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_94'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_95'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_96'></a>
+</td>
+<td class=''><pre><span  class=''>    public float nextFloat() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_97'/>
+97
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_97'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return next(23) * 0x1.0p-23f;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_98'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_99'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_100'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_101'></a>
+</td>
+<td class=''><pre><span  class=''>    public double nextGaussian() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_102'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_103'/>
+103
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_103'></a>
+</td>
+<td class=''><pre><span  class=''>        final double random;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_104'/>
+104
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_104'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (Double.isNaN(nextGaussian)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_105'></a>
+</td>
+<td class=''><pre><span  class=''>            // generate a new pair of gaussian numbers</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_106'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double x = nextDouble();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_107'></a>
+</td>
+<td class='covered'><pre><span  class=''>            final double y = nextDouble();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_108'/>
+108
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_108'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double alpha = 2 * FastMath.PI * x;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_109'/>
+109
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_109'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double r      = FastMath.sqrt(-2 * FastMath.log(y));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_110'/>
+110
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_110'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            random       = r * FastMath.cos(alpha);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_111'/>
+111
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_111'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            nextGaussian = r * FastMath.sin(alpha);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_112'></a>
+</td>
+<td class='covered'><pre><span  class=''>        } else {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_113'/>
+113
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_113'></a>
+</td>
+<td class=''><pre><span  class=''>            // use the second element of the pair already generated</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_114'></a>
+</td>
+<td class='covered'><pre><span  class=''>            random = nextGaussian;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_115'/>
+115
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_115'></a>
+</td>
+<td class='covered'><pre><span  class=''>            nextGaussian = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_116'/>
+116
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_116'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_117'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_118'/>
+118
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_118'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return random;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_119'/>
+119
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_119'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_120'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_121'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_122'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_123'></a>
+</td>
+<td class=''><pre><span  class=''>    public int nextInt() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_124'/>
+124
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_124'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return next(32);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_125'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_126'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_127'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_128'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_129'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;This default implementation is copied from Apache Harmony</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_130'></a>
+</td>
+<td class=''><pre><span  class=''>     * java.util.Random (r929253).&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_131'/>
+131
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_131'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_132'/>
+132
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_132'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Implementation notes: &#60;ul&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_133'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;li&#62;If n is a power of 2, this method returns</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_134'/>
+134
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_134'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@code (int) ((n * (long) next(31)) &#62;&#62; 31)}.&#60;/li&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_135'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_136'></a>
+</td>
+<td class=''><pre><span  class=''>     * &#60;li&#62;If n is not a power of 2, what is returned is {@code next(31) % n}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_137'></a>
+</td>
+<td class=''><pre><span  class=''>     * with {@code next(31)} values rejected (i.e. regenerated) until a</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_138'></a>
+</td>
+<td class=''><pre><span  class=''>     * value that is larger than the remainder of {@code Integer.MAX_VALUE / n}</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_139'/>
+139
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_139'></a>
+</td>
+<td class=''><pre><span  class=''>     * is generated. Rejection of this initial segment is necessary to ensure</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_140'></a>
+</td>
+<td class=''><pre><span  class=''>     * a uniform distribution.&#60;/li&#62;&#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_141'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_142'></a>
+</td>
+<td class=''><pre><span  class=''>    public int nextInt(int n) throws IllegalArgumentException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_143'/>
+143
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_143'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (n &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_144'/>
+144
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_144'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            if ((n &#38; -n) == n) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_145'/>
+145
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_145'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                return (int) ((n * (long) next(31)) &#62;&#62; 31);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_146'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_147'/>
+147
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_147'></a>
+</td>
+<td class=''><pre><span  class=''>            int bits;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_148'/>
+148
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_148'></a>
+</td>
+<td class=''><pre><span  class=''>            int val;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_149'></a>
+</td>
+<td class=''><pre><span  class=''>            do {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_150'></a>
+</td>
+<td class='covered'><pre><span  class=''>                bits = next(31);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_151'/>
+151
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_151'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                val = bits % n;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_152'/>
+152
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_152'>5</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            } while (bits - val + (n - 1) &#60; 0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_153'/>
+153
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_153'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return val;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_154'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_155'/>
+155
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_155'></a>
+</td>
+<td class='covered'><pre><span  class=''>        throw new NotStrictlyPositiveException(n);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_156'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_157'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_158'></a>
+</td>
+<td class=''><pre><span  class=''>    /** {@inheritDoc} */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_159'/>
+159
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_159'></a>
+</td>
+<td class=''><pre><span  class=''>    public long nextLong() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_160'/>
+160
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_160'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final long high  = ((long) next(32)) &#60;&#60; 32;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_161'/>
+161
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_161'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        final long  low  = ((long) next(32)) &#38; 0xffffffffL;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_162'/>
+162
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_162'>2</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        return high | low;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_163'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_164'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_165'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_166'></a>
+</td>
+<td class=''><pre><span  class=''>     * Returns a pseudorandom, uniformly distributed &#60;tt&#62;long&#60;/tt&#62; value</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_167'></a>
+</td>
+<td class=''><pre><span  class=''>     * between 0 (inclusive) and the specified value (exclusive), drawn from</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_168'></a>
+</td>
+<td class=''><pre><span  class=''>     * this random number generator&#39;s sequence.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_169'/>
+169
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_169'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_170'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param n the bound on the random number to be returned.  Must be</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_171'></a>
+</td>
+<td class=''><pre><span  class=''>     * positive.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_172'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return  a pseudorandom, uniformly distributed &#60;tt&#62;long&#60;/tt&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_173'/>
+173
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_173'></a>
+</td>
+<td class=''><pre><span  class=''>     * value between 0 (inclusive) and n (exclusive).</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_174'/>
+174
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_174'></a>
+</td>
+<td class=''><pre><span  class=''>     * @throws IllegalArgumentException  if n is not positive.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_175'/>
+175
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_175'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_176'/>
+176
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_176'></a>
+</td>
+<td class=''><pre><span  class=''>    public long nextLong(long n) throws IllegalArgumentException {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_177'/>
+177
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_177'>2</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        if (n &#62; 0) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_178'></a>
+</td>
+<td class=''><pre><span  class=''>            long bits;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_179'/>
+179
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_179'></a>
+</td>
+<td class=''><pre><span  class=''>            long val;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_180'></a>
+</td>
+<td class=''><pre><span  class=''>            do {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_181'/>
+181
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_181'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                bits = ((long) next(31)) &#60;&#60; 32;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_182'/>
+182
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_182'>2</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                bits = bits | (((long) next(32)) &#38; 0xffffffffL);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_183'/>
+183
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_183'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                val  = bits % n;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_184'/>
+184
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_184'>5</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            } while (bits - val + (n - 1) &#60; 0);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_185'/>
+185
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_185'>1</a>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return val;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_186'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_187'></a>
+</td>
+<td class='uncovered'><pre><span  class=''>        throw new NotStrictlyPositiveException(n);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_188'/>
+188
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_188'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_189'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_190'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_191'/>
+191
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_191'></a>
+</td>
+<td class=''><pre><span  class=''>     * Clears the cache used by the default implementation of</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_192'/>
+192
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_192'></a>
+</td>
+<td class=''><pre><span  class=''>     * {@link #nextGaussian}.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_193'/>
+193
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_193'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_194'></a>
+</td>
+<td class=''><pre><span  class=''>    public void clear() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_195'/>
+195
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_195'></a>
+</td>
+<td class='covered'><pre><span  class=''>        nextGaussian = Double.NaN;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_196'/>
+196
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_196'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_197'/>
+197
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_197'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2af6d178_198'/>
+198
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_198'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_66'>66</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_66'/> 
+
+<p class='SURVIVED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : SURVIVED</p> <p class='SURVIVED'>negated conditional : SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_72'>72</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_72'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_73'>73</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_73'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_75'>75</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_75'/> 
+
+<p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_76'>76</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_76'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced Shift Right with Shift Left : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_77'>77</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_77'/> 
+
+<p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced Shift Right with Shift Left : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_78'>78</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_78'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced Shift Right with Shift Left : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_79'>79</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_79'/> 
+
+<p class='KILLED'>Changed increment from 4 to -4 : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_82'>82</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_82'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>changed conditional boundary : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_83'>83</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_83'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_84'>84</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_84'/> 
+
+<p class='KILLED'>Replaced Shift Right with Shift Left : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_90'>90</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_90'/> 
+
+<p class='KILLED'>Replaced Shift Left with Shift Right : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testDoubleDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_92'>92</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_92'/> 
+
+<p class='TIMED_OUT'>replaced return of double value with -(x + 1) for org/apache/commons/math3/random/BitsStreamGenerator::nextDouble : TIMED_OUT</p> <p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='TIMED_OUT'>Replaced bitwise OR with AND : TIMED_OUT</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_97'>97</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_97'/> 
+
+<p class='KILLED'>Replaced float multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextFloatDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>replaced return of float value with -(x + 1) for org/apache/commons/math3/random/BitsStreamGenerator::nextFloat : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextFloatDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_104'>104</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_104'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGaussian(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_108'>108</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_108'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGaussian(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_109'>109</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_109'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGamma(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_110'>110</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_110'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGamma(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_111'>111</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_111'/> 
+
+<p class='KILLED'>Replaced double multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGamma(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_118'>118</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_118'/> 
+
+<p class='KILLED'>replaced return of double value with -(x + 1) for org/apache/commons/math3/random/BitsStreamGenerator::nextGaussian : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGaussian(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_124'>124</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_124'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_143'>143</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_143'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntNeg(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_144'>144</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_144'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> org.apache.commons.math3.random.Well19937cTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well19937cTest)</p> <p class='KILLED'>removed negation : KILLED -> org.apache.commons.math3.random.Well44497bTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well44497bTest)</p> <p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.Well19937cTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well19937cTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_145'>145</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_145'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced Shift Right with Shift Left : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='KILLED'>Replaced long multiplication with division : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_151'>151</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_151'/> 
+
+<p class='KILLED'>Replaced integer modulus with multiplication : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_152'>152</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_152'/> 
+
+<p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='TIMED_OUT'>negated conditional : TIMED_OUT</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> <p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_153'>153</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_153'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_160'>160</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_160'/> 
+
+<p class='KILLED'>Replaced Shift Left with Shift Right : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_161'>161</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_161'/> 
+
+<p class='KILLED'>Replaced bitwise AND with OR : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLong2(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_162'>162</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_162'/> 
+
+<p class='SURVIVED'>replaced return of long value with value + 1 for org/apache/commons/math3/random/BitsStreamGenerator::nextLong : SURVIVED</p> <p class='KILLED'>Replaced bitwise OR with AND : KILLED -> org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLong2(org.apache.commons.math3.random.BitsStreamGeneratorTest)</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_177'>177</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_177'/> 
+
+<p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> <p class='NO_COVERAGE'>changed conditional boundary : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_181'>181</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_181'/> 
+
+<p class='NO_COVERAGE'>Replaced Shift Left with Shift Right : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_182'>182</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_182'/> 
+
+<p class='NO_COVERAGE'>Replaced bitwise AND with OR : NO_COVERAGE</p> <p class='NO_COVERAGE'>Replaced bitwise OR with AND : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_183'>183</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_183'/> 
+
+<p class='NO_COVERAGE'>Replaced long modulus with multiplication : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_184'>184</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_184'/> 
+
+<p class='NO_COVERAGE'>Replaced long subtraction with addition : NO_COVERAGE</p> <p class='NO_COVERAGE'>changed conditional boundary : NO_COVERAGE</p> <p class='NO_COVERAGE'>Replaced long subtraction with addition : NO_COVERAGE</p> <p class='NO_COVERAGE'>negated conditional : NO_COVERAGE</p> <p class='NO_COVERAGE'>Replaced long addition with subtraction : NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2af6d178_185'>185</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2af6d178_185'/> 
+
+<p class='NO_COVERAGE'>replaced return of long value with value + 1 for org/apache/commons/math3/random/BitsStreamGenerator::nextLong : NO_COVERAGE</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongExtremeValues(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextBooleanDirect(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextPoissonConsistency(org.apache.commons.math3.random.RandomDataGeneratorTest) (25097 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testTanhAccuracy(org.apache.commons.math3.util.FastMathTest) (36379 ms)</li><li>org.apache.commons.math3.analysis.interpolation.MicrosphereInterpolatorTest.testLinearFunction2D(org.apache.commons.math3.analysis.interpolation.MicrosphereInterpolatorTest) (409 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntWideRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (538 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextWeibull(org.apache.commons.math3.random.BitsStreamGeneratorTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testDoubleDirect(org.apache.commons.math3.random.Well44497aTest) (47 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testConfig(org.apache.commons.math3.random.Well512aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well19937aTest) (13 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well512aTest) (23574 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testConfig(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextZipf(org.apache.commons.math3.random.RandomDataGeneratorTest) (221 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextInt2(org.apache.commons.math3.random.Well44497aTest) (4 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextBinomial(org.apache.commons.math3.random.Well19937aTest) (42 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextChiSquare(org.apache.commons.math3.random.Well512aTest) (165 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextInt2(org.apache.commons.math3.random.MersenneTwisterTest) (5 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongWideRange(org.apache.commons.math3.random.MersenneTwisterTest) (9411 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testSampling(org.apache.commons.math3.distribution.TriangularDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testSeeding(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextGaussian(org.apache.commons.math3.random.Well19937aTest) (39 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextHypergeometric(org.apache.commons.math3.random.Well512aTest) (38 ms)</li><li>org.apache.commons.math3.distribution.DiscreteRealDistributionTest.testSample(org.apache.commons.math3.distribution.DiscreteRealDistributionTest) (778 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testConfig(org.apache.commons.math3.random.BitsStreamGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextFloatDirect(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextPascal(org.apache.commons.math3.random.Well19937aTest) (59 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNexBoolean2(org.apache.commons.math3.random.Well19937aTest) (12 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationFF3(org.apache.commons.math3.util.Decimal64Test) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntWideRange(org.apache.commons.math3.random.Well44497bTest) (657 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongDirect(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextHex(org.apache.commons.math3.random.RandomDataGeneratorTest) (37 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextF(org.apache.commons.math3.random.Well1024aTest) (250 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextZipf(org.apache.commons.math3.random.Well1024aTest) (223 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextHex(org.apache.commons.math3.random.Well512aTest) (32 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextFloatDirect(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.RandomDataGeneratorTest) (7 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHypergeometric(org.apache.commons.math3.random.BitsStreamGeneratorTest) (44 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntWideRange(org.apache.commons.math3.random.ISAACTest) (516 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.ISAACTest) (8 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well44497bTest) (8 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextZipf(org.apache.commons.math3.random.Well19937cTest) (216 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well44497aTest) (9 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextPoissonConsistency(org.apache.commons.math3.random.BitsStreamGeneratorTest) (26325 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testDotProduct(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (44 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntIAE2(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextPoisson(org.apache.commons.math3.random.Well512aTest) (44 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testMakotoNishimura(org.apache.commons.math3.random.MersenneTwisterTest) (6 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationFF4(org.apache.commons.math3.util.Decimal64Test) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well19937cTest) (7 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.MersenneTwisterTest) (11 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testSeeding(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextF(org.apache.commons.math3.random.RandomDataGeneratorTest) (263 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well19937cTest) (10 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntNeg(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextF(org.apache.commons.math3.random.Well19937aTest) (247 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongNegativeRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (29 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.GammaDistributionTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testCbrtAccuracy(org.apache.commons.math3.util.FastMathTest) (21144 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextPermutation(org.apache.commons.math3.random.Well19937cTest) (4 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextSample(org.apache.commons.math3.random.BitsStreamGeneratorTest) (9 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextFloatDirect(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testConfig(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombination2DoubleDS(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (505 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextGaussian(org.apache.commons.math3.random.MersenneTwisterTest) (40 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextPoisson(org.apache.commons.math3.random.Well44497aTest) (49 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNexBoolean2(org.apache.commons.math3.random.MersenneTwisterTest) (10 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntNeg(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextChiSquare(org.apache.commons.math3.random.MersenneTwisterTest) (172 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextPascal(org.apache.commons.math3.random.MersenneTwisterTest) (59 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well44497aTest) (8 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextBeta(org.apache.commons.math3.random.Well1024aTest) (123 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextF(org.apache.commons.math3.random.Well19937cTest) (243 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testAsinAccuracy(org.apache.commons.math3.util.FastMathTest) (23115 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testSeeding(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testValueWithInverseFunction(org.apache.commons.math3.analysis.function.LogitTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextGamma(org.apache.commons.math3.random.Well19937aTest) (30 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextBinomial(org.apache.commons.math3.random.BitsStreamGeneratorTest) (44 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextGamma(org.apache.commons.math3.random.Well19937cTest) (28 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextBeta(org.apache.commons.math3.random.RandomDataGeneratorTest) (125 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextExponential(org.apache.commons.math3.random.Well19937aTest) (18 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testReseed(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongWideRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (11590 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextZipf(org.apache.commons.math3.random.ISAACTest) (237 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextFloatDirect(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLong2(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testSinhAccuracy(org.apache.commons.math3.util.FastMathTest) (18699 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextZipf(org.apache.commons.math3.random.Well44497bTest) (219 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombination2DSDS(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (656 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextPascal(org.apache.commons.math3.random.ISAACTest) (60 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.BitsStreamGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextHypergeometric(org.apache.commons.math3.random.ISAACTest) (53 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well44497aTest) (12 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntIAE2(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextHex(org.apache.commons.math3.random.Well44497aTest) (36 ms)</li><li>org.apache.commons.math3.util.ArithmeticUtilsTest.testGcdConsistency(org.apache.commons.math3.util.ArithmeticUtilsTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextGamma(org.apache.commons.math3.random.Well44497aTest) (27 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextPascal(org.apache.commons.math3.random.BitsStreamGeneratorTest) (59 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextPascal(org.apache.commons.math3.random.Well44497bTest) (57 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextChiSquare(org.apache.commons.math3.random.Well19937aTest) (167 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextBinomial(org.apache.commons.math3.random.Well44497bTest) (43 ms)</li><li>org.apache.commons.math3.analysis.function.LogitTest.testDerivativesWithInverseFunction(org.apache.commons.math3.analysis.function.LogitTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextF(org.apache.commons.math3.random.Well44497aTest) (246 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLong2(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testSampling(org.apache.commons.math3.distribution.NormalDistributionTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testDoubleRotations(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (10481 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testFloatDirect(org.apache.commons.math3.random.Well19937aTest) (4 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well19937aTest) (7 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.ISAACTest) (19 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextExponential(org.apache.commons.math3.random.MersenneTwisterTest) (18 ms)</li><li>org.apache.commons.math3.analysis.interpolation.MicrosphereInterpolatorTest.testParaboloid2D(org.apache.commons.math3.analysis.interpolation.MicrosphereInterpolatorTest) (2075 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testCauchyCase(org.apache.commons.math3.random.StableRandomGeneratorTest) (58 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testAtanAccuracy(org.apache.commons.math3.util.FastMathTest) (1537 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testToDegrees(org.apache.commons.math3.util.FastMathTest) (566 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextCauchy(org.apache.commons.math3.random.RandomDataGeneratorTest) (5 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextSample(org.apache.commons.math3.random.RandomDataGeneratorTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextBinomial(org.apache.commons.math3.random.Well19937cTest) (43 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextGamma(org.apache.commons.math3.random.ISAACTest) (30 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntNeg(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testSampling(org.apache.commons.math3.distribution.ExponentialDistributionTest) (3 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextHypergeometric(org.apache.commons.math3.random.MersenneTwisterTest) (35 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntIAE2(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationDF2(org.apache.commons.math3.dfp.DfpTest) (20 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextHypergeometric(org.apache.commons.math3.random.Well44497bTest) (38 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNexBytes(org.apache.commons.math3.random.Well19937aTest) (202 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testDoubleDirect(org.apache.commons.math3.random.ISAACTest) (36 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextInt2(org.apache.commons.math3.random.BitsStreamGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well19937cTest) (7 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextPoisson(org.apache.commons.math3.random.BitsStreamGeneratorTest) (74 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testReseed(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well19937aTest) (7 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextT(org.apache.commons.math3.random.MersenneTwisterTest) (250 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextF(org.apache.commons.math3.random.ISAACTest) (269 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextInt2(org.apache.commons.math3.random.Well1024aTest) (4 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testCrossProduct(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (359 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextWeibull(org.apache.commons.math3.random.Well19937cTest) (12 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextWeibull(org.apache.commons.math3.random.Well19937aTest) (8 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextBeta(org.apache.commons.math3.random.Well44497aTest) (120 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntExtremeValues(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testSampling(org.apache.commons.math3.distribution.UniformRealDistributionTest) (2 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.ProductTest.testWeightedConsistency(org.apache.commons.math3.stat.descriptive.summary.ProductTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextZipf(org.apache.commons.math3.random.MersenneTwisterTest) (265 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testGaussianCase(org.apache.commons.math3.random.StableRandomGeneratorTest) (38 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well19937cTest) (23999 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well44497bTest) (8 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well512aTest) (13 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntNeg(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.linear.HessenbergTransformerTest.testRandomDataNormalDistribution(org.apache.commons.math3.linear.HessenbergTransformerTest) (465 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.RandomDataGeneratorTest) (7 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well19937aTest) (9 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testSampling(org.apache.commons.math3.random.EmpiricalDistributionTest) (163 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNexBytes(org.apache.commons.math3.random.Well19937cTest) (154 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntNegativeRange(org.apache.commons.math3.random.ISAACTest) (26 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongWideRange(org.apache.commons.math3.random.Well44497aTest) (10726 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextInt2(org.apache.commons.math3.random.Well19937aTest) (4 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testReseed(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongDirect(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntExtremeValues(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntWideRange(org.apache.commons.math3.random.MersenneTwisterTest) (546 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well512aTest) (9 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNexBytes(org.apache.commons.math3.random.Well512aTest) (152 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextHex(org.apache.commons.math3.random.ISAACTest) (83 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well44497aTest) (14 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well44497bTest) (8 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextInversionDeviate(org.apache.commons.math3.random.Well44497bTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextT(org.apache.commons.math3.random.Well44497bTest) (161 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest.testDoubleVectors(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDfpTest) (9387 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testDoubleDirect(org.apache.commons.math3.random.Well1024aTest) (21 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntDirect(org.apache.commons.math3.random.Well44497aTest) (7648 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextPermutation(org.apache.commons.math3.random.ISAACTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntNeg(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testConfig(org.apache.commons.math3.random.RandomDataGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextFloatDirect(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well19937cTest) (16 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNexBoolean2(org.apache.commons.math3.random.Well44497bTest) (15 ms)</li><li>org.apache.commons.math3.distribution.CauchyDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.CauchyDistributionTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well44497bTest) (10 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well19937aTest) (11 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextBeta(org.apache.commons.math3.random.BitsStreamGeneratorTest) (119 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testReseed(org.apache.commons.math3.random.BitsStreamGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well1024aTest) (11 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntWideRange(org.apache.commons.math3.random.Well44497aTest) (628 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongExtremeValues(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextHypergeometric(org.apache.commons.math3.random.Well44497aTest) (38 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongWideRange(org.apache.commons.math3.random.Well19937cTest) (10766 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextGamma(org.apache.commons.math3.random.Well1024aTest) (28 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntNegativeRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (15 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testFloatDirect(org.apache.commons.math3.random.Well19937cTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextT(org.apache.commons.math3.random.Well44497aTest) (155 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextPermutation(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextWeibull(org.apache.commons.math3.random.RandomDataGeneratorTest) (8 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well19937cTest) (7 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testConfig(org.apache.commons.math3.random.ISAACTest) (5 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well44497bTest) (12 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextCauchy(org.apache.commons.math3.random.BitsStreamGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testWeightedConsistency(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (1 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationFF4(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (6 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.UniformRealDistributionTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testSinAccuracy(org.apache.commons.math3.util.FastMathTest) (1037 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextPermutation(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLong2(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testSampling(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (3852 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well1024aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextBeta(org.apache.commons.math3.random.Well19937aTest) (121 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextBeta(org.apache.commons.math3.random.Well512aTest) (120 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.ISAACTest) (8 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNexBytes(org.apache.commons.math3.random.BitsStreamGeneratorTest) (266 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testDoubleDirect(org.apache.commons.math3.random.MersenneTwisterTest) (25 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNexBytes(org.apache.commons.math3.random.ISAACTest) (289 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testModes(org.apache.commons.math3.random.ValueServerTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextBeta(org.apache.commons.math3.random.Well19937cTest) (122 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongWideRange(org.apache.commons.math3.random.Well44497bTest) (11823 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextChiSquare(org.apache.commons.math3.random.Well44497aTest) (166 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregationConsistency(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextF(org.apache.commons.math3.random.Well44497bTest) (246 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testPowAccuracy(org.apache.commons.math3.util.FastMathTest) (3291 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNexBytes(org.apache.commons.math3.random.Well44497aTest) (223 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well19937aTest) (17 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextHex(org.apache.commons.math3.random.Well19937cTest) (37 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextSample(org.apache.commons.math3.random.Well512aTest) (6 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLong2(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextHex(org.apache.commons.math3.random.Well44497bTest) (35 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextPoisson(org.apache.commons.math3.random.MersenneTwisterTest) (43 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextPermutation(org.apache.commons.math3.random.BitsStreamGeneratorTest) (5 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationDF3(org.apache.commons.math3.util.Decimal64Test) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntWideRange(org.apache.commons.math3.random.Well512aTest) (528 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testLogAccuracy(org.apache.commons.math3.util.FastMathTest) (1873 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntDirect(org.apache.commons.math3.random.Well512aTest) (6893 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextBooleanDirect(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testSampling(org.apache.commons.math3.distribution.GammaDistributionTest) (7 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testConfig(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNexBoolean2(org.apache.commons.math3.random.Well44497aTest) (19 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntWideRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (630 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLong2(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well44497aTest) (24174 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationDF3(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (6 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextHex(org.apache.commons.math3.random.BitsStreamGeneratorTest) (80 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testExpAccuracy(org.apache.commons.math3.util.FastMathTest) (2271 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextChiSquare(org.apache.commons.math3.random.Well1024aTest) (166 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextT(org.apache.commons.math3.random.Well1024aTest) (151 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well19937cTest) (11 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well1024aTest) (6 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testSampling(org.apache.commons.math3.distribution.TDistributionTest) (200 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testDoubleDirect(org.apache.commons.math3.random.Well512aTest) (32 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextWeibull(org.apache.commons.math3.random.Well44497bTest) (9 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest.testCrossProduct(org.apache.commons.math3.geometry.euclidean.threed.Vector3DTest) (59 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testConfig(org.apache.commons.math3.random.Well19937aTest) (3 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationFF3(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well19937aTest) (18 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextPascal(org.apache.commons.math3.random.Well19937cTest) (59 ms)</li><li>org.apache.commons.math3.distribution.DiscreteIntegerDistributionTest.testSample(org.apache.commons.math3.distribution.DiscreteIntegerDistributionTest) (1066 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testFloatDirect(org.apache.commons.math3.random.Well512aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextBinomial(org.apache.commons.math3.random.Well1024aTest) (43 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformExtremeValues(org.apache.commons.math3.random.RandomDataGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well1024aTest) (17 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.ISAACTest) (9 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationFF2(org.apache.commons.math3.util.Decimal64Test) (1 ms)</li><li>org.apache.commons.math3.util.MathUtilsTest.testPermutedArrayHash(org.apache.commons.math3.util.MathUtilsTest) (2 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextWeibull(org.apache.commons.math3.random.ISAACTest) (9 ms)</li><li>org.apache.commons.math3.distribution.CauchyDistributionTest.testSampling(org.apache.commons.math3.distribution.CauchyDistributionTest) (6 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGaussian(org.apache.commons.math3.random.BitsStreamGeneratorTest) (41 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well44497aTest) (17 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextGaussian(org.apache.commons.math3.random.Well44497aTest) (42 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextHypergeometric(org.apache.commons.math3.random.Well19937cTest) (36 ms)</li><li>org.apache.commons.math3.util.MathArraysTest.testLinearCombination2(org.apache.commons.math3.util.MathArraysTest) (112 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationFaFa(org.apache.commons.math3.util.Decimal64Test) (3 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.RandomDataGeneratorTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextChiSquare(org.apache.commons.math3.random.Well44497bTest) (165 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testReseed(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testReseed(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextT(org.apache.commons.math3.random.RandomDataGeneratorTest) (168 ms)</li><li>org.apache.commons.math3.distribution.BinomialDistributionTest.testSampling(org.apache.commons.math3.distribution.BinomialDistributionTest) (69 ms)</li><li>org.apache.commons.math3.random.SynchronizedRandomGeneratorTest.testMath899Sync(org.apache.commons.math3.random.SynchronizedRandomGeneratorTest) (20491 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well1024aTest) (17 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.RandomDataGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextChiSquare(org.apache.commons.math3.random.Well19937cTest) (164 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNexBoolean2(org.apache.commons.math3.random.ISAACTest) (8 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (21 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testReferenceCode(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextFloatDirect(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.Well1024aTest) (9 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextExponential(org.apache.commons.math3.random.ISAACTest) (38 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well44497aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextPermutation(org.apache.commons.math3.random.Well44497aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextGaussian(org.apache.commons.math3.random.Well19937cTest) (41 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextInt2(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextChiSquare(org.apache.commons.math3.random.BitsStreamGeneratorTest) (164 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextBinomial(org.apache.commons.math3.random.ISAACTest) (72 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well19937cTest) (19 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testSeeding(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntNeg(org.apache.commons.math3.random.Well1024aTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.BitsStreamGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationDaFa(org.apache.commons.math3.util.Decimal64Test) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testReferenceCode(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextExponential(org.apache.commons.math3.random.Well19937cTest) (19 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntNegativeRange(org.apache.commons.math3.random.MersenneTwisterTest) (13 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testDoubleDirect(org.apache.commons.math3.random.Well44497bTest) (42 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextSample(org.apache.commons.math3.random.Well1024aTest) (5 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextInversionDeviate(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextPascal(org.apache.commons.math3.random.RandomDataGeneratorTest) (60 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformExtremeValues(org.apache.commons.math3.random.MersenneTwisterTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextZipf(org.apache.commons.math3.random.BitsStreamGeneratorTest) (285 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextExponential(org.apache.commons.math3.random.Well44497aTest) (19 ms)</li><li>org.apache.commons.math3.distribution.NormalDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.NormalDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongNegativeRange(org.apache.commons.math3.random.ISAACTest) (22 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntDirect(org.apache.commons.math3.random.MersenneTwisterTest) (7501 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest.testSampling(org.apache.commons.math3.distribution.MultivariateNormalMixtureModelDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNexBoolean2(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationDaFa(org.apache.commons.math3.dfp.DfpTest) (72 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testReseed(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextHex(org.apache.commons.math3.random.Well19937aTest) (33 ms)</li><li>org.apache.commons.math3.distribution.PoissonDistributionTest.testSampling(org.apache.commons.math3.distribution.PoissonDistributionTest) (22 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testExpm1Accuracy(org.apache.commons.math3.util.FastMathTest) (1129 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextSample(org.apache.commons.math3.random.Well44497bTest) (4 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNexBytes(org.apache.commons.math3.random.Well44497bTest) (259 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testConfig(org.apache.commons.math3.random.MersenneTwisterTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntIAE2(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testReferenceCode(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongNegativeRange(org.apache.commons.math3.random.MersenneTwisterTest) (16 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testSampling(org.apache.commons.math3.distribution.FDistributionTest) (239 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntDirect(org.apache.commons.math3.random.Well19937aTest) (7366 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextIntWideRange(org.apache.commons.math3.random.Well19937aTest) (583 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNexBoolean2(org.apache.commons.math3.random.Well512aTest) (9 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testSampling(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (218 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextF(org.apache.commons.math3.random.BitsStreamGeneratorTest) (279 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testToRadians(org.apache.commons.math3.util.FastMathTest) (562 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well19937cTest) (14 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextPermutation(org.apache.commons.math3.random.RandomDataGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.BitsStreamGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformExtremeValues(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextExponential(org.apache.commons.math3.random.Well44497bTest) (21 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationDF4(org.apache.commons.math3.dfp.DfpTest) (31 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntWideRange(org.apache.commons.math3.random.Well1024aTest) (574 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntPositiveRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (19 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGamma(org.apache.commons.math3.random.BitsStreamGeneratorTest) (27 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextSample(org.apache.commons.math3.random.Well44497aTest) (4 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextBeta(org.apache.commons.math3.random.MersenneTwisterTest) (127 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextPoisson(org.apache.commons.math3.random.Well1024aTest) (43 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testNext(org.apache.commons.math3.random.EmpiricalDistributionTest) (164 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntIAE2(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongPositiveRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (19 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testSeeding(org.apache.commons.math3.random.ISAACTest) (3 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextF(org.apache.commons.math3.random.Well512aTest) (245 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.TDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testReferenceCode(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testWithInitialCapacity(org.apache.commons.math3.util.ResizableDoubleArrayTest) (2 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntExtremeValues(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.MersenneTwisterTest) (11 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.LogNormalDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextPoisson(org.apache.commons.math3.random.RandomDataGeneratorTest) (53 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationDaFa(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (9 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongWideRange(org.apache.commons.math3.random.Well1024aTest) (9598 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well1024aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextBooleanDirect(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextFloatDirect(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well1024aTest) (14 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well512aTest) (6 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntNeg(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well1024aTest) (18 ms)</li><li>org.apache.commons.math3.distribution.DiscreteRealDistributionTest.testIssue942(org.apache.commons.math3.distribution.DiscreteRealDistributionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testFloatDirect(org.apache.commons.math3.random.Well44497aTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextSample(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testReseed(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.util.ResizableDoubleArrayTest.testWithInitialCapacityAndExpansionFactor(org.apache.commons.math3.util.ResizableDoubleArrayTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well512aTest) (15 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextHypergeometric(org.apache.commons.math3.random.RandomDataGeneratorTest) (40 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongWideRange(org.apache.commons.math3.random.Well19937aTest) (10195 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.BitsStreamGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextBinomial(org.apache.commons.math3.random.RandomDataGeneratorTest) (47 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.ISAACTest) (14 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextGamma(org.apache.commons.math3.random.Well512aTest) (31 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationFF2(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (3 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testReseed(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testAtan2Accuracy(org.apache.commons.math3.util.FastMathTest) (1853 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextPascal(org.apache.commons.math3.random.Well1024aTest) (60 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextBooleanDirect(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextHex(org.apache.commons.math3.random.Well1024aTest) (36 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testFit(org.apache.commons.math3.fitting.PolynomialFitterTest) (3 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongWideRange(org.apache.commons.math3.random.Well512aTest) (9134 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntDirect(org.apache.commons.math3.random.Well1024aTest) (7437 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest.testDotProduct(org.apache.commons.math3.geometry.euclidean.threed.FieldVector3DTest) (212 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntPositiveRange(org.apache.commons.math3.random.MersenneTwisterTest) (17 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLong2(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongDirect(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationFF3(org.apache.commons.math3.dfp.DfpTest) (27 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testReferenceCode(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well512aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testDoubleDirect(org.apache.commons.math3.random.Well19937cTest) (20 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testDistributionClone(org.apache.commons.math3.random.EmpiricalDistributionTest) (250 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.FDistributionTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testSeeding(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well19937aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextBinomial(org.apache.commons.math3.random.Well44497aTest) (43 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextF(org.apache.commons.math3.random.MersenneTwisterTest) (248 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextBinomial(org.apache.commons.math3.random.Well512aTest) (43 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextInt2(org.apache.commons.math3.random.Well44497bTest) (5 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGridTooFine(org.apache.commons.math3.random.EmpiricalDistributionTest) (200 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well44497aTest) (19 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well44497bTest) (19 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well19937aTest) (27108 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextCauchy(org.apache.commons.math3.random.Well1024aTest) (5 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (17 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextLongPositiveRange(org.apache.commons.math3.random.MersenneTwisterTest) (17 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongDirect(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextPermutation(org.apache.commons.math3.random.Well19937aTest) (3 ms)</li><li>org.apache.commons.math3.distribution.PascalDistributionTest.testSampling(org.apache.commons.math3.distribution.PascalDistributionTest) (63 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testSeeding(org.apache.commons.math3.random.Well44497bTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testWeightedConsistency(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextInt2(org.apache.commons.math3.random.ISAACTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testReseed(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextBooleanDirect(org.apache.commons.math3.random.ISAACTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextBooleanDirect(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLong2(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well44497bTest) (18 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.Well512aTest) (11 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextT(org.apache.commons.math3.random.Well19937aTest) (153 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextPermutation(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testNextDigest(org.apache.commons.math3.random.ValueServerTest) (46 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregate(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (3 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextZipf(org.apache.commons.math3.random.Well19937aTest) (213 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextGaussian(org.apache.commons.math3.random.ISAACTest) (52 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNexBoolean2(org.apache.commons.math3.random.BitsStreamGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextGamma(org.apache.commons.math3.random.MersenneTwisterTest) (28 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.BitsStreamGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well1024aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextPermutation(org.apache.commons.math3.random.Well44497bTest) (3 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testReseed(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.MersenneTwisterTest) (12 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextPoissonConsistency(org.apache.commons.math3.random.ISAACTest) (28014 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextPoisson(org.apache.commons.math3.random.Well19937aTest) (48 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextSample(org.apache.commons.math3.random.ISAACTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well19937cTest) (19 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testFloatDirect(org.apache.commons.math3.random.MersenneTwisterTest) (5 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testAcosAccuracy(org.apache.commons.math3.util.FastMathTest) (23888 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntPositiveRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (32 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextWeibull(org.apache.commons.math3.random.Well1024aTest) (8 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLong2(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongNegativeRange(org.apache.commons.math3.random.Well19937aTest) (17 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextGaussian(org.apache.commons.math3.random.RandomDataGeneratorTest) (41 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextWeibull(org.apache.commons.math3.random.Well512aTest) (7 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextBeta(org.apache.commons.math3.random.ISAACTest) (133 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.RandomDataGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testTanAccuracy(org.apache.commons.math3.util.FastMathTest) (1582 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextHypergeometric(org.apache.commons.math3.random.Well19937aTest) (36 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextGamma(org.apache.commons.math3.random.RandomDataGeneratorTest) (29 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testFixedSeed(org.apache.commons.math3.random.ValueServerTest) (13 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well44497aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextFloatDirect(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformExclusiveEndpoints(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationFaFa(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (11 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testDoubleDirect(org.apache.commons.math3.random.Well19937aTest) (39 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextPascal(org.apache.commons.math3.random.Well44497aTest) (58 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextInversionDeviate(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntNeg(org.apache.commons.math3.random.Well512aTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongExtremeValues(org.apache.commons.math3.random.ISAACTest) (2 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntIAE2(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextSample(org.apache.commons.math3.random.MersenneTwisterTest) (6 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntNegativeRange(org.apache.commons.math3.random.Well44497bTest) (15 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextExponential(org.apache.commons.math3.random.BitsStreamGeneratorTest) (37 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextGaussian(org.apache.commons.math3.random.Well512aTest) (39 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.WeibullDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNexBytes(org.apache.commons.math3.random.MersenneTwisterTest) (401 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextCauchy(org.apache.commons.math3.random.ISAACTest) (87 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextPoisson(org.apache.commons.math3.random.ISAACTest) (42 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (9 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationDF4(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (5 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testFloatDirect(org.apache.commons.math3.random.ISAACTest) (4 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well44497bTest) (17 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextExponential(org.apache.commons.math3.random.Well512aTest) (16 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well512aTest) (6 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationDF3(org.apache.commons.math3.dfp.DfpTest) (27 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextCauchy(org.apache.commons.math3.random.Well44497bTest) (5 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well19937cTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well44497aTest) (7 ms)</li><li>org.apache.commons.math3.random.SynchronizedRandomGeneratorTest.testAdapter(org.apache.commons.math3.random.SynchronizedRandomGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongDirect(org.apache.commons.math3.random.ISAACTest) (3 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntNegativeRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (23 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testDoubleRotations(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (1797 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformExtremeValues(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (6376 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextBooleanDirect(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testLog1pAccuracy(org.apache.commons.math3.util.FastMathTest) (1371 ms)</li><li>org.apache.commons.math3.distribution.WeibullDistributionTest.testSampling(org.apache.commons.math3.distribution.WeibullDistributionTest) (6 ms)</li><li>org.apache.commons.math3.distribution.HypergeometricDistributionTest.testSampling(org.apache.commons.math3.distribution.HypergeometricDistributionTest) (86 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testSampling(org.apache.commons.math3.distribution.LogNormalDistributionTest) (5 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextGaussian(org.apache.commons.math3.random.Well44497bTest) (42 ms)</li><li>org.apache.commons.math3.distribution.TriangularDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.TriangularDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextUniformUniformMaximalInterval(org.apache.commons.math3.random.Well19937aTest) (7 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextBinomial(org.apache.commons.math3.random.MersenneTwisterTest) (45 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationDF4(org.apache.commons.math3.util.Decimal64Test) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well1024aTest) (25398 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well1024aTest) (6 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntDirect(org.apache.commons.math3.random.Well19937cTest) (8291 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNexBoolean2(org.apache.commons.math3.random.Well1024aTest) (4 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextT(org.apache.commons.math3.random.ISAACTest) (162 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.ISAACTest) (11 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextBooleanDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextGamma(org.apache.commons.math3.random.Well44497bTest) (28 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextExponential(org.apache.commons.math3.random.Well1024aTest) (21 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testSeeding(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testCosAccuracy(org.apache.commons.math3.util.FastMathTest) (1040 ms)</li><li>org.apache.commons.math3.distribution.ZipfDistributionTest.testSampling(org.apache.commons.math3.distribution.ZipfDistributionTest) (113 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongDirect(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.util.Decimal64Test.testLinearCombinationDF2(org.apache.commons.math3.util.Decimal64Test) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testNextDouble(org.apache.commons.math3.random.StableRandomGeneratorTest) (234 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testReSeed(org.apache.commons.math3.random.EmpiricalDistributionTest) (154 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextBooleanDirect(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextCauchy(org.apache.commons.math3.random.Well19937aTest) (5 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testFloatDirect(org.apache.commons.math3.random.Well44497bTest) (4 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextFloatDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.distribution.UniformIntegerDistributionTest.testSampling(org.apache.commons.math3.distribution.UniformIntegerDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextWeibull(org.apache.commons.math3.random.MersenneTwisterTest) (9 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongPositiveRange(org.apache.commons.math3.random.ISAACTest) (23 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongPositiveRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (22 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextPoisson(org.apache.commons.math3.random.Well19937cTest) (48 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testConfig(org.apache.commons.math3.random.Well44497aTest) (3 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongNegativeToPositiveRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.MersenneTwisterTest) (12 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntPositiveRange(org.apache.commons.math3.random.ISAACTest) (29 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextWeibull(org.apache.commons.math3.random.Well44497aTest) (8 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextCauchy(org.apache.commons.math3.random.Well512aTest) (4 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationFF4(org.apache.commons.math3.dfp.DfpTest) (31 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextSample(org.apache.commons.math3.random.Well19937aTest) (5 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextLongWideRange(org.apache.commons.math3.random.ISAACTest) (8799 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextLongWideRange(org.apache.commons.math3.random.BitsStreamGeneratorTest) (4657 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongDirect(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextExponential(org.apache.commons.math3.random.RandomDataGeneratorTest) (20 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextHex(org.apache.commons.math3.random.MersenneTwisterTest) (34 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextPoissonConsistency(org.apache.commons.math3.random.MersenneTwisterTest) (23794 ms)</li><li>org.apache.commons.math3.linear.SchurTransformerTest.testRandomDataNormalDistribution(org.apache.commons.math3.linear.SchurTransformerTest) (607 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextChiSquare(org.apache.commons.math3.random.RandomDataGeneratorTest) (186 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntWideRange(org.apache.commons.math3.random.Well19937cTest) (635 ms)</li><li>org.apache.commons.math3.distribution.ExponentialDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.ExponentialDistributionTest) (2 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testLog10Accuracy(org.apache.commons.math3.util.FastMathTest) (3008 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.RandomDataGeneratorTest) (7 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testSeeding(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextBeta(org.apache.commons.math3.random.Well44497bTest) (125 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextLong2(org.apache.commons.math3.random.Well44497bTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextIntExtremeValues(org.apache.commons.math3.random.BitsStreamGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testConfig(org.apache.commons.math3.random.Well44497bTest) (3 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextLongDirect(org.apache.commons.math3.random.Well1024aTest) (2 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationFF2(org.apache.commons.math3.dfp.DfpTest) (21 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntIAE2(org.apache.commons.math3.random.ISAACTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testReferenceCode(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well512aTest) (16 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.MersenneTwisterTest) (8 ms)</li><li>org.apache.commons.math3.dfp.DfpTest.testLinearCombinationFaFa(org.apache.commons.math3.dfp.DfpTest) (70 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextCauchy(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextLongPositiveRange(org.apache.commons.math3.random.Well44497aTest) (18 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextLongNegativeRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (18 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.RandomDataGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.Well512aTest) (6 ms)</li><li>org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest.testDoubleVectors(org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest) (815 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testReference(org.apache.commons.math3.random.ISAACTest) (5 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextZipf(org.apache.commons.math3.random.Well512aTest) (221 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntDirect(org.apache.commons.math3.random.Well44497bTest) (8306 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextInversionDeviate(org.apache.commons.math3.random.ISAACTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextUniformUniformNegativeToPositiveBounds(org.apache.commons.math3.random.Well44497aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextIntIAE2(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGridTooFat(org.apache.commons.math3.random.EmpiricalDistributionTest) (167 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testFloatDirect(org.apache.commons.math3.random.Well1024aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextIntPositiveRange(org.apache.commons.math3.random.Well512aTest) (16 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextPoisson(org.apache.commons.math3.random.Well44497bTest) (54 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntNeg(org.apache.commons.math3.random.ISAACTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextT(org.apache.commons.math3.random.Well512aTest) (158 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextT(org.apache.commons.math3.random.BitsStreamGeneratorTest) (236 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextGaussian(org.apache.commons.math3.random.Well1024aTest) (40 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextChiSquare(org.apache.commons.math3.random.ISAACTest) (172 ms)</li><li>org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest.testLinearCombinationDF2(org.apache.commons.math3.analysis.differentiation.DerivativeStructureTest) (5 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGeneratorConfig(org.apache.commons.math3.random.EmpiricalDistributionTest) (159 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextLongExtremeValues(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextIntNegativeToPositiveRange(org.apache.commons.math3.random.MersenneTwisterTest) (10 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextUniformUniformNegaiveBounds(org.apache.commons.math3.random.BitsStreamGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextCauchy(org.apache.commons.math3.random.MersenneTwisterTest) (5 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testDoubleDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (24 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextPoissonConsistency(org.apache.commons.math3.random.Well44497bTest) (27545 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNexBytes(org.apache.commons.math3.random.Well1024aTest) (134 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextT(org.apache.commons.math3.random.Well19937cTest) (151 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextHypergeometric(org.apache.commons.math3.random.Well1024aTest) (38 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextUniformUniformPositiveBounds(org.apache.commons.math3.random.Well44497bTest) (8 ms)</li><li>org.apache.commons.math3.util.FastMathTest.testCoshAccuracy(org.apache.commons.math3.util.FastMathTest) (18841 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextPascal(org.apache.commons.math3.random.Well512aTest) (57 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextInt2(org.apache.commons.math3.random.Well512aTest) (3 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextIntIAE2(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextIntExtremeValues(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextIntDirect(org.apache.commons.math3.random.ISAACTest) (8089 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextZipf(org.apache.commons.math3.random.Well44497aTest) (222 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextCauchy(org.apache.commons.math3.random.Well44497aTest) (6 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testFloatDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (3 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.29
+
+</body>
+</html>
