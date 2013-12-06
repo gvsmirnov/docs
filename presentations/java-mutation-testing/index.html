@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
 
-        <title>Java mutation testing</title>
+        <title>Java Mutation Analysis</title>
 
         <link href="css/impress.css" rel="stylesheet"/>
         <link href="css/prettify.css" rel="stylesheet"/>
@@ -19,9 +19,8 @@
         <div id="impress">
 
             <div class="step slide" data-x="1500" style="text-align: center;">
-                <h1>Мутационное тестирование</h1>
-                <h2>или</h2>
-		<h2>о чём молчит Code Coverage</h2>
+                <h1>Mutation Analysis:</h1>
+		<h2>What Code Coverage Doesn't Tell Us</h2>
                 <br/>
                 <br/>
                 <br/>
@@ -40,13 +39,13 @@
             -->
 
             <div class="step" data-x="3000">
-                <h2>Качество тестов иногда оставляет желать лучшего</h2>
+                <h2>Sometimes, the tests leave a lot to be desired</h2>
                 <pre class='mono prettyprint lang-java'>public class NodeMapperTest {
 
     @Test
     public void testGetMachineById() {
         // The boss says we should write tests.
-        // Here you are, he-he-he.
+        // Well, here you are. He-he.
 
         Assert.assertTrue(true);
     }
@@ -55,7 +54,7 @@
             </div>
 
             <div class="step" data-x="3000" data-y="1000">
-                <h2>За ним можно следить с помощью Code Coverage</h2>
+                <h2>And we can check that using Code Coverage</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean -Dtest=NodeMapperTest#testGetMachineById test jacoco:report</pre>
 
                 <pre class="mono prettyprint lang-java" data-jmpress="fade">
@@ -76,7 +75,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="3000" data-y="1600">
-                <h2>Но Code Coverage очень легко обмануть</h2>
+                <h2>But Code Coverage is easily tricked</h2>
                 <pre class='mono prettyprint lang-java'>private static final Map&lt;String, List&lt;Long&gt;&gt; MACHINES = /* ... */
 
 @Test
@@ -89,7 +88,7 @@ public void testGetMachineById2() {
             </div>
 
             <div class="step" data-x="3000" data-y="2400">
-                <h2>И получить хорошие метрики</h2>
+                <h2>And the reports are saying it's cool</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean -Dtest=NodeMapperTest#testGetMachineById2 test jacoco:report</pre>
                 <pre class="mono prettyprint lang-java" data-jmpress="fade">
 public class NodeMapper {
@@ -110,7 +109,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="3000" data-y="3200">
-                <center><img src="img/yo-dawg.jpg"/></center>
+                <center><img src="img/zoidberg.jpg"/></center>
             </div>
 
             <!--
@@ -120,38 +119,37 @@ public class NodeMapper {
             -->
 
             <div class="step" data-x="4500">
-                <h2>Мутационное Тестирование судит судей</h2>
+                <h2>Mutation Analysis judges the judges</h2>
                 <ol>
-                    <li data-jmpress="fade">Запустить тесты</li>
-                    <li data-jmpress="fade">Поменять что-то в исходниках</li>
-                    <li data-jmpress="fade">Запустить тесты снова</li>
-                    <li data-jmpress="fade">Какие-то тесты должны упасть</li>
+                    <li data-jmpress="fade">Run the tests</li>
+                    <li data-jmpress="fade">Change the sources</li>
+                    <li data-jmpress="fade">Run the tests again</li>
+                    <li data-jmpress="fade">Some tests have to fail</li>
                 </ol>
-                <h3 data-jmpress="fade">Если изменения в коде не заставляют упасть ни один тест, то участок кода,
-                    скорее всего, плохо протестирован</h3>
+                <h3 data-jmpress="fade">If a change is not making any test fail, the line is <span class="nc">not covered</span>.</h3>
+                <h3 data-jmpress="fade">Otherwise, the changed line is considered to be <span class="fc">covered</span></h3>
             </div>
 
             <div class="step" data-x="4500" data-y="800">
-                <h2>Мутационное Тестирование придумали уже давно</h2>
+                <h2>The notion itself is not new at all</h2>
                 <p>
                     <ul>
-                        <li data-jmpress="fade">Richard Lipton предложил идею в 1971</li>
+                        <li data-jmpress="fade">Richard Lipton suggested the idea 1971</li>
                         <li data-jmpress="fade">
-                            Timothy Budd реализовал первую библиотеку<br/>
-                            для FORTRAN в 1979<sup>[1]</sup>
+                            Timothy Budd implemented the first FORTRAN framework in 1979<sup>[1]</sup>
                         </li>
                         <li style="margin-top: 20pt; list-style-type: none; color: #a9a9a9;" data-jmpress="fade">
-                            <img src="img/nothing_happens.png" />
+                            <h1 class="fail">A MEME GOES HERE</h1>
                         </li>
                         <li style="margin-top: 20pt;" data-jmpress="fade">
-                            К 2010 мутационное тестирование наконец находит применение в индустрии
+                            By the year of 2010 people have finally started using it in production
                         </li>
                     </ul>
                 </p>
             </div>
 
             <div class="step" data-x="4500" data-y="1600">
-                <h2>Хороших библиотек для Java мало</h2>
+                <h2>There are few good java libraries out there</h2>
                 <p>
                 <ul>
                     <li>Javalanche</li>
@@ -161,42 +159,42 @@ public class NodeMapper {
                 </ul>
                 <div class="step spoiler" data-y="350">
                     <h3>
-                        Все эти <span class="fail">не</span> хороши,
-                        так как они как минимум <small class="remark">(одно из)</small>
+                        All of the above are <span class="fail">not</span> good,
+                        as they are <small class="remark">(at least one of)</small>
                     </h3>
                     <ul>
-                        <li>Заброшены</li>
-                        <li>Устарели</li>
-                        <li>Тормозят</li>
-                        <li>Не поддерживают популярные библиотеки</li>
+                        <li>Abandoned</li>
+                        <li>Outdated</li>
+                        <li>Painfully slow</li>
+                        <li>Don't support the required frameworks</li>
                     </ul>
                 </div>
                 </p>
             </div>
 
             <div class="step" data-x="4500" data-y="2400">
-                <h2>Но есть Pitest (PIT)</h2>
+                <h2>Then there's pitest <span class="remark">aka PIT</span></h2>
                 <p>
                     <ul>
-                        <li data-jmpress="fade">Активно разрабатывается</li>
-                        <li data-jmpress="fade">Производительность приемлема</li>
-                        <li data-jmpress="fade">Открытый исходный код</li>
-                        <li data-jmpress="fade">Поддерживает Java 7, Maven, JUnit, *Mock*, ...</li>
+                        <li data-jmpress="fade">Actively developed</li>
+                        <li data-jmpress="fade">Acceptable performance</li>
+                        <li data-jmpress="fade">Open Source</li>
+                        <li data-jmpress="fade">Supports Java 7, Maven, JUnit, *Mock* etc.</li>
                     </ul>
                 </p>
             </div>
 
             <div class="step" data-x="4500" data-y="3200">
-                <h2>Таблица сравнения<sup>[2]</sup></h2>
+                <h2>Comparison table<sup>[2]</sup></h2>
                 <table class="comparison-table">
                     <tr>
-                        <td class="name">Система</td>
+                        <td class="name">System</td>
                         <td>Ant</td>
                         <td>Maven</td>
                         <td>Java 7</td>
                         <td>TestNG</td>
                         <td>*Mock*</td>
-                        <td>Последнее обновление</td>
+                        <td>Last Updated</td>
                     </tr>
                     <tr>
                         <td class="name">Javalanche</td>
@@ -241,17 +239,17 @@ public class NodeMapper {
                         <td class="yes">YES</td>
                         <td class="yes">YES</td>
                         <td class="yes">6/6</td>
-                        <td class="yes">Вчера</td>
+                        <td class="yes">Yesterday</td>
                     </tr>
                 </table>
             </div>
 
             <div class="step" data-x="4500" data-y="3600">
-                <h1 class="success">Pitest жжот!</h1>
+                <h1 class="success">Pitest rocks!</h1>
             </div>
 
             <div class="step" data-x="4500" data-y="4300">
-                <h2>Pitest замечает, что тест бесполезен</h2>
+                <h2>PIT detects the useless test</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean -Dtest=NodeMapperTest#testGetMachineById2 test pitest:mutationCoverage</pre>
                 <table data-jmpress="fade">
                     <tr>
@@ -286,7 +284,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="4500" data-y="4300" data-rotate-y="90">
-                <h2>PIT сломал исходный код (1)</h2>
+                <h2>PIT messes with your code (1)</h2>
                 <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
     if(<span class="nb">!</span>nodeId2machine.containsKey(nodeId)) {
         return nodeId2machine.get(nodeId);
@@ -298,7 +296,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="4500" data-y="4300" data-rotate-y="90" data-z="-1100">
-                <h2>PIT сломал исходный код (2)</h2>
+                <h2>PIT messes with your code (2)</h2>
                 <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
     if(nodeId2machine.containsKey(nodeId)) {
         <span class="nb">if(nodeId2machine.get(nodeId) != null) {
@@ -314,7 +312,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="4500" data-y="4300" data-rotate-y="90" data-z="-2200">
-                <h2>PIT сломал исходный код (3)</h2>
+                <h2>PIT messes with your code (3)</h2>
                 <pre class="mono prettyprint lang-java">public String getMachineById(long nodeId) {
     if(nodeId2machine.containsKey(nodeId)) {
         return nodeId2machine.get(nodeId);
@@ -330,7 +328,7 @@ public class NodeMapper {
             </div>
 
             <div class="step" data-x="4500" data-y="4900">
-                <h2>Придётся написать нормальный тест</h2>
+                <h2>So we have to write a proper test this time</h2>
                 <pre class='mono prettyprint lang-java'>@Test
 public void testGetMachineById3() {
     NodeMapper nodeMapper = new NodeMapper(MACHINES);
@@ -380,6 +378,7 @@ public void testGetMachineById3() {
             </div>
 
             <div class="step" data-x="4500" data-y="6800">
+                <h2>PIT has also found a bug</h2>
                 <table>
                     <tr>
                         <td class="line-numbers"><pre class="mono">7
@@ -430,39 +429,40 @@ public void testGetMachineById3() {
             -->
 
             <div class="step" data-x="6000">
-                <h2>Протестируйте свои тесты в три простых шага</h2>
-                <ol>
-                    <li data-jmpress="fade">Выбрать что-нибудь, чтобы помутировать</li>
-                    <li data-jmpress="fade">Помутировать что-нибудь</li>
-                    <li data-jmpress="fade">Проверить, не упало ли что-нибудь</li>
+                <h2>Test your stuff in three easy steps</h2>
+                <ol class="bigger">
+                    <li data-jmpress="fade">Pick stuff to mutate</li>
+                    <li data-jmpress="fade">Mutate said stuff</li>
+                    <li data-jmpress="fade">Check if stuff fails</li>
                 </ol>
             </div>
 
             <div class="step" data-x="6000" data-y="800">
-                <h2>Выбор целей для мутации</h2>
+                <h2>Picking stuff to mutate</h2>
                 <ol>
-                    <li data-jmpress="fade">Скомпилировать исходники в байт-код</li>
-                    <li data-jmpress="fade">Запустить нужные тесты</li>
-                    <li data-jmpress="fade">Собрать детальный Code Coverage:<br/>
-                        какие тесты выполняют какие инструкции</li>
+                    <li data-jmpress="fade">Compile the sources to bytecode</li>
+                    <li data-jmpress="fade">Run the selected tests</li>
+                    <li data-jmpress="fade">Gather detailed Code Coverage info:<br/>
+                        which tests execute which instructions</li>
                 </ol>
             </div>
 
             <div class="step" data-x="6000" data-y="1600">
-                <h2>Создание мутантов</h2>
+                <h2>Creating mutant overlords</h2>
                 <img src="img/genetic-experiments.png" align="left" style="padding-right: 80px;">
                 <div>
 
                     <ol>
-                        <li data-jmpress="fade">Сгенерировать классы-мутанты с помощью ASM</li>
+                        <li data-jmpress="fade">Use ASM to generate mutations</li>
                         <li data-jmpress="fade">
-                            Мутации должны быть предсказуемыми и стабильными<br/>
-                            От запуска к запуску поведение не должно меняться
+                            The mutations must be predictable and stable.<br/>
+                            The behavior may not change between runs
                         </li>
 
                         <li data-jmpress="fade">
-                            Должно быть как можно меньше эквивалентных мутаций<br/><br/>
-                            <span data-jmpress="fade">Эквивалентная мутация &dash; мутация, в результате которой наблюдаемое поведение программы не меняется<br/><br/>Выжившие эквивалентные мутации &dash; ложные срабатывания.</span>
+                            Avoid false positives<br/><br/>
+                            <span data-jmpress="fade"><b>Equivalent mutation</b>:
+                                a mutation which results in no observable change in behavior</span>
                         </li>
 
                     </ol>
@@ -475,7 +475,7 @@ public void testGetMachineById3() {
                 <h2>CONDITIONALS_BOUNDARY<br/>
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Меняет операции сравнения: включительные на невключительные и наоборот</p>
+                <p>Changes the inequalities checks from strict to non-strict and vice versa</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -497,7 +497,7 @@ public void testGetMachineById3() {
                 <h2>NEGATE_CONDITIONALS
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Меняет условия, заменяя их на противоположные</p>
+                <p>Negates Conditionals</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -516,14 +516,14 @@ public void testGetMachineById3() {
             </div>
             
 	    <div class="step spoiler" style="text-align: center;" data-duration="1200" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-1100">
-                <img src="img/total-recall.jpg"/>
+                <h1 class="fail">A MUTATION PICTURE GOES HERE</h1>
 	    </div>
 
             <div class="step" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-2200">
                 <h2>MATH
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Заменяет бинарные операторы по таблице</p>
+                <p>Replaces binary operations by their counterparts</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -535,7 +535,7 @@ public void testGetMachineById3() {
                         </td>
                     </tr>
                 </table>
-                <p data-jmpress="fade">Также меняет инкременты/декременты полей</p>
+                <p data-jmpress="fade">Also mutates field increments/decrements</p>
                 <table>
                     <tr>
                         <td>
@@ -555,7 +555,7 @@ public void testGetMachineById3() {
 1: dup
 2: getfield
 5: iconst_1
-6: iadd <span data-jmpress="fade"># &larr; сложение</span>
+6: iadd <span data-jmpress="fade"># &larr; addition</span>
 7: putfield
 10: return</pre>
                         </td>
@@ -568,7 +568,7 @@ public void testGetMachineById3() {
                     <small class="success">[on by default]</small>
                 </h2>
                 <p>
-                    Заменяет операции инкремента на декремент и наоборот<br/>
+                    Swaps increments to decrements and vice versa<br/>
                 </p>
                 <table class="before-after">
                     <tr>
@@ -582,7 +582,7 @@ public void testGetMachineById3() {
                     </tr>
                 </table>
                 <p data-jmpress="fade">
-                    NB: Работает только для локальных переменных
+                    NB: only works on local variables
                 </p>
             </div>
 
@@ -590,7 +590,7 @@ public void testGetMachineById3() {
                 <h2>INVERT_NEGS
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Убирает унарный минус у чисел</p>
+                <p>Removes the unary minus operator</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -608,7 +608,7 @@ public void testGetMachineById3() {
                 <h2>RETURN_VALS
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Меняет возвращаемое методом значение</p>
+                <p>Changes the value returned by a method</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -632,7 +632,7 @@ public void testGetMachineById3() {
                 <h2>VOID_METHOD_CALLS
                     <small class="success">[on by default]</small>
                 </h2>
-                <p>Удаляет вызов void-методов</p>
+                <p>Removes a call to a void method</p>
                 <table class="before-after">
                     <tr>
                         <td>
@@ -661,7 +661,7 @@ public void bar() {
                 <h2>INLINE_CONSTS
                     <small class="fail">[off by default]</small>
                 </h2>
-                <p>Меняет значения, присваемые не-final локальным переменным</p>
+                <p>Changes literal values assigned to locals</p>
                 <table class="before-after">
                     <tr>
                         <td><p>Before:</p>
@@ -677,14 +677,14 @@ public void bar() {
                         </td>
                     </tr>
                 </table>
-                <p data-jmpress="fade">Может порождать много Runtime Exceptions</p>
+                <p data-jmpress="fade">Could spawn lots of RuntimeExceptions</p>
             </div>
 
             <div class="step" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-8800">
                 <h2>NON_VOID_METHOD_CALLS<br/>
                     <small class="fail">[off by default]</small>
                 </h2>
-                <p>Удаляет вызов метода, подставляет присвоение значения по умолчанию</p>
+                <p>Removes a method call, replaces by assigning the default value</p>
                 <table class="before-after">
                     <tr>
                         <td>
@@ -707,14 +707,14 @@ public void bar() {
                         </td>
                     </tr>
                 </table>
-                <p data-jmpress="fade">Порождает много эквивалентных мутаций, много NullPointerException</p>
+                <p data-jmpress="fade">Could spawn lots of NullPointerExceptions and equivalent mutations</p>
             </div>
 
             <div class="step" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-10200">
                 <h2>CONSTRUCTOR_CALLS
                     <small class="fail">[off by default]</small>
                 </h2>
-                <p>Заменяет вызов конструктора присвоением null</p>
+                <p>Removes a constructor call, to be replaced by assignment of null</p>
                 <table class="before-after">
                     <tr>
                         <td>
@@ -731,14 +731,14 @@ public void bar() {
                         </td>
                     </tr>
                 </table>
-                <p data-jmpress="fade">Порождает много NullPointerException</p>
+                <p data-jmpress="fade">Spawns lots of NullPointerException</p>
             </div>
 
             <div class="step" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-12000">
                 <h2>EXPERIMENTAL_INLINE_CONSTS<br/>
                     <small class="fail">[off by default]</small>
                 </h2>
-                <p>Пока не стабильная, но более консистентная замена INLINE_CONSTS</p>
+                <p>Here to replace INLINE_CONSTS, has more consistent behavior</p>
                 <table class="before-after">
                     <tr>
                         <td>
@@ -757,8 +757,7 @@ public void bar() {
                 <h2>EXPERIMENTAL_MEMBER_VARIABLE<br/>
                     <small class="fail">[off by default]</small>
                 </h2>
-                <p>Заменяет значения, присвоенные полям при инициализации,
-                    <br/>на значения по умолчанию</p>
+                <p>Replaces values asigned to fields by default values</p>
                 <table class="before-after">
                     <tr>
                         <td>
@@ -777,7 +776,7 @@ public void bar() {
                         </td>
                     </tr>
                 </table>
-                <p>Может порождать много эквивалентных мутаций</p>
+                <p>Could generate lots of equivalent mutations</p>
             </div>
 
             <div class="step" data-x="6000" data-y="1600" data-rotate-y="90" data-z="-15000">
@@ -811,25 +810,26 @@ switch(a) {
             </div>
 
             <div class="step" data-x="6000" data-y="2400">
-                <h2>Запустить тесты, сгенерировать отчёты</h2>
+                <h2>Running the analysis</h2>
                 <ol>
-                    <li data-jmpress="fade">Выбрать очередного мутанта</li>
-                    <li data-jmpress="fade">С помощью Instrumentation API подменить классы</li>
+                    <li data-jmpress="fade">Pick a mutant</li>
+                    <li data-jmpress="fade">Use Instrumentation API to replace the original</li>
                     <li data-jmpress="fade">
-                        Запускать с ним тесты до первого упавшего (и убившего этим мутанта)<br/>
-                        <span data-jmpress="fade">Опасаться:</span>
+                        Run the tests until one of them fails (and hence kills the mutant)<br/>
+                        <span data-jmpress="fade">Watch out for:</span>
                         <ul>
-                            <li data-jmpress="fade after 1ms">Долго работающих тестов (мог появиться бесконечный цикл)</li>
-                            <li data-jmpress="fade">OOM (могла появиться утечка памяти)</li>
-                            <li data-jmpress="fade">Ошибок валидации (сгенерировался некорректный байткод)</li>
-                            <li data-jmpress="fade">Runtime exceptions</li>
+                            <li data-jmpress="fade after 1ms">Tests working way too long (could have introduced an infinite loop)</li>
+                            <li data-jmpress="fade">Out Of Memory errors (could have introduced a memory leak)</li>
+                            <li data-jmpress="fade">JVM crashing (you get the idea)</li>
+                            <li data-jmpress="fade">Runtime exceptions (not conclusive)</li>
                         </ul>
                     </li>
                 </ol>
             </div>
 
             <div class="step" data-x="6000" data-y="3200">
-                <h2>Единица работы &dash; исходный класс</h2>
+                <h2>Unit of work is a source class</h2>
+                <h2 class="fail">Translate this!</h2>
                 <center><img src="img/balancing.png"/></center>
             </div>
 
@@ -840,35 +840,38 @@ switch(a) {
             -->
 
             <div class="step" data-x="9000" style="text-align: center;">
-                <h2>Три закона TDD</h2>
+                <h2>The three laws of TDD</h2>
 		    <img data-jmpress="fade" src="img/fight-club.jpg" />
             </div>
 
-	    <div class="step" data-x="10100">
-                 <h2>Первый Закон TDD</h2>
-		 <p>Нельзя писать продакшн-код, если это не чинит падающий тест</p>
+	    <div class="step" data-x="10100" style="text-align: center;">
+                 <h2>The first law of TDD is</h2>
+		 <p class="cool-quote">You do not write any production code<br/>
+             Unless it is to make a failing unit test pass</p>
 	    </div>
 
-	    <div class="step" data-x="11200">
-                 <h2>Второй Закон TDD</h2>
-		 <p>Нельзя писать тестов больше, чем нужно для создания ошибки <br/><span class="remark">(ошибка компиляции &dash; тоже ошибка)</span></p>
+	    <div class="step" data-x="11200" style="text-align: center;">
+                 <h2>The second law of TDD is</h2>
+		 <p class="cool-quote">You do not write any more of a unit test than is sufficient to fail<br/>
+             <span class="remark">And compilation failures are failures</span></p>
 	    </div>
 
-	    <div class="step" data-x="12300">
-                 <h2>Третий Закон TDD</h2>
-		 <p>Нельзя писать больше продакшн-кода, чем нужно, чтобы единственный <br/> падающий тест заработал</p>
+	    <div class="step" data-x="12300" style="text-align: center;">
+                 <h2>The third law of TDD is</h2>
+		 <p class="cool-quote">You do not write any production code<br/>
+             More than is sufficient to pass the one failing unit test</p>
 	    </div>
 
             <div class="step" data-x="9000" data-y=800>
-                <h2>PIT даёт <span class="success">уверенность</span> в тестах</h2>
+                <h2>PIT grants you <span class="success">confidence</span> in your tests</h2>
                 <p data-jmpress="fade">
-                    История успеха от TheLadders.com<sup>[4]</sup>
+                    A success story from TheLadders.com<sup>[4]</sup>
                     <ul>
-                        <li data-jmpress="fade">Новый проект с нуля, используют Mutation Testing с самого начала</li>
-                        <li data-jmpress="fade">Code and Mutation Coverage около <span class="success">95%</span></li>
-                        <li data-jmpress="fade">Потребовалось перевести ядро системы на event sourcing</li>
-                        <li data-jmpress="fade">Код отрефакторили, добились того, чтобы все тесты проходили, и выкатились в продакшн</li>
-                        <li data-jmpress="fade">Ни единого разрыва!</li>
+                        <li data-jmpress="fade">A project from scratch, PIT used from the stard</li>
+                        <li data-jmpress="fade">Code and Mutation Coverage of about <span class="success">95%</span></li>
+                        <li data-jmpress="fade">Needed to refactor the core to use event sourcing</li>
+                        <li data-jmpress="fade">The code was refactored, the tests greened out, and it was rolled out</li>
+                        <li data-jmpress="fade">Not a single issue!<sup>*</sup></li>
                     </ul>
                 </p>
             </div>
@@ -881,15 +884,15 @@ switch(a) {
             -->
 
             <div class="step" data-x="7500">
-                <h2>Это же должно жутко тормозить!</h2>
+                <h2>Okay, that must be excruciatingly slow!</h2>
                 <p>
-                    Возьмём большую и хорошо покрытую тестами библиотеку и проверим экспериментально
+                    Let's take an allegedly well-covered library and give it a go
                 </p>
                 <h2 data-jmpress="fade">Apache commons-math</h2>
                 <ul>
-                    <li data-jmpress="fade">Много сложных математических алгоритмов</li>
-                    <li data-jmpress="fade">177 тысяч строк исходного кода</li>
-                    <li data-jmpress="fade">Около 5000 тестов в 109 тысяч строк кода</li>
+                    <li data-jmpress="fade">Loads of complex mathematical algorithms</li>
+                    <li data-jmpress="fade">177K lines of source code</li>
+                    <li data-jmpress="fade">About 5000 tests in 109K lines of code</li>
                 </ul>
             </div>
 
@@ -907,7 +910,7 @@ switch(a) {
             </div>
 
             <div class="step" data-x="7500" data-y="2000">
-                <h2>Baseline: просто Code Coverage</h2>
+                <h2>Baseline: good old Code Coverage</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean test jacoco:report
 
 <span data-jmpress="appear">...</span>
@@ -925,21 +928,21 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
                 
 
                 <p class="info" data-jmpress="appear">
-                    Общий Code Coverage составляет 92%
+                    The total Code Coverage is impressive: 92%
                 </p>
 
             </div>
 	    
 	    <div data-x="7500" data-y="2000" class="step spoiler warn shipilev">
                 <img src="img/shipilev.png" align="left"/>
-                NB: maven наверняка при первом запуске будет скачивать десятки jar-файлов.<br/>
-                Не учитывайте это в своих в измерениях.
+                NB: maven is likely to download quite a few jars the first time it's run<br/>
+                Don't forget to exclude that from your stats.
                 <br/><br/>
-                И вообще, делайте бенчмарки хорошо и не делайте их плохо.
+                The rule of thumb is that you should not make bad benchmarks and make good ones instead.
             </div>
 
             <div class="step" data-x="7500" data-y="3000">
-                <h2>Мутационный анализ</h2>
+                <h2>Mutation Analysis</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean test pitest:mutationCoverage
 <span data-jmpress="appear">...</span>
 <span data-jmpress="appear after 300ms">================================================================================
@@ -953,7 +956,7 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 > Total  : <span class="nb">4 hours, 14 minutes and 46 seconds</span></span></pre>
 
                 <p class="info" data-jmpress="appear">
-                    Общий Mutation Coverage составляет 79%
+                    The total Mutation Coverage is 79%
                 </p>
 
             </div>
@@ -963,7 +966,7 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
             </div>
 
             <div class="step" data-x="7500" data-y="4000">
-                <h2>Можно добавить ещё потоков</h2>
+                <h2>We could throw in more threads</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean test pitest:mutationCoverage <span class="nb">-Dpit.threads=2</span>
 <span data-jmpress="appear">...</span>
 <span data-jmpress="appear after 300ms">================================================================================
@@ -976,33 +979,32 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 <span data-jmpress="appear">--------------------------------------------------------------------------------
 > Total  : <span class="nb">2 hours, 29 minutes and 33 seconds</span></span></pre>
                 <p class="info" data-jmpress="appear">
-                    Улучшение почти линейное
+                    The improvement is nearly linear
                 </p>
 
             </div>
 
             <div class="step graph" data-x="7500" data-y="4000" data-rotate-y="90">
-                <h2>Время анализа apache commons-math3</h2>
                 <img src="img/performance-graph-commons-math3.png"/>
             </div>
 
             <div class="step graph" data-x="7500" data-y="4000" data-rotate-y="90" data-z="-1500">
-                <h2>Нагрузка на ядра CPU</h2>
+                <h2>CPU load over time</h2>
                 <img src="img/core-load.png"/>
             </div>
 
             <div class="step graph" data-x="7500" data-y="4000" data-rotate-y="90" data-z="-3000">
-                <h2>Нагрузка на ядра CPU</h2>
+                <h2>CPU load over time <span class="fail">TODO: translate</span></h2>
                 <img src="img/core-load-explained.png"/>
             </div>
 
             <div class="step graph" data-x="7500" data-y="4000" data-rotate-y="90" data-z="-4500">
-                <h2>Улучшено в pitest 0.30</h2>
+                <h2>Improved in pitest 0.30<span class="fail">TODO: translate</span></h2>
                 <img src="img/core-load-improved.png"/>
             </div>
 
             <div class="step graph" data-x="7500" data-y="4000" data-rotate-y="90" data-z="-6000">
-                <h2>Улучшено ещё в pitest 0.31</h2>
+                <h2>Improved further in pitest 0.31<span class="fail">TODO: translate</span></h2>
                 <img src="img/core-load-improved-more.png"/>
             </div>
 
@@ -1011,35 +1013,35 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 	    </div>
 
             <div class="step" data-x="7500" data-y="5300">
-                <h2>Инкрементальный анализ</h2>
-                <h3 data-jmpress="fade">Между запусками сохраняются мета-данные</h3>
+                <h2>Incremental analysis</h2>
+                <h3 data-jmpress="fade">Some metadata is stored in-between runs</h3>
                 <ul>
-                    <li data-jmpress="fade">Хеши всех тестируемых классов</li>
-                    <li data-jmpress="fade">Хеши всех запущенных тестов</li>
-                    <li data-jmpress="fade">Результаты анализа</li>
+                    <li data-jmpress="fade">The hashes of all tested classes</li>
+                    <li data-jmpress="fade">The hashes of all the tests</li>
+                    <li data-jmpress="fade">Analysis results</li>
                 </ul>
             </div>
 
             <div class="step" data-x="7500" data-y="6000">
-                <h3>При повторном запуске применяются эвристики<br/>
-                Мутант не будет снова проверяться, если он в прошлый раз</h3>
+                <h3>During each following run, some heuristics are applied.<br/>
+                A mutant will not be checked again, if the last time it:</h3>
                 <ul>
-                    <li data-jmpress="fade"><font color="#00008b">затаймаутился</font>, а класс с ним не изменился</li>
-                    <li data-jmpress="fade">был <font color="#008b00">убит</font>, а ни класс ни тест не изменились</li>
-                    <li data-jmpress="fade"><font color="#8b0000">выжил</font>, а новых тестов для него нет, и старые не изменились</li>
+                    <li data-jmpress="fade"><font color="#00008b">timed out</font>, and the class has not changed</li>
+                    <li data-jmpress="fade">was <font color="#008b00">killed</font>, and neither the class nor the test have changed</li>
+                    <li data-jmpress="fade"><font color="#8b0000">survived</font>, and there are no new/changed tests for it</li>
                 </ul>
             </div>
 
             <div class="step" data-x="7500" data-y="6700">
-                <h3>А что с зависимостями?</h3>
+                <h3>Okay, what of the dependencies?</h3>
                 <p data-jmpress="fade">
-                    PIT учитывает только изменения в самом классе, в его предках и в outer классе, если он есть<br/><br/>
-                    <span data-jmpress="fade">Но не учитывает изменения в используемых классах</span>
+                    PIT only considers the changed make to superclasses or outer classes <span class="remark">(if any)</span><br/><br/>
+                    <span data-jmpress="fade">It does not take into account changes made to dependencies</span>
                 </p>
             </div>
 
             <div class="step" data-x="7500" data-y="7600">
-                <h2>Overhead инкрементального анализа</h2>
+                <h2>Overhead induced by incremental analysis</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean test pitest:mutationCoverage <span class="nb">-P pit-history</span> -Dpit.threads=4
 
 <span data-jmpress="fade">...
@@ -1054,12 +1056,12 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 > Total  : <span class="nb">1 hours, 2 minutes and 59 seconds</span></span></pre>
 
                 <p class="info" data-jmpress="fade">
-                    Сохранение мета-информации почти бесплатное
+                    Meta-info is saved nearly for free
                 </p>
             </div>
 
             <div class="step" data-x="7500" data-y="7600" data-rotate-y="90">
-                <h2>PIT обнаружил бесполезный код!</h2>
+                <h2>PIT has found some useless code!</h2>
                 <table style="padding-top: 1px; margin-top: -60px;">
                     <tr>
                         <td class="line-numbers"><pre class="mono">
@@ -1100,7 +1102,7 @@ createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
             </div>
 
             <div class="step" data-x="7500" data-y="7600" data-rotate-y="90" data-z="-1500">
-                <h2>Запустим тесты снова</h2>
+                <h2>Let's run the tests on the updated code base</h2>
                 <pre class="mono console"><span class="prompt">$</span> mvn clean test pitest:mutationCoverage <span class="nb">-P pit-history</span> -Dpit.threads=24
 
 <span data-jmpress="fade">...
@@ -1117,17 +1119,17 @@ createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
             </div>
 
             <div class="step" data-x="7500" data-y="8600">
-                <h2>На менее крупных проектах время работы несущественно</h2>
-                <p data-jmpress="fade"><b>Joda Time</b> &dash; библиотека, позволяющая удобно работать с датами и временем</p>
+                <h2>The elapsed time is negligible on simpler projects</h2>
+                <p data-jmpress="fade"><b>Joda Time</b> &dash; an awesome library that lets youwork with dates and times</p>
                 <ul>
-                    <li data-jmpress="fade">68 тысяч строк кода</li>
-                    <li data-jmpress="fade">70 тысяч строк кода в тестах</li>
-                    <li data-jmpress="fade"><h2>Мутационный анализ выполняется<br/>за 5 минут</h2></li>
+                    <li data-jmpress="fade">68K lines of code</li>
+                    <li data-jmpress="fade">70K lines of test code</li>
+                    <li data-jmpress="fade"><h2>Mutation analysis is done in under 7 minutes</h2></li>
                 </ul>
             </div>
 
             <div class="step" id="reading-material" data-x="1100" data-y="800">
-                <h2>Полезно почитать</h2>
+                <h2>Reading material</h2>
                 <ol>
                     <li>Mutation Analysis [1979]: Budd, Lipton, DeNillo, Sayward<br/>
                         <a href="http://www.cs.yale.edu/publications/techreports/tr155.pdf">
@@ -1156,17 +1158,17 @@ createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
             </div>
 
             <div class="step" id="try-me" data-x="1100" data-y="1600">
-                <h2>Сделай сам</h2>
+                <h2>Do It Yourself</h2>
                 <pre class="console mono">$ git clone git@github.com:gvsmirnov/docs.git
 $ cd docs/presentations/java-mutation-testing</pre>
-                <h2>Снова посмотреть презентацию</h2>
+                <h2>See this presentation again</h2>
                 <p><a href="http://gvsmirnov.ru/docs/presentations/java-mutation-testing/">http://gvsmirnov.ru/docs/presentations/java-mutation-testing/</a><br/>
-                    <small class="remark">Точно работает в Yandex.Browser и Google Chrome последних версий на Mac OS X</small>
+                    <small class="remark">Is sure to work in Webkit-based browsers on Mac OS, may have issues on other browsers/platforms</small>
                 </p>
             </div>
 
 	    <div class="step graph" id="qr" data-x="1100" data-y="2600">
-                <img src="img/qr.png"/>
+                <img src="img/qr.png" style="height: 600px; width: auto;"/>
 	    </div>
 
             <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>
