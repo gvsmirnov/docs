@@ -1129,6 +1129,105 @@ createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
                 </ul>
             </div>
 
+            <!-- GRAIN OF SALT -->
+
+            <div class="step" data-x="10500" data-y="0">
+                <center><img src="img/excited.jpg"/></center>
+            </div>
+
+            <div class="step" data-x="10500" data-y="1000">
+                <center>
+                    <h2>Probably, there's nothing perfect in existence</h2>
+                </center>
+            </div>
+
+            <div class="step" data-x="10500" data-y="1500">
+                <h3>PIT is not perfect either</h3>
+                <p>
+                    <pre class='mono prettyprint lang-java'>public int evaluate(final int distance) {
+    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");
+    }
+
+    int result = 0;
+
+    if(distance > 0) {
+        result += calculateDistanceAdjustment(distance);
+    }
+
+    return result;
+}</pre>
+                </p>
+            </div>
+
+            <div class="step" data-x="10500" data-y="2500">
+                <h2>PIT vs Defensive Programming</h2>
+                <table style="padding-top: 1px; margin-top: -60px;">
+                    <tr>
+                        <td class="line-numbers"><pre class="mono">5
+<span class="fc">6
+7</span>
+8
+9
+<span class="fc">10</span>
+11
+<span class="nc">12</span>
+<span class="fc">13</span>
+14
+15
+<span class="fc">16</span>
+17</pre></td>
+                        <td><pre class="mono prettyprint lang-java">public int evaluate(final int distance) {
+<span class="fc">    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");</span>
+    }
+
+<span class="fc">    int result = 0;</span>
+
+<span class="nc">    if(distance > 0) {</span>
+<span class="fc">        result += calculateDistanceAdjustment(distance);</span>
+    }
+
+<span class="fc">    return result;</span>
+}</pre></td>
+                    </tr>
+                </table>
+                <h3>Mutations</h3>
+                <ol class="mutation-list mono">
+                    <li class="nc">12: changed conditional boundary → SURVIVED</li>
+                </ol>
+            </div>
+
+            <div class="step" data-x="10500" data-y="4000">
+                <h2>PIT vs Dangerous Code</h2>
+                <p>
+                    <pre class='mono prettyprint lang-java'>public static void rectify(String path) {
+    ensurePathIsSecure(path);
+
+    rmRf(path);
+}
+
+private static final void rmRf(String path) {
+    System.out.println("$ rm -rf " + path);
+    // Actually remove the directory
+}</pre>
+                </p>
+            </div>
+
+            <div class="step" data-x="10500" data-y="5500">
+                <h2>I accidentally your data</h2>
+                <pre class="mono">
+stderr  : PIT >> Running mutation  <span class="remark">[...]</span>
+          mutator=VoidMethodCallMutator,
+          description=<span class="fail">removed call to Minitrue::ensurePathIsSecure</span>
+          <span data-jmpress="fade">testsInOrder=[<span class="fail">MinitrueTest.testRectifySecurity</span> <span class="remark">[...]</span>]</span>
+<span class="remark" data-jmpress="fade">stderr  : PIT >> mutating method rectify
+stderr  : PIT >> 2 relevant test for rectify
+stderr  : PIT >> replaced class with mutant in 2 ms
+stderr  : PIT >> Running 1 units</span>
+<span class="fail" data-jmpress="fade">stdout  : $ rm -rf /</span></pre>
+            </div>
+
             <div class="step" id="reading-material" data-x="1100" data-y="800">
                 <h2>Reading material</h2>
                 <ol>

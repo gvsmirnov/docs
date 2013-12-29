@@ -39,6 +39,7 @@ public class NodeMapperTest {
     }
 
     @Test
+    @Ignore
     public void testGetMachineById4() {
         final String defaultMachineName = "myDefault";
         NodeMapper nodeMapper = new NodeMapper(MACHINES, defaultMachineName);
