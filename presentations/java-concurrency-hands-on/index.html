@@ -12,14 +12,15 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/jmpress.impress.js"></script>
-    <script src="js/prettify.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
 </head>
 <body>
 
-    <div class="alert alert-danger navbar-fixed-top text-center">
+    <div class="alert alert-warning navbar-fixed-top text-center">
         Under construction. Unless you have been explicitly given this link, you should probably go away right now.
+        Also, don't share this link, please.
     </div>
 
     <div id="impress">
@@ -43,7 +44,7 @@
             </div>
         </div>
 
-        <div class="step">
+        <div class="step step-slide">
             <h1>Leaky Abstractions</h1>
 
             <ul>
@@ -69,7 +70,7 @@
             </div>
         </div>
 
-        <div class="step" data-x="1300">
+        <div class="step step-slide" data-x="1300">
             <h1>Just Another Brick In The Wall</h1>
 
             <ul>
@@ -88,13 +89,13 @@
             </ul>
         </div>
 
-        <div class="step spoiler" data-x="1300">
+        <div class="step step-slide spoiler" data-x="1300">
             <div class="jumbotron text-center">
                 <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Caches!</span></h1>
             </div>
         </div>
 
-        <div class="step" data-x="2600">
+        <div class="step step-slide" data-x="2600">
             <h1>Moore's Law</h1>
 
             <blockquote>
@@ -108,20 +109,20 @@
 
         </div>
 
-        <div class="step" data-x="3900">
+        <div class="step step-slide" data-x="3900">
             <div class="text-center">
                 <img class="graph" src="img/moores-law.jpg"/>
             </div>
         </div>
 
-        <div class="step" data-x="5200">
+        <div class="step step-slide" data-x="5200">
             <div class="text-center">
                 <!-- http://queue.acm.org/detail.cfm?id=2181798 -->
                 <img class="graph scale-to-fit-h" src="img/horowitz_fig7.png"/>
             </div>
         </div>
 
-        <div class="step" data-x="6500">
+        <div class="step step-slide" data-x="6500">
             <h1 class="text-smaller">One Does Not Simply Increase Clock Rate</h1>
 
             <ul>
@@ -140,13 +141,13 @@
             </ul>
         </div>
 
-        <div class="step spoiler" data-x="6500">
+        <div class="step step-slide spoiler" data-x="6500">
             <div class="jumbotron text-center">
                 <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Multi-Core!</span></h1>
             </div>
         </div>
 
-        <div class="step" data-y="800">
+        <div class="step step-slide" data-y="800">
             <h1>Parallelize And Conquer</h1>
 
             <ul>
@@ -162,7 +163,7 @@
             </ul>
         </div>
 
-        <div class="step" data-y="800" data-x="1300">
+        <div class="step step-slide" data-y="800" data-x="1300">
             <h1>Cache Coherency</h1>
 
             <blockquote>
@@ -181,7 +182,7 @@
             </div>
         </div>
 
-        <div class="step" data-y="800" data-x="2600">
+        <div class="step step-slide" data-y="800" data-x="2600">
             <h1>Cache Coherency Protocols</h1>
 
             <ul>
@@ -200,7 +201,7 @@
             </ul>
         </div>
 
-        <div class="step" data-y="800" data-x="3900">
+        <div class="step step-slide" data-y="800" data-x="3900">
             <h1>MESI <span class="text-muted">(Just An Example, Mind You)</span></h1>
 
             <p data-jmpress="fade">
@@ -223,7 +224,7 @@
             </ul>
         </div>
 
-        <div class="step" data-y="800" data-x="5200">
+        <div class="step step-slide" data-y="800" data-x="5200">
             <h1>Store Buffers</h1>
 
             <ul>
@@ -243,7 +244,93 @@
             </ul>
         </div>
 
-        <div class="step" id="overview"data-x="3000" data-y="1500" data-scale="10"></div>
+        <div class="step nested-steps" data-y="800" data-x="6500">
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="150">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1>
+                            What could <i>possibly</i> go wrong?
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="250">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+finished: Exclusive
+value: Invalid
+</pre>
+                    </div>
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+finished: Invalid
+value: Exclusive
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="350">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-6">
+<pre class="prettyprint lang-java">
+while(!finished);
+&larr; read(finished)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="450">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+value = 10;
+- store_buffer(value)
+&larr; read_invalidate(value)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="600">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+finished = true;
+- finished: Modified
+
+&rarr; read(finished)
+&larr; read_response(finished, true)
+- finished: Shared
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" id="overview"data-x="3000" data-y="1500" data-scale="10"></div>
     </div>
 
     <script type="text/javascript">
@@ -252,14 +339,18 @@
                 "mouse": { clickSelects: false },
                 "beforeChange": function(element, eventData) {
                     element = $(element);
-                    if(element.is('tr')) {
+                    if(element.is('tr') || element.hasClass("visit-me")) {
                         element.addClass('visited'); // code should not be hidden after visiting
                     }
                 }
             });
         });
 
-        prettyPrint();
+        !function ($) {
+            $(function(){
+                window.prettyPrint && prettyPrint()
+            })
+        }(window.jQuery)
     </script>
 </body>
 </html>
