@@ -264,7 +264,7 @@ void executedOnCpu1() {
                 </div>
             </div>
 
-            <div class="step visit-me" data-y="150">
+            <div class="step visit-me" data-y="200">
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h1>
@@ -274,7 +274,7 @@ void executedOnCpu1() {
                 </div>
             </div>
 
-            <div class="step visit-me" data-y="250">
+            <div class="step visit-me" data-y="350">
                 <div class="row">
                     <div class="col-md-6">
 <pre class="prettyprint lang-java">
@@ -291,7 +291,7 @@ value: Exclusive
                 </div>
             </div>
 
-            <div class="step visit-me" data-y="350">
+            <div class="step visit-me" data-y="500">
                 <div class="row">
                     <div class="col-md-6 col-md-offset-6">
 <pre class="prettyprint lang-java">
@@ -302,19 +302,19 @@ while(!finished);
                 </div>
             </div>
 
-            <div class="step visit-me" data-y="450">
+            <div class="step visit-me" data-y="550">
                 <div class="row">
                     <div class="col-md-6">
 <pre class="prettyprint lang-java">
 value = 10;
 - store_buffer(value)
-&larr; read_invalidate(value)
+&larr; invalidate(value)
 </pre>
                     </div>
                 </div>
             </div>
 
-            <div class="step visit-me" data-y="600">
+            <div class="step visit-me" data-y="800">
                 <div class="row">
                     <div class="col-md-6">
 <pre class="prettyprint lang-java">
@@ -328,6 +328,52 @@ finished = true;
                     </div>
                 </div>
             </div>
+
+            <div class="step visit-me" data-y="900">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; read_response(finished, true)
+- finished: Shared (true)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1000">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+<pre class="prettyprint lang-java">
+assert value == 10;
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1100">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+                        <div class="alert alert-danger">
+                            <p>
+                                Assertion fails
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1230">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; invalidate(value)
+- value: Invalid
+&larr; invalidate_ack(value)
+</pre>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="step step-slide" id="overview"data-x="3000" data-y="1500" data-scale="10"></div>
