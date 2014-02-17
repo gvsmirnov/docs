@@ -26,5 +26,20 @@ Live Demo:
 * Show how ```do_LoadField``` adds a ```membar_acquire```
 * Go to ```share/vm/c1/c1_LIRAssembler.cpp``` and show what's emitted on x86
 * Remove special handling of volatile fields and see what happens
-
 * RUN FOR YOUR LIVES!!!
+
+Java Threading Under The Hood
+-----------------------------
+
+Presentation:
+* Visibility is just not enough
+* Atomicity
+* Mutual Exclusion
+* Monitor: Thin, Fat, Biased
+  * synchronized blocks
+  * j.u.c.locks
+* Synchronization
+  * wait/notify
+  * LockSupport
+  * j.u.c.{CountDownLatch, Phaser, CyclicBarrier, ...}
+
