@@ -575,6 +575,232 @@ assert value == 10;
 
         <!-- INVALIDATE QUEUES END -->
 
+        <!-- HMM -->
+
+        <div class="step step-slide" data-y="3000" data-x="5200">
+            <h1>Hardware Memory Model</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    Hardware engineers cannot know <b>in advance</b> when optimizations could break stuff and when they won't
+                </li>
+                <li data-jmpress="fade">
+                    Software engineers know how their code <b>should</b> behave
+                </li>
+                <li data-jmpress="fade">
+                    They need the ability to <b>influence</b> hardware optimizations
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="3000" data-x="6500">
+            <h1>Store Memory Barriers In MESI</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    Some stores <code>S<sub>1</sub></code> were placed to the Store Buffer
+                </li>
+                <li data-jmpress="fade">
+                    A <b>Store Memory Barrier</b> was issued
+                </li>
+                <li data-jmpress="fade">
+                    More stores <code>S<sub>2</sub></code> were executed
+                </li>
+                <li class="list-unstyled">
+                    &nbsp;
+                </li>
+                <li data-jmpress="fade">
+                    All the stores from <code>S<sub>1</sub></code> will be committed
+                    <b>before</b> any store from <code>S<sub>2</sub></code>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="3000" data-x="7800">
+            <h1>Load Memory Barriers In MESI</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    Some invalidation requests <code>I</code> were placed to the Invalidate Queue
+                </li>
+                <li data-jmpress="fade">
+                    A <b>Load Memory Barrier</b> was issued
+                </li>
+                <li data-jmpress="fade">
+                    Some operations <code>OPS</code> come next in the program order
+                </li>
+                <li class="list-unstyled">
+                    &nbsp;
+                </li>
+                <li data-jmpress="fade">
+                    All the invalidations from <code>I</code> will be executed
+                    <b>before</b> anything from <code>OPS</code>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step nested-steps" data-y="3000" data-x="9100">
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    Magic.storeMemoryBarrier();
+    finished = true;
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    Magic.loadMemoryBarrier();
+    assert value == 10;
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="200">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1>
+                            Everyone <i>loves</i> magic <snan class="text-muted">(and unicorns)</snan>!
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="350">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+finished: Exclusive
+value: Shared
+</pre>
+                    </div>
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+finished: Invalid
+value: Shared
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="500">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-6">
+<pre class="prettyprint lang-java">
+while(!finished);
+&larr; read(finished)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="550">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+value = 10;
+- store_buffer(value)
+&larr; invalidate(value)
+
+<span data-jmpress="fade">Magic.storeMemoryBarrier();</span>
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="700">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-6">
+<pre class="prettyprint lang-java">
+&rarr; invalidate(value)
+&larr; invalidate_ack(value)
+- invalidate_queue(value)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="900">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; invalidate_ack(value)
+- writeback(value, 10)
+- value: Exclusive
+
+<span data-jmpress="fade">finished = true;
+- finished: Modified</span>
+
+<span data-jmpress="fade">&rarr; read(finished)
+&larr; read_response(finished, true)
+- finished: Shared</span>
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1200">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; read_response(finished, true)
+- finished: Shared (true)
+
+<span data-jmpress="fade">Magic.loadMemoryBarrier();</span>
+
+<span data-jmpress="fade">- value: Invalid</span>
+
+<span data-jmpress="fade">assert value == 10;
+&larr; read(value)</span>
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1400">
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; read(value)
+&larr; read_response(value, 10)
+- value: Shared
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1450">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+<pre class="prettyprint lang-java">
+&rarr; read_response(value, 10)
+- value: Shared (10)
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step visit-me" data-y="1570">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+                        <div class="alert alert-success">
+                            <p>
+                                Assertion passes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- HMM ENDS -->
+
         <div class="step step-slide spoiler" id="overview"data-x="3000" data-y="1500" data-scale="10">
 
             <div class="jumbotron text-center">

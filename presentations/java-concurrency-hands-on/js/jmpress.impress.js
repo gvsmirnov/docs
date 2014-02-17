@@ -2365,7 +2365,7 @@
 			});
 		}
 		$.each(eventData.current.animationCleanupWaiting, function(idx, item) {
-			cleanupAnimation(item);
+			//cleanupAnimation(item);
 		});
 		eventData.current.animationCleanupWaiting = [];
 		var substepsData = $(step).data("substepsData");
