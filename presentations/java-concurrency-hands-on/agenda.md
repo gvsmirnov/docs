@@ -1,10 +1,8 @@
-Java Concurrency Intro: OpenJDK Hands-On
-========================================
+# Java Concurrency Intro: OpenJDK Hands-On
 
-Java Memory Model Under The Hood
---------------------------------
+## Java Memory Model Under The Hood
 
-Presentation:
+### Presentation:
 * Leaky abstractions
 * Memory Wall that introduces caches
 * Multiple processors
@@ -15,7 +13,7 @@ Presentation:
 * Higher-level abstractions (LoadLoad, LoadStore, StoreLoad, StoreStore)
 * Acquire/release semantics
 
-Live Demo:
+### Live Demo:
 * Use jcstress to demonstrate how things will fail without ```volatile``` (```fences/UnfencedAcquireReleaseTest.java```)
 * Write up a simple class with acquire/release
 * Walk through its bytecode
@@ -28,10 +26,9 @@ Live Demo:
 * Remove special handling of volatile fields and see what happens
 * RUN FOR YOUR LIVES!!!
 
-Java Threading Under The Hood
------------------------------
+## Java Threading Under The Hood
 
-Presentation:
+### Presentation:
 * Visibility is just not enough
 * Atomicity
 * Mutual Exclusion
