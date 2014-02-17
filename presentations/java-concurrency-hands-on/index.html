@@ -66,7 +66,7 @@
             </ul>
         </div>
 
-        <div class="step spoiler">
+        <div class="step step-slide spoiler">
             <div class="text-center">
                 <img class="graph scale-to-fit-h" src="img/go-deeper.jpg"/>
             </div>
@@ -575,7 +575,7 @@ assert value == 10;
 
         <!-- INVALIDATE QUEUES END -->
 
-        <!-- HMM -->
+        <!-- MESI BARRIERS -->
 
         <div class="step step-slide" data-y="3000" data-x="5200">
             <h1>Hardware Memory Model</h1>
@@ -634,7 +634,7 @@ assert value == 10;
                 </li>
                 <li data-jmpress="fade">
                     All the invalidations from <code>I</code> will be executed
-                    <b>before</b> anything from <code>OPS</code>
+                    <b>before</b> <br/>any operation from <code>OPS</code>
                 </li>
             </ul>
         </div>
@@ -799,7 +799,104 @@ value = 10;
 
         </div>
 
-        <!-- HMM ENDS -->
+        <!-- MESI BARRIERS END -->
+
+        <!-- MORE HIGH-LEVEL BARRIERS -->
+
+        <div class="step step-slide" data-y="5000">
+            <h1>Must Construct Additional Abstractions</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    There are many <b>different protocols</b> besides MESI
+                </li>
+                <li data-jmpress="fade">
+                    Many other things can result in <b>Out Of Order Execution</b>
+                </li>
+                <li data-jmpress="fade">
+                    Some may have <b>no notion</b> of a Store Buffer or Invalidate queue
+                </li>
+                <li data-jmpress="fade">
+                    Need to be able to reason about them <b>in general</b>
+                </li>
+                <li data-jmpress="fade">
+                    The concept of a <b>Load</b> or a <b>Store</b> still remains
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="5000" data-x="1300">
+            <h1>For X, Y in [Store, Load]:</h1>
+
+            <div class="text-center well" data-jmpress="fade">
+                <p>
+                    All the <code>X</code> operations that precede an <code>XY</code> barrier will complete
+                </p>
+                <p data-jmpress="fade">
+                    <b>before</b>
+                </p>
+                <p data-jmpress="fade">
+                    Any <code>Y</code> operation that succeeds the <code>XY</code> barrier starts
+                </p>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="5000" data-x="2600">
+            <h1>For Instance</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    Suppose some stores <code>S<sub>1</sub></code> were executed
+                </li>
+                <li data-jmpress="fade">
+                    A <code>StoreStore</code> memory barrier was issued
+                </li>
+                <li data-jmpress="fade">
+                    Some more stores <code>S<sub>2</sub></code> follow
+                </li>
+                <li class="list-unstyled">&nbsp;</li>
+                <li data-jmpress="fade">
+                    All the stores in <code>S<sub>1</sub></code> will complete <b>before</b>
+                    any store in <code>S<sub>2</sub></code> starts
+                </li>
+                <li data-jmpress="fade" class="list-unstyled text-muted">
+                    (Incidentally, this is the Store Memory Barrier in MESI)
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="5000" data-x="3900">
+            <h1>Acquire And Release Semantics</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    <p>
+                        All the memory operations:
+                    </p>
+                    <ul>
+                        <li data-jmpress="fade">
+                            preceding a <b>release</b> must complete before it starts<br/>
+                            <code>----------------] release</code>
+                        </li>
+                        <li data-jmpress="fade">
+                            following an <b>acquire</b> can't start before it completes<br/>
+                            <code>acquire [----------------</code>
+                        </li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="5000" data-x="3900">
+            <div class="text-center jumbotron">
+                <h1 style="color: #ea2d2e; margin-bottom: 20px;">Write Once</h1>
+                <img class="graph" src="img/wora.png"/>
+                <h1 style="color: #0074bd;">Run Anywhere</h1>
+            </div>
+        </div>
+
+        <!-- MORE HIGH-LEVEL BARRIERS END -->
 
         <div class="step step-slide spoiler" id="overview"data-x="3000" data-y="1500" data-scale="10">
 
