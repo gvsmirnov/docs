@@ -1,8 +1,8 @@
 Java Concurrency Intro: OpenJDK Hands-On
-----------------------------------------
+========================================
 
 Java Memory Model Under The Hood
-================================
+--------------------------------
 
 Presentation:
 * Leaky abstractions
