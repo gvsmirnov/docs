@@ -41,4 +41,6 @@
   * j.u.c.{CountDownLatch, Phaser, CyclicBarrier, ...}
 
 ### Live demo:
-* AtomicInteger (Unsafe#getAndAddInt)
+* AtomicInteger (```Unsafe#getAndAddInt```)
+* synchronized
+* ReentrantLock (```Unsafe#park```)
