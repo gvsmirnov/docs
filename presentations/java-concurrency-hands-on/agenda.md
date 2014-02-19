@@ -14,7 +14,8 @@
 * Acquire/release semantics
 
 ### Live Demo:
-* Use jcstress to demonstrate how things will fail without ```volatile``` (```fences/UnfencedAcquireReleaseTest.java```)
+* Use jcstress to demonstrate how things will fail without ```volatile```
+  (```fences/UnfencedAcquireReleaseTest.java```, ``````)
 * Write up a simple class with acquire/release
 * Walk through its bytecode
 * Find all the ```getfield```/```putfield``` usages in openjdk sources
