@@ -9,6 +9,7 @@
     <link href="css/prettify.css" rel="stylesheet"/>
     <link href="css/animation.css" rel="stylesheet"/>
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/whhg.css" rel="stylesheet"/>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/jmpress.impress.js"></script>
@@ -17,728 +18,6 @@
 
 </head>
 <body>
-
-    <div id="impress">
-
-        <div class="step step-title" data-y="-800">
-            <div class="jumbotron text-center">
-                <h1>
-                    Многопоточность Java<br/>
-                    Под Капотом
-                </h1>
-                <p>#volatile #membar #dragons #openjdk #mesi</p>
-                <p>#jmm #store #load #omg #internals</p>
-                <p>#cachecoherency</p>
-                <p>#jugru</p>
-
-                <footer>
-                    <h2>Gleb Smirnov</h2>
-                    <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
-                </footer>
-
-            </div>
-        </div>
-
-        <!-- LEAKY ABSTRACTIONS -->
-
-        <div class="step step-slide">
-            <h1>Текущие Абстракции</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    Каждый слой абстракции прячет <span class="text-muted">детали реализации</span>
-                </li>
-                <li data-jmpress="fade">
-                    Происходящее на <b>нижних уровнях</b>
-                    влияет на <b>высокоуровневое</b> поведение
-                </li>
-                <li data-jmpress="fade">
-                    Некоторое поведение <b>нельзя объяснить</b> в рамках абстракции
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide spoiler">
-            <div class="text-center">
-                <img class="graph scale-to-fit-h" src="img/go-deeper.jpg"/>
-            </div>
-        </div>
-
-        <!-- LEAKY ABSTRACTIONS END -->
-
-        <!-- POP QUIZ -->
-
-        <div class="step step-slide" data-x="1300">
-
-            <div class="row">
-                <div class="col-md-6">
-<pre class="prettyprint lang-java">
-void executedOnCpu0() {
-    value = 10;
-    finished = true;
-}
-</pre>
-                </div>
-                <div class="col-md-6">
-<pre class="prettyprint lang-java">
-void executedOnCpu1() {
-    while(!finished);
-    assert value == 10;
-}
-</pre>
-                </div>
-            </div>
-
-            <div class="row" data-jmpress="fade">
-                <div class="col-md-12 text-center">
-                    <h1>
-                        Может ли упасть?
-                    </h1>
-                </div>
-            </div>
-
-            <div class="row" data-jmpress="fade">
-                <div class="col-md-12 text-center">
-                    <h1>
-                        А на x86?
-                    </h1>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- POP QUIZ ENDS -->
-
-        <!-- JMM -->
-
-        <div class="step step-slide" data-y="900">
-            <h1>Подход Теоретический</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    Согласно JMM, без <code>volatile</code> упасть может
-                </li>
-                <li class="list-unstyled" data-jmpress="fade">
-                    <span class="text-muted">(а может и не упасть)</span>
-                </li>
-                <li data-jmpress="fade">
-                    В JMM есть только высокоуровневые абстракции
-                </li>
-                <li data-jmpress="fade">
-                    Нет ни слова про x86 или другие архитектуры
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-y="900" data-x="1300">
-            <div class="text-center">
-                <h1>Так Говорила JMM</h1>
-            </div>
-            <div class="text-center well">
-                <div data-jmpress="disappear">
-                    <p>Запись значения в <code>volatile</code> поле</p>
-                    <p><i><b>happens-before</b></i></p>
-                    <p>Последующее чтение значения из этого поля</p>
-                </div>
-
-                <div data-jmpress="appear after 1 ms">
-                    <p>Запись значения в <code>volatile</code> поле</p>
-                    <p>
-                        <del class="text-muted">
-                            <i><b>happens-before</b></i>
-                        </del>
-                        <i><b>synchronizes-with</b></i></p>
-                    <p>Последующее чтение значения из этого поля</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="step step-slide spoiler" data-y="900" data-x="1300">
-            <div class="text-center">
-                <img class="graph" src="img/wat.jpg"/>
-            </div>
-            <br/>
-            <blockquote>
-                <p>
-                    Чувак, я ничего не понял из того, что ты сейчас сказал.<br/>
-                    Но ты заговорил и достучался моего до сердца.
-                </p>
-            </blockquote>
-        </div>
-
-        <!-- JMM ENDS -->
-
-        <!-- JCSTRESS -->
-
-        <div class="step step-slide" data-y="1800">
-            <h1>Подход Эмпирический</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    Один запуск не даст надёжных результатов
-                </li>
-                <li data-jmpress="fade">
-                    Можно запустить много раз <span data-jmpress="fade">... очень много раз!</span>
-                </li>
-                <li data-jmpress="fade">
-                    Если так и не упадёт, то, <b>вероятно</b>, и не должно
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-y="1800" data-x="1300">
-            <h1>Не Сотвори Себе Велосипеда</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    <del class="text-muted">Шипилёв</del> Сообщество уже сделало всё за нас
-                </li>
-                <li data-jmpress="fade">
-                    <code>jcstress</code> создан специально для таких изысканий
-                </li>
-                <li data-jmpress="fade">
-                    И там даже есть нужный тест
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-y="1800" data-x="2600">
-            <div class="jumbotron text-center text-v-center">
-                <h1>
-                    <span class="text-bigger">Демо <code>jcstress</code></span>
-                </h1>
-            </div>
-        </div>
-
-        <div class="step step-slide" data-y="1800" data-x="3900">
-            <h1 class="text-center">Результаты Теста (x86)</h1>
-
-            <div class="row">
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">y: 0, x: 3</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">y: 0, x: 0</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-4 left-tit">
-                    <img align="right" class="img-responsive" src="img/left-tit.png"/>
-                </div>
-                <div class="col-md-4 right-tit">
-                    <img class="img-responsive" src="img/right-tit.png"/>
-                </div>
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">y: 1, x: 0</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">y: 1, x: 3</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="step step-slide todo" data-y="1800" data-x="5200">
-            <h1 class="text-center">Результаты Теста (ARM)</h1>
-            <!-- TODO: https://gist.github.com/shipilev/9595796 -->
-
-            <div class="row">
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 0, x: 3}</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 0, x: 0}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-4 left-tit">
-                    <img align="right" class="img-responsive" src="img/left-tit.png"/>
-                </div>
-                <div class="col-md-4 right-tit">
-                    <img class="img-responsive" src="img/right-tit.png"/>
-                </div>
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 1, x: 0}</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 1, x: 3}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="step step-slide todo" data-y="1800" data-x="6500">
-            <h1 class="text-center">Результаты Теста (x86, C1)</h1>
-
-            <div class="row">
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 0, x: 3}</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 0, x: 0}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-4 left-tit">
-                    <img align="right" class="img-responsive" src="img/left-tit.png"/>
-                </div>
-                <div class="col-md-4 right-tit">
-                    <img class="img-responsive" src="img/right-tit.png"/>
-                </div>
-                <div class="col-md-2">
-                    <ul class="legend list-unstyled">
-                        <li class="legend-smaller-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 1, x: 0}</span>
-                        </li>
-                        <li class="legend-bigger-part">
-                            <span class="box"></span>
-                            <span class="text-mono">{y: 1, x: 3}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- JCSTRESS ENDS -->
-
-        <!-- DIAGRAMS -->
-
-
-        <div class="step nested-steps" data-y="2700">
-            <h1 class="text-center">Куда Протекли Абстракции?</h1>
-            <div class="row">
-                <div class="col-md-offset-3 col-md-6">
-<pre class="prettyprint lang-java">
-    void executedOnCpu0() {
-        value = 10;
-        finished = true;
-    }
-</pre>
-                    </div>
-            </div>
-
-            <div class="step visit-me" data-y="250">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h1 class="text-giant">
-                            &darr;
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me" data-y="450">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
-                        <img src="img/duke-java.png"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me" data-y="700">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h1 class="text-giant">
-                            &darr;
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me" data-y="950">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <img src="img/platforms.png"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me" data-y="1280">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h1 class="text-giant">
-                            &darr;
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me" data-y="1400">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <img src="img/arm-amd-intel.png"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me spoiler" data-y="1400" data-z="200">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <img class="graph scale-to-fit-h" src="img/cloud.png"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step visit-me spoiler step-slide" data-y="1400" data-z="-200" data-scale="0.2">
-                <h1>Никто Не Хочет Быть Тормозом</h1>
-                <ul>
-                    <li data-jmpress="fade">На каждом слое могут применяться <b>оптимизации</b></li>
-                    <li data-jmpress="fade">Есть оптимизации, меняющие <b>наблюдаемое поведение</b></li>
-                    <li data-jmpress="fade">
-                        Иногда это вполне допустимо
-                        <span data-jmpress="fade">(<b>но иногда нет</b>)</span>
-                    </li>
-                    <li data-jmpress="fade">Разработчики среды <b>не знают заранее</b>, когда как</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- DIAGRAMS END -->
-
-        <!-- CACHES EXAMPLE -->
-
-        <div class="step step-slide" data-y="2700" data-x="1300">
-            <h1>Когерентность Кешей, Например</h1>
-            <!-- TODO: Add a spider -->
-            <ul>
-                <li data-jmpress="fade">Доступ к основной памяти &mdash; <b>дорогая операция</b></li>
-                <li data-jmpress="fade">Ядра хранят <b>копии</b> популярных значений поблизости</li>
-                <li data-jmpress="fade">Если ядер более одного, <b>начинается дикий угар</b></li>
-            </ul>
-        </div>
-
-        <!-- CACHES EXAMPLE END -->
-
-
-        <!-- MORE HIGH-LEVEL BARRIERS -->
-
-        <div class="step step-slide" data-y="2400">
-            <h1>Must Construct Additional Abstractions</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    There are many <b>different protocols</b> besides MESI
-                </li>
-                <li data-jmpress="fade">
-                    Many other things can result in <b>Out Of Order Execution</b>
-                </li>
-                <li data-jmpress="fade">
-                    Some may have <b>no notion</b> of a Store Buffer or Invalidate queue
-                </li>
-                <li data-jmpress="fade">
-                    Need to be able to reason about them <b>in general</b>
-                </li>
-                <li data-jmpress="fade">
-                    The concept of a <b>Load</b> or a <b>Store</b> still remains
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-y="2400" data-x="1300">
-            <h1>For X, Y in [Store, Load]:</h1>
-
-            <div class="text-center well" data-jmpress="fade">
-                <p>
-                    All the <code>X</code> operations that precede an <code>XY</code> barrier will complete
-                </p>
-                <p data-jmpress="fade">
-                    <b>before</b>
-                </p>
-                <p data-jmpress="fade">
-                    Any <code>Y</code> operation that succeeds the <code>XY</code> barrier starts
-                </p>
-            </div>
-        </div>
-
-        <div class="step step-slide" data-y="2400" data-x="2600">
-            <h1>For Instance</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    Suppose some stores <code>S<sub>1</sub></code> were executed
-                </li>
-                <li data-jmpress="fade">
-                    A <code>StoreStore</code> memory barrier was issued
-                </li>
-                <li data-jmpress="fade">
-                    Some more stores <code>S<sub>2</sub></code> follow
-                </li>
-                <li class="list-unstyled">&nbsp;</li>
-                <li data-jmpress="fade">
-                    All the stores in <code>S<sub>1</sub></code> will complete <b>before</b>
-                    any store in <code>S<sub>2</sub></code> starts
-                </li>
-                <li data-jmpress="fade" class="list-unstyled text-muted">
-                    (Incidentally, this is the Store Memory Barrier in MESI)
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-y="2400" data-x="3900">
-            <h1>Acquire And Release Semantics</h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    <p>
-                        All the memory operations:
-                    </p>
-                    <ul>
-                        <li data-jmpress="fade">
-                            preceding a <b>release</b> must complete before it starts
-                        </li>
-                        <li data-jmpress="fade">
-                            following an <b>acquire</b> can't start before it completes
-                        </li>
-                    </ul>
-
-                </li>
-            </ul>
-        </div>
-
-        <!-- MORE HIGH-LEVEL BARRIERS END -->
-
-        <!-- LIVE DEMO STUFF -->
-
-        <div class="step step-slide spoiler" id="overview" data-z="2" data-x="3500" data-y="2000" data-scale="9">
-            <div class="text-center">
-                <h1 style="color: #ea2d2e; margin-bottom: 20px;">Write Once</h1>
-                <img class="graph" src="img/wora.png"/>
-                <h1 style="color: #0074bd;">Run Anywhere</h1>
-            </div>
-        </div>
-
-        <div class="step spoiler very-spoiler" id="mad-scientist" data-z="1" data-x="-1600" data-y="6500" data-scale="25">
-            <div class="text-center">
-                <img class="graph" src="img/mad-scientist.png"/>
-                <h1>LIVE DEMO TIME!</h1>
-            </div>
-        </div>
-
-        <div class="step step-slide" data-x="-2600" data-y="2000">
-            <h1>
-                If All You Have Is This Presentation
-            </h1>
-            <p>
-                The live demo consisted of the following stuff:
-            </p>
-                <ul>
-                    <li>A demonstration of how things really fail w/o deliberate effort</li>
-                    <li>Digging through OpenJDK and seeing how volatiles are handled</li>
-                    <li>Removing the special handling of volatiles from OpenJDK</li>
-                </ul>
-            <p>
-                To catch on, you might want to check out:
-                <ul>
-                    <li>Some video recording of the live demo</li>
-                    <li><a href="http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html"><u><small>http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html</small></a></u></li>
-                </ul>
-            </p>
-        </div>
-
-        <!-- LIVE DEMO STUFF ENDS -->
-
-        <!-- MUTUAL EXCLUSION -->
-
-        <div class="step step-slide" data-x="-1300" data-y="2000" data-rotate="90">
-            <h1>
-                Mere Visibility Is Often Not Enough
-            </h1>
-            <div class="row">
-                <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-class Foo {
-    volatile int a;
-    //...
-    void bar() {
-        a++;
-    }
-}
-</pre>
-                </div>
-                <div class="col-md-2 text-center" data-jmpress="fade">
-                    <h1>&rarr;</h1>
-                </div>
-                <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-0: aload_0
-1: dup
-<span class="text-highlighted">2: getfield</span>
-5: iconst_1<span data-jmpress="appear" class="nocode text-danger"><br/>   &larr; Some other thread</span>
-6: iadd
-<span class="text-highlighted">7: putfield</span>
-10: return
-</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step spoiler step-slide" data-x="-1300" data-y="2000" data-rotate="90">
-            <div class="jumbotron text-center">
-                <h1 class="margin-a-lot">
-                    <span class="text-giant">Yay <code>AtomicStuff</code></span>
-                </h1>
-            </div>
-        </div>
-
-        <div class="step step-slide" data-x="-1300" data-y="3300" data-rotate="90">
-            <h1>
-                Mere <code>AtomicStuff</code> Is Not Enough Either
-            </h1>
-
-<pre class="prettyprint lang-java">
-public void execute(Action action, long userId) {
-    this.lastResult = action.execute();<span data-jmpress="appear" class="nocode text-danger"><br/>    // Please don't observe me here!</span>
-    this.lastUserId = userId;<span data-jmpress="appear" class="nocode text-danger"><br/>    // Also here, please-please</span>
-    this.lastAction = action;
-}
-</pre>
-        </div>
-
-        <div class="step spoiler step-slide" data-x="-1300" data-y="3300" data-rotate="90">
-            <div class="jumbotron text-center text-v-center">
-                <h1>
-                    <span class="text-bigger">That's a Critical Section!</span>
-                </h1>
-            </div>
-        </div>
-
-        <div class="step step-slide" data-x="-1300" data-y="4600" data-rotate="90">
-            <h1>
-                Mutual Exclusion
-            </h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    No two threads are in the same <b>critical section</b> simultaneously
-                </li>
-                <li data-jmpress="fade">
-                    A <b>lock</b> can be used to enforce it
-                    <ul>
-                        <li data-jmpress="fade">Can be <b>acquired</b> (locked)</li>
-                        <li data-jmpress="fade">And <b>released</b> (unlocked)</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-x="-1300" data-y="5900" data-rotate="90">
-            <h1>
-                Synchronization
-            </h1>
-
-            <ul>
-                <li data-jmpress="fade">
-                    Some thread may want to <b>wait</b> for some other thread
-                </li>
-
-                <li data-jmpress="fade">
-                    <b>Condition Variables</b> are used to achieve this
-                    <ul>
-                        <li data-jmpress="fade">A condition variable allows to <b>wait</b> for an event</li>
-                        <li data-jmpress="fade">And <b>notify</b> a waiting thread of an event happening</li>
-                    </ul>
-                </li>
-
-                <li data-jmpress="fade">
-                    Don't want to burn CPU cycles needlessly when waiting
-                </li>
-
-                <li data-jmpress="fade" class="list-unstyled">
-                    Therefore, threads may be <b>parked</b> by the OS
-                </li>
-            </ul>
-        </div>
-
-        <div class="step step-slide" data-x="-1300" data-y="7200" data-rotate="90">
-            <h1>
-                Monitor = Lock + Condition Variable
-            </h1>
-
-            <p data-jmpress="fade">
-                Can be in one of the following states:
-            </p>
-
-            <ul>
-                <li data-jmpress="fade">
-                    <b>Thin</b>: has no contention on it, <b>atomics</b> are used to acquire it
-                </li>
-                <li data-jmpress="fade">
-                    <b>Inflated</b>: threads are <b>parked</b> when waiting for acquisition
-                </li>
-                <li data-jmpress="fade">
-                    <b>Biased</b>: can be cheaply acquired by <b>one thread</b>,
-                    but it is expensive when multiple threads are trying to acquire it
-                </li>
-            </ul>
-        </div>
-
-        <!-- MUTUAL EXCLUSION ENDS -->
-
-        <!-- LAST REMARKS -->
-
-        <div class="step" id="mad-scientist-2" data-z="3" data-x="-1600" data-y="6500" data-scale="25" data-rotate="180"></div>
-
-        <div class="step step-slide" data-x="-2600" data-y="1200">
-            <h1>
-                If All You Have Is This Presentation
-            </h1>
-            <p>
-                The live demo consisted of the following stuff:
-            </p>
-            <ul>
-                <li>A demonstration of how AtomicInteger works</li>
-                <li>Synchronized blocks implementation, also <code>j.u.c.locks.*</code></li>
-                <li><code>wait/notify</code> blocks and <code>CountDownLatch</code></li>
-            </ul>
-            <p>
-                To catch on, you might want to check out:
-            <ul>
-                <li>Some video recording of the live demo</li>
-                <li>An upcoming entry in my blog, stay tuned! <!-- TODO --></li>
-            </ul>
-            </p>
-        </div>
-
-        <div class="step step-slide" data-x="-2600" id="links">
-            <div class="text-center">
-                <img class="graph" src="img/qr.png"/>
-
-                <h2>
-                    <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on">
-                        http://gvsmirnov.ru/docs/presentations/</br>java-concurrency-hands-on
-                    </a>
-                </h2>
-            </div>
-        </div>
-
-        <!-- LAST REMARKS END -->
-
-
-    </div>
 
     <div id="laser"></div>
 
@@ -763,5 +42,910 @@ public void execute(Action action, long userId) {
             });
         }(window.jQuery)
     </script>
+
+    <div id="impress">
+
+    <div class="step step-title" data-y="-800">
+        <div class="jumbotron text-center">
+            <h1>
+                Многопоточность Java<br/>
+                Под Капотом
+            </h1>
+            <p>#volatile #membar #dragons #openjdk #mesi</p>
+            <p>#jmm #store #load #omg #internals</p>
+            <p>#cachecoherency</p>
+            <p>#jugru</p>
+
+            <footer>
+                <h2>Gleb Smirnov</h2>
+                <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- LEAKY ABSTRACTIONS -->
+
+    <div class="step step-slide">
+        <h1>Текущие Абстракции</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Каждый слой абстракции прячет детали реализации
+            </li>
+            <li data-jmpress="fade">
+                Происходящее на <b>нижних уровнях</b>
+                влияет на <b>высокоуровневое</b> поведение
+            </li>
+            <li data-jmpress="fade">
+                Некоторое поведение <b>нельзя объяснить</b> в рамках абстракции
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide spoiler">
+        <div class="text-center">
+            <img class="graph scale-to-fit-h" src="img/go-deeper.jpg"/>
+        </div>
+    </div>
+
+    <!-- LEAKY ABSTRACTIONS END -->
+
+    <!-- POP QUIZ -->
+
+    <div class="step step-slide" data-x="1300">
+
+        <div class="row">
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+            </div>
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    Может ли упасть?
+                </h1>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    А на x86?
+                </h1>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- POP QUIZ ENDS -->
+
+    <!-- JMM -->
+
+    <div class="step step-slide" data-y="900">
+        <h1>Подход Теоретический</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Согласно JMM, без <code>volatile</code> упасть может
+            </li>
+            <li class="list-unstyled" data-jmpress="fade">
+                <span class="text-muted">(а может и не упасть)</span>
+            </li>
+            <li data-jmpress="fade">
+                В JMM есть только высокоуровневые абстракции
+            </li>
+            <li data-jmpress="fade">
+                Нет ни слова про x86 или другие архитектуры
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="900" data-x="1300">
+        <div class="text-center">
+            <h1>Так Говорила JMM</h1>
+        </div>
+        <div class="text-center well">
+            <div data-jmpress="disappear">
+                <p>Запись значения в <code>volatile</code> поле</p>
+                <p><i><b>happens-before</b></i></p>
+                <p>Последующее чтение значения из этого поля</p>
+            </div>
+
+            <div data-jmpress="appear after 1 ms">
+                <p>Запись значения в <code>volatile</code> поле</p>
+                <p>
+                    <del class="text-muted">
+                        <i><b>happens-before</b></i>
+                    </del>
+                    <i><b>synchronizes-with</b></i></p>
+                <p>Последующее чтение значения из этого поля</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide spoiler" data-y="900" data-x="1300">
+        <div class="text-center">
+            <img class="graph" src="img/wat.jpg"/>
+        </div>
+        <br/>
+        <blockquote>
+            <p>
+                Чувак, я ничего не понял из того, что ты сейчас сказал.<br/>
+                Но ты заговорил и достучался моего до сердца.
+            </p>
+        </blockquote>
+    </div>
+
+    <!-- JMM ENDS -->
+
+    <!-- JCSTRESS -->
+
+    <div class="step step-slide" data-y="1800">
+        <h1>Подход Эмпирический</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Один запуск не даст надёжных результатов
+            </li>
+            <li data-jmpress="fade">
+                Можно запустить много раз <span data-jmpress="fade">... очень много раз!</span>
+            </li>
+            <li data-jmpress="fade">
+                Если так и не упадёт, то, <b>вероятно</b>, и не должно
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="1300">
+        <h1>Не Сотвори Себе Велосипеда</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                <del class="text-muted">Шипилёв</del> Сообщество уже сделало всё за нас
+            </li>
+            <li data-jmpress="fade">
+                <code>jcstress</code> создан специально для таких изысканий
+            </li>
+            <li data-jmpress="fade">
+                И там даже есть нужный тест
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="2600">
+        <div class="jumbotron text-center text-v-center">
+            <h1>
+                <span class="text-bigger">Демо <code>jcstress</code></span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="3900">
+        <h1 class="text-center">Результаты Теста (x86)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide todo" data-y="1800" data-x="5200">
+        <h1 class="text-center">Результаты Теста (ARM)</h1>
+        <!-- TODO: https://gist.github.com/shipilev/9595796 -->
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 0, x: 3}</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 0, x: 0}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 1, x: 0}</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 1, x: 3}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide todo" data-y="1800" data-x="6500">
+        <h1 class="text-center">Результаты Теста (x86, C1)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 0, x: 3}</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 0, x: 0}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 1, x: 0}</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">{y: 1, x: 3}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JCSTRESS ENDS -->
+
+    <!-- DIAGRAMS -->
+
+
+    <div class="step nested-steps" data-y="2700">
+        <h1 class="text-center">Куда Протекли Абстракции?</h1>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+<pre class="prettyprint lang-java">
+    void executedOnCpu0() {
+        value = 10;
+        finished = true;
+    }
+</pre>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="250">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="450">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
+                    <img src="img/duke-java.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="700">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="950">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/platforms.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1280">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1400">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/arm-amd-intel.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler" data-y="1400" data-z="200">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img class="graph scale-to-fit-h" src="img/cloud.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler step-slide" data-y="1400" data-z="-200" data-scale="0.2">
+            <h1>Никто Не Хочет Быть Тормозом</h1>
+            <ul>
+                <li data-jmpress="fade">На каждом слое могут применяться <b>оптимизации</b></li>
+                <li data-jmpress="fade">Есть оптимизации, меняющие <b>наблюдаемое поведение</b></li>
+                <li data-jmpress="fade">
+                    Иногда это вполне допустимо
+                    <span data-jmpress="fade">(<b>но иногда нет</b>)</span>
+                </li>
+                <li data-jmpress="fade">Разработчики среды <b>не знают заранее</b>, когда как</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DIAGRAMS END -->
+
+    <!-- CACHES EXAMPLE -->
+
+    <div class="step step-slide" data-y="2700" data-x="1300">
+        <h1>
+            Когерентность Кешей, Например
+
+        </h1>
+        <ul class="list-unstyled spider">
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Доступ к основной памяти &mdash; <b>дорогая операция</b>
+            </li>
+
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Ядра хранят <b>копии</b> популярных значений поблизости
+            </li>
+
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Если ядер более одного, <b>начинается дикий угар</b>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step nested-steps" data-y="3400" data-x="2600">
+
+        <div class="visit-me">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><code>finished</code></td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr class="active">
+                            <td><code>value</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1600">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="active">
+                            <td><code>finished</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td><code>0</code></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="600" data-scale="2.3">
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+                </div>
+
+                <div class="col-md-2" data-jmpress="fade">
+                    <h1 class="text-center">
+                        <span class="glyphicon glyphicon-transfer"></span>
+                    </h1>
+                </div>
+
+                <div class="col-md-5">
+                    <ul class="list-unstyled">
+                        <li data-jmpress="fade">&mdash; Удали из кеша!</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">&mdash; Я удалил!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1100" data-scale="2.3">
+
+            <div class="row">
+                <hr/>
+
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+                </div>
+
+                <div class="col-md-7">
+                    <ul>
+                        <li data-jmpress="fade">Пришлось ждать очень долго</li>
+                        <li data-jmpress="fade">Процессор простаивал</li>
+                        <li data-jmpress="fade">Вы самое слабое звено!</li>
+                        <li data-jmpress="fade">Время <b>оптимизировать</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1600" data-scale="2.3">
+            <div class="row">
+                <hr/>
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(исполняется асинхронно)</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(тоже)</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler" data-x="800" data-y="800" data-scale="3.5" data-z="1000">
+            <h1 class="text-center">
+                <img src="img/explosion1.png"/>
+            </h1>
+        </div>
+
+    </div>
+    <!-- CACHES EXAMPLE END -->
+
+
+    <!-- HIGH-LEVEL BARRIERS -->
+
+    <div class="step step-slide" data-y="3600" data-x="1300">
+        <img src="img/mm-tradeoff.png"/>
+    </div>
+
+    <div class="step step-slide spoiler"data-y="3600" data-x="1300">
+        <div class="jumbotron text-center">
+            <h1 class="margin-a-lot">
+                <span class="text-giant">
+                    (@shipilёв)
+                </span>
+            </h1>
+        </div>
+    </div>
+
+    <!-- HIGH-LEVEL BARRIERS END -->
+
+
+    <!-- MORE HIGH-LEVEL BARRIERS -->
+
+    <div class="step step-slide" data-y="2400">
+        <h1>Must Construct Additional Abstractions</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                There are many <b>different protocols</b> besides MESI
+            </li>
+            <li data-jmpress="fade">
+                Many other things can result in <b>Out Of Order Execution</b>
+            </li>
+            <li data-jmpress="fade">
+                Some may have <b>no notion</b> of a Store Buffer or Invalidate queue
+            </li>
+            <li data-jmpress="fade">
+                Need to be able to reason about them <b>in general</b>
+            </li>
+            <li data-jmpress="fade">
+                The concept of a <b>Load</b> or a <b>Store</b> still remains
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="2400" data-x="1300">
+        <h1>For X, Y in [Store, Load]:</h1>
+
+        <div class="text-center well" data-jmpress="fade">
+            <p>
+                All the <code>X</code> operations that precede an <code>XY</code> barrier will complete
+            </p>
+            <p data-jmpress="fade">
+                <b>before</b>
+            </p>
+            <p data-jmpress="fade">
+                Any <code>Y</code> operation that succeeds the <code>XY</code> barrier starts
+            </p>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="2400" data-x="2600">
+        <h1>For Instance</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Suppose some stores <code>S<sub>1</sub></code> were executed
+            </li>
+            <li data-jmpress="fade">
+                A <code>StoreStore</code> memory barrier was issued
+            </li>
+            <li data-jmpress="fade">
+                Some more stores <code>S<sub>2</sub></code> follow
+            </li>
+            <li class="list-unstyled">&nbsp;</li>
+            <li data-jmpress="fade">
+                All the stores in <code>S<sub>1</sub></code> will complete <b>before</b>
+                any store in <code>S<sub>2</sub></code> starts
+            </li>
+            <li data-jmpress="fade" class="list-unstyled text-muted">
+                (Incidentally, this is the Store Memory Barrier in MESI)
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="2400" data-x="3900">
+        <h1>Acquire And Release Semantics</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                <p>
+                    All the memory operations:
+                </p>
+                <ul>
+                    <li data-jmpress="fade">
+                        preceding a <b>release</b> must complete before it starts
+                    </li>
+                    <li data-jmpress="fade">
+                        following an <b>acquire</b> can't start before it completes
+                    </li>
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+
+    <!-- MORE HIGH-LEVEL BARRIERS END -->
+
+    <!-- LIVE DEMO STUFF -->
+
+    <div class="step step-slide spoiler" id="overview" data-z="2" data-x="3500" data-y="2000" data-scale="9">
+        <div class="text-center">
+            <h1 style="color: #ea2d2e; margin-bottom: 20px;">Write Once</h1>
+            <img class="graph" src="img/wora.png"/>
+            <h1 style="color: #0074bd;">Run Anywhere</h1>
+        </div>
+    </div>
+
+    <div class="step spoiler very-spoiler" id="mad-scientist" data-z="1" data-x="-1600" data-y="6500" data-scale="25">
+        <div class="text-center">
+            <img class="graph" src="img/mad-scientist.png"/>
+            <h1>LIVE DEMO TIME!</h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="-2600" data-y="2000">
+        <h1>
+            If All You Have Is This Presentation
+        </h1>
+        <p>
+            The live demo consisted of the following stuff:
+        </p>
+        <ul>
+            <li>A demonstration of how things really fail w/o deliberate effort</li>
+            <li>Digging through OpenJDK and seeing how volatiles are handled</li>
+            <li>Removing the special handling of volatiles from OpenJDK</li>
+        </ul>
+        <p>
+            To catch on, you might want to check out:
+        <ul>
+            <li>Some video recording of the live demo</li>
+            <li><a href="http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html"><u><small>http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html</small></a></u></li>
+        </ul>
+        </p>
+    </div>
+
+    <!-- LIVE DEMO STUFF ENDS -->
+
+    <!-- MUTUAL EXCLUSION -->
+
+    <div class="step step-slide" data-x="-1300" data-y="2000" data-rotate="90">
+        <h1>
+            Mere Visibility Is Often Not Enough
+        </h1>
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+class Foo {
+    volatile int a;
+    //...
+    void bar() {
+        a++;
+    }
+}
+</pre>
+            </div>
+            <div class="col-md-2 text-center" data-jmpress="fade">
+                <h1>&rarr;</h1>
+            </div>
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+0: aload_0
+1: dup
+<span class="text-highlighted">2: getfield</span>
+5: iconst_1<span data-jmpress="appear" class="nocode text-danger"><br/>   &larr; Some other thread</span>
+6: iadd
+<span class="text-highlighted">7: putfield</span>
+10: return
+</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="step spoiler step-slide" data-x="-1300" data-y="2000" data-rotate="90">
+        <div class="jumbotron text-center">
+            <h1 class="margin-a-lot">
+                <span class="text-giant">Yay <code>AtomicStuff</code></span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="-1300" data-y="3300" data-rotate="90">
+        <h1>
+            Mere <code>AtomicStuff</code> Is Not Enough Either
+        </h1>
+
+<pre class="prettyprint lang-java">
+public void execute(Action action, long userId) {
+    this.lastResult = action.execute();<span data-jmpress="appear" class="nocode text-danger"><br/>    // Please don't observe me here!</span>
+    this.lastUserId = userId;<span data-jmpress="appear" class="nocode text-danger"><br/>    // Also here, please-please</span>
+    this.lastAction = action;
+}
+</pre>
+    </div>
+
+    <div class="step spoiler step-slide" data-x="-1300" data-y="3300" data-rotate="90">
+        <div class="jumbotron text-center text-v-center">
+            <h1>
+                <span class="text-bigger">That's a Critical Section!</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="-1300" data-y="4600" data-rotate="90">
+        <h1>
+            Mutual Exclusion
+        </h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                No two threads are in the same <b>critical section</b> simultaneously
+            </li>
+            <li data-jmpress="fade">
+                A <b>lock</b> can be used to enforce it
+                <ul>
+                    <li data-jmpress="fade">Can be <b>acquired</b> (locked)</li>
+                    <li data-jmpress="fade">And <b>released</b> (unlocked)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-x="-1300" data-y="5900" data-rotate="90">
+        <h1>
+            Synchronization
+        </h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Some thread may want to <b>wait</b> for some other thread
+            </li>
+
+            <li data-jmpress="fade">
+                <b>Condition Variables</b> are used to achieve this
+                <ul>
+                    <li data-jmpress="fade">A condition variable allows to <b>wait</b> for an event</li>
+                    <li data-jmpress="fade">And <b>notify</b> a waiting thread of an event happening</li>
+                </ul>
+            </li>
+
+            <li data-jmpress="fade">
+                Don't want to burn CPU cycles needlessly when waiting
+            </li>
+
+            <li data-jmpress="fade" class="list-unstyled">
+                Therefore, threads may be <b>parked</b> by the OS
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-x="-1300" data-y="7200" data-rotate="90">
+        <h1>
+            Monitor = Lock + Condition Variable
+        </h1>
+
+        <p data-jmpress="fade">
+            Can be in one of the following states:
+        </p>
+
+        <ul>
+            <li data-jmpress="fade">
+                <b>Thin</b>: has no contention on it, <b>atomics</b> are used to acquire it
+            </li>
+            <li data-jmpress="fade">
+                <b>Inflated</b>: threads are <b>parked</b> when waiting for acquisition
+            </li>
+            <li data-jmpress="fade">
+                <b>Biased</b>: can be cheaply acquired by <b>one thread</b>,
+                but it is expensive when multiple threads are trying to acquire it
+            </li>
+        </ul>
+    </div>
+
+    <!-- MUTUAL EXCLUSION ENDS -->
+
+    <!-- LAST REMARKS -->
+
+    <div class="step" id="mad-scientist-2" data-z="3" data-x="-1600" data-y="6500" data-scale="25" data-rotate="180"></div>
+
+    <div class="step step-slide" data-x="-2600" data-y="1200">
+        <h1>
+            If All You Have Is This Presentation
+        </h1>
+        <p>
+            The live demo consisted of the following stuff:
+        </p>
+        <ul>
+            <li>A demonstration of how AtomicInteger works</li>
+            <li>Synchronized blocks implementation, also <code>j.u.c.locks.*</code></li>
+            <li><code>wait/notify</code> blocks and <code>CountDownLatch</code></li>
+        </ul>
+        <p>
+            To catch on, you might want to check out:
+        <ul>
+            <li>Some video recording of the live demo</li>
+            <li>An upcoming entry in my blog, stay tuned! <!-- TODO --></li>
+        </ul>
+        </p>
+    </div>
+
+    <div class="step step-slide" data-x="-2600" id="links">
+        <div class="text-center">
+            <img class="graph" src="img/qr.png"/>
+
+            <h2>
+                <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on">
+                    http://gvsmirnov.ru/docs/presentations/</br>java-concurrency-hands-on
+                </a>
+            </h2>
+        </div>
+    </div>
+
+    <!-- LAST REMARKS END -->
+
+
+    </div>
 </body>
 </html>
