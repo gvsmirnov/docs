@@ -51,10 +51,10 @@
                 Многопоточность Java<br/>
                 Под Капотом
             </h1>
-            <p>#volatile #membar #dragons #openjdk #mesi</p>
-            <p>#jmm #store #load #omg #internals</p>
-            <p>#cachecoherency</p>
-            <p>#jugru</p>
+            <p>#volatile #membar #dragons #openjdk</p>
+            <p>#jmm #store #load #internals</p>
+            <p>#cachecoherency #omg</p>
+            <p>#jugru #jugmsk</p>
 
             <footer>
                 <h2>Gleb Smirnov</h2>
@@ -169,9 +169,6 @@ void executedOnCpu1() {
             <div data-jmpress="appear after 1 ms">
                 <p>Запись значения в <code>volatile</code> поле</p>
                 <p>
-                    <del class="text-muted">
-                        <i><b>happens-before</b></i>
-                    </del>
                     <i><b>synchronizes-with</b></i></p>
                 <p>Последующее чтение значения из этого поля</p>
             </div>
@@ -440,20 +437,6 @@ void executedOnCpu1() {
                 <li data-jmpress="fade">Разработчики среды <b>не знают заранее</b>, когда как</li>
             </ul>
         </div>
-
-        <div class="step visit-me step-slide" data-y="1600" data-z="-200" data-scale="0.2">
-            <img src="img/mm-tradeoff.png"/>
-        </div>
-
-        <div class="step step-slide spoiler" data-y="1600" data-z="-200" data-scale="0.2">
-            <div class="jumbotron text-center">
-                <h1 class="margin-a-lot">
-                <span class="text-giant">
-                    (@shipilёв)
-                </span>
-                </h1>
-            </div>
-        </div>
     </div>
 
     <!-- DIAGRAMS END -->
@@ -463,7 +446,6 @@ void executedOnCpu1() {
     <div class="step step-slide" data-y="2700" data-x="1300">
         <h1>
             Когерентность Кешей, Например
-
         </h1>
         <ul class="list-unstyled spider">
             <li data-jmpress="fade">
@@ -483,7 +465,7 @@ void executedOnCpu1() {
         </ul>
     </div>
 
-    <div class="step nested-steps" data-y="3400" data-x="2600">
+    <div class="step nested-steps" data-y="3600" data-x="2600">
 
         <div class="visit-me">
             <div class="row">
@@ -638,16 +620,98 @@ finished = true;
 
     <!-- HIGH-LEVEL BARRIERS -->
 
-    <div class="step step-slide todo" data-y="3600" data-x="1300">
-        <h1>Есть Два Типа Операций С Памятью</h1>
+    <div class="step step-slide" data-y="3600" data-x="1300">
+        <h1>Модель Памяти &mdash; Нужна</h1>
         <ul>
             <li data-jmpress="fade">
-                Одна на чтение, другая на запись
+                Разработчики софта знают, как должна вести себя программа
             </li>
-            <li data-duration="fade">
-                TODO
+            <li data-jmpress="fade">
+                Нужно передать это знание среде исполнения
+            </li>
+            <li class="list-unstyled" data-jmpress="fade">
+                <blockquote>
+                    <p>Модель памяти = trade-off между:</p>
+                    <ul>
+                        <li data-jmpress="fade">Долбанутостью программирования <em>на языке</em></li>
+                        <li data-jmpress="fade">Долбанутостью <em>быстрой и корректной реализации языка</em></li>
+                        <li data-jmpress="fade">Долбанутостью <em>хардвара</em></li>
+                    </ul>
+                    <p><footer data-jmpress="fade">Алексей Шипилёв</footer></p>
+                </blockquote>
             </li>
         </ul>
+    </div>
+
+    <div class="step step-slide" data-y="4500" data-x="1300">
+        <h1 class="text-center">Барьер Памяти</h1>
+
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    value = 10;
+    <span class="nocode text-success" data-jmpress="appear">magicUnicorn();</span>
+    finished = true;
+}
+</pre>
+            </div>
+
+            <div class="col-md-2" data-jmpress="fade">
+                <h1 class="text-center text-giant text-danger">&nrarr;</h1>
+            </div>
+
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    finished = true;
+    <span class="nocode text-success">magicUnicorn();</span>
+    value = 10;
+}
+</pre>
+            </div>
+        </div>
+        <h2 class="text-center" data-jmpress="fade">
+            <em>(С точки зрения другого потока)</em>
+        </h2>
+    </div>
+
+    <div class="step step-slide" data-y="5400" data-x="1300">
+        <h1>Не Всех Под Одну Гребёнку</h1>
+        <ul>
+            <li data-jmpress="fade">Запрещать переставлять всё со всем &mdash; медленно</li>
+            <li data-jmpress="fade">
+                Иногда допустимо переставить
+                <code>ST</code> и <code>LD</code>, но не <code>ST</code> и <code>ST</code>
+            </li>
+            <li data-jmpress="fade">Нужен более тонкий контроль</li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="6300" data-x="1300">
+        <h1>Есть Два Типа Операций с Памятью</h1>
+        <ul>
+            <li data-jmpress="fade">Один на запись, другой на чтение</li>
+            <li data-jmpress="fade">Будем гранулировать контроль по ним</li>
+            <li data-jmpress="fade">Введём барьеры памяти типа <code>XY</code></li>
+            <li class="list-unstyled" data-jmpress="fade">(<code>X</code> и <code>Y</code> принимают значения <code>Store</code> и <code>Load</code>)</li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="1300">
+        <h1>For X, Y in [Store, Load]:</h1>
+
+        <div class="text-center well" data-jmpress="fade">
+            <p>
+                Все операции типа <code>X</code> перед барьером типа <code>XY</code>
+            </p>
+            <p data-jmpress="fade">
+                <b>завершатся до того, как</b>
+            </p>
+            <p data-jmpress="fade">
+                Начнётся любая операция типа <code>Y</code> после этого барьера
+            </p>
+        </div>
     </div>
 
     <!-- HIGH-LEVEL BARRIERS END -->
@@ -655,43 +719,7 @@ finished = true;
 
     <!-- MORE HIGH-LEVEL BARRIERS -->
 
-    <div class="step step-slide" data-y="2400">
-        <h1>Must Construct Additional Abstractions</h1>
 
-        <ul>
-            <li data-jmpress="fade">
-                There are many <b>different protocols</b> besides MESI
-            </li>
-            <li data-jmpress="fade">
-                Many other things can result in <b>Out Of Order Execution</b>
-            </li>
-            <li data-jmpress="fade">
-                Some may have <b>no notion</b> of a Store Buffer or Invalidate queue
-            </li>
-            <li data-jmpress="fade">
-                Need to be able to reason about them <b>in general</b>
-            </li>
-            <li data-jmpress="fade">
-                The concept of a <b>Load</b> or a <b>Store</b> still remains
-            </li>
-        </ul>
-    </div>
-
-    <div class="step step-slide" data-y="2400" data-x="1300">
-        <h1>For X, Y in [Store, Load]:</h1>
-
-        <div class="text-center well" data-jmpress="fade">
-            <p>
-                All the <code>X</code> operations that precede an <code>XY</code> barrier will complete
-            </p>
-            <p data-jmpress="fade">
-                <b>before</b>
-            </p>
-            <p data-jmpress="fade">
-                Any <code>Y</code> operation that succeeds the <code>XY</code> barrier starts
-            </p>
-        </div>
-    </div>
 
     <div class="step step-slide" data-y="2400" data-x="2600">
         <h1>For Instance</h1>
@@ -761,21 +789,29 @@ finished = true;
         <h1>
             If All You Have Is This Presentation
         </h1>
+
         <p>
             The live demo consisted of the following stuff:
         </p>
+
         <ul>
             <li>A demonstration of how things really fail w/o deliberate effort</li>
             <li>Digging through OpenJDK and seeing how volatiles are handled</li>
             <li>Removing the special handling of volatiles from OpenJDK</li>
         </ul>
+
         <p>
             To catch on, you might want to check out:
+        </p>
+
         <ul>
             <li>Some video recording of the live demo</li>
-            <li><a href="http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html"><u><small>http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html</small></a></u></li>
+            <li>
+                <a href="http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html">
+                    <small class="text-underlined">http://gvsmirnov.ru/blog/tech/2014/02/10/jmm-under-the-hood.html</small>
+                </a>
+            </li>
         </ul>
-        </p>
     </div>
 
     <!-- LIVE DEMO STUFF ENDS -->
@@ -925,21 +961,25 @@ public void execute(Action action, long userId) {
         <h1>
             If All You Have Is This Presentation
         </h1>
+
         <p>
             The live demo consisted of the following stuff:
         </p>
+
         <ul>
             <li>A demonstration of how AtomicInteger works</li>
             <li>Synchronized blocks implementation, also <code>j.u.c.locks.*</code></li>
             <li><code>wait/notify</code> blocks and <code>CountDownLatch</code></li>
         </ul>
+
         <p>
             To catch on, you might want to check out:
+        </p>
+
         <ul>
             <li>Some video recording of the live demo</li>
             <li>An upcoming entry in my blog, stay tuned! <!-- TODO --></li>
         </ul>
-        </p>
     </div>
 
     <div class="step step-slide" data-x="-2600" id="links">
@@ -948,7 +988,8 @@ public void execute(Action action, long userId) {
 
             <h2>
                 <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on">
-                    http://gvsmirnov.ru/docs/presentations/</br>java-concurrency-hands-on
+                    http://gvsmirnov.ru/docs/presentations/ <br/>
+                    java-concurrency-hands-on/javapoint-april-2014.html
                 </a>
             </h2>
         </div>
