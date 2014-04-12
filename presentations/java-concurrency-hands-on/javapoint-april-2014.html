@@ -175,7 +175,13 @@ void executedOnCpu1() {
         </div>
     </div>
 
-    <div class="step step-slide spoiler" data-y="900" data-x="1300">
+    <div class="step step-slide spoiler" data-y="900" data-x="2600">
+        <div class="text-center">
+            <img class="graph" src="img/jls.png"/>
+        </div>
+    </div>
+
+    <div class="step step-slide spoiler" data-y="900" data-x="2600">
         <div class="text-center">
             <img class="graph" src="img/wat.jpg"/>
         </div>
@@ -816,180 +822,15 @@ void foo() {
 
     <!-- LIVE DEMO STUFF ENDS -->
 
-    <!-- MUTUAL EXCLUSION -->
-
-    <div class="step step-slide" data-x="-1300" data-y="2000" data-rotate="90">
-        <h1>
-            Mere Visibility Is Often Not Enough
-        </h1>
-        <div class="row">
-            <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-class Foo {
-    volatile int a;
-    //...
-    void bar() {
-        a++;
-    }
-}
-</pre>
-            </div>
-            <div class="col-md-2 text-center" data-jmpress="fade">
-                <h1>&rarr;</h1>
-            </div>
-            <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-0: aload_0
-1: dup
-<span class="text-highlighted">2: getfield</span>
-5: iconst_1<span data-jmpress="appear" class="nocode text-danger"><br/>   &larr; Some other thread</span>
-6: iadd
-<span class="text-highlighted">7: putfield</span>
-10: return
-</pre>
-            </div>
-        </div>
-    </div>
-
-    <div class="step spoiler step-slide" data-x="-1300" data-y="2000" data-rotate="90">
-        <div class="jumbotron text-center">
-            <h1 class="margin-a-lot">
-                <span class="text-giant">Yay <code>AtomicStuff</code></span>
-            </h1>
-        </div>
-    </div>
-
-    <div class="step step-slide" data-x="-1300" data-y="3300" data-rotate="90">
-        <h1>
-            Mere <code>AtomicStuff</code> Is Not Enough Either
-        </h1>
-
-<pre class="prettyprint lang-java">
-public void execute(Action action, long userId) {
-    this.lastResult = action.execute();<span data-jmpress="appear" class="nocode text-danger"><br/>    // Please don't observe me here!</span>
-    this.lastUserId = userId;<span data-jmpress="appear" class="nocode text-danger"><br/>    // Also here, please-please</span>
-    this.lastAction = action;
-}
-</pre>
-    </div>
-
-    <div class="step spoiler step-slide" data-x="-1300" data-y="3300" data-rotate="90">
-        <div class="jumbotron text-center text-v-center">
-            <h1>
-                <span class="text-bigger">That's a Critical Section!</span>
-            </h1>
-        </div>
-    </div>
-
-    <div class="step step-slide" data-x="-1300" data-y="4600" data-rotate="90">
-        <h1>
-            Mutual Exclusion
-        </h1>
-
-        <ul>
-            <li data-jmpress="fade">
-                No two threads are in the same <b>critical section</b> simultaneously
-            </li>
-            <li data-jmpress="fade">
-                A <b>lock</b> can be used to enforce it
-                <ul>
-                    <li data-jmpress="fade">Can be <b>acquired</b> (locked)</li>
-                    <li data-jmpress="fade">And <b>released</b> (unlocked)</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
-    <div class="step step-slide" data-x="-1300" data-y="5900" data-rotate="90">
-        <h1>
-            Synchronization
-        </h1>
-
-        <ul>
-            <li data-jmpress="fade">
-                Some thread may want to <b>wait</b> for some other thread
-            </li>
-
-            <li data-jmpress="fade">
-                <b>Condition Variables</b> are used to achieve this
-                <ul>
-                    <li data-jmpress="fade">A condition variable allows to <b>wait</b> for an event</li>
-                    <li data-jmpress="fade">And <b>notify</b> a waiting thread of an event happening</li>
-                </ul>
-            </li>
-
-            <li data-jmpress="fade">
-                Don't want to burn CPU cycles needlessly when waiting
-            </li>
-
-            <li data-jmpress="fade" class="list-unstyled">
-                Therefore, threads may be <b>parked</b> by the OS
-            </li>
-        </ul>
-    </div>
-
-    <div class="step step-slide" data-x="-1300" data-y="7200" data-rotate="90">
-        <h1>
-            Monitor = Lock + Condition Variable
-        </h1>
-
-        <p data-jmpress="fade">
-            Can be in one of the following states:
-        </p>
-
-        <ul>
-            <li data-jmpress="fade">
-                <b>Thin</b>: has no contention on it, <b>atomics</b> are used to acquire it
-            </li>
-            <li data-jmpress="fade">
-                <b>Inflated</b>: threads are <b>parked</b> when waiting for acquisition
-            </li>
-            <li data-jmpress="fade">
-                <b>Biased</b>: can be cheaply acquired by <b>one thread</b>,
-                but it is expensive when multiple threads are trying to acquire it
-            </li>
-        </ul>
-    </div>
-
-    <!-- MUTUAL EXCLUSION ENDS -->
-
     <!-- LAST REMARKS -->
-
-    <div class="step" id="mad-scientist-2" data-z="3" data-x="-1600" data-y="6500" data-scale="25" data-rotate="180"></div>
-
-    <div class="step step-slide" data-x="-2600" data-y="1200">
-        <h1>
-            If All You Have Is This Presentation
-        </h1>
-
-        <p>
-            The live demo consisted of the following stuff:
-        </p>
-
-        <ul>
-            <li>A demonstration of how AtomicInteger works</li>
-            <li>Synchronized blocks implementation, also <code>j.u.c.locks.*</code></li>
-            <li><code>wait/notify</code> blocks and <code>CountDownLatch</code></li>
-        </ul>
-
-        <p>
-            To catch on, you might want to check out:
-        </p>
-
-        <ul>
-            <li>Some video recording of the live demo</li>
-            <li>An upcoming entry in my blog, stay tuned! <!-- TODO --></li>
-        </ul>
-    </div>
 
     <div class="step step-slide" data-x="-2600" id="links">
         <div class="text-center">
-            <img class="graph" src="img/qr.png"/>
+            <img class="graph" src="img/qr-jpoint-2014.png"/>
 
             <h2>
-                <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on">
-                    http://gvsmirnov.ru/docs/presentations/ <br/>
-                    java-concurrency-hands-on/javapoint-april-2014.html
+                <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on/javapoint-april-2014.html">
+                    goo.gl/KJW16e
                 </a>
             </h2>
         </div>
