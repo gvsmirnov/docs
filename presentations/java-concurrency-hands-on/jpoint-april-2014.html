@@ -15,52 +15,67 @@
     <script src="js/jmpress.impress.js"></script>
     <script src="js/google-code-prettify/prettify.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
 </head>
 <body>
 
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    JPoint 2014
+                </a>
+
+                <p class="navbar-text">
+                    Многопоточность Java под Капотом, Глеб Смирнов
+                </p>
+
+
+            </div>
+            <div class="navbar-right">
+                <a class="navbar-brand">
+                    Слайд <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
     <div id="laser"></div>
 
-    <script type="text/javascript">
-        !function ($) {
-            $(function(){
-
-                $('#impress').jmpress({
-                    "mouse": { clickSelects: false },
-                    "beforeChange": function(element, eventData) {
-                        element = $(element);
-                        if(element.is('tr') || element.hasClass("visit-me")) {
-                            element.addClass('visited'); // code should not be hidden after visiting
-                        }
-                    }
-                });
-
-                window.prettyPrint && prettyPrint()
-                $('body').mousemove(function(e){
-                    $('#laser').css('left', e.clientX).css('top', e.clientY);
-                });
-            });
-        }(window.jQuery)
-    </script>
 
     <div id="impress">
 
-    <div class="step step-title" data-y="-800">
+    <div class="step step-title" data-y="-900">
         <div class="jumbotron text-center">
             <h1>
                 Многопоточность Java<br/>
                 Под Капотом
             </h1>
-            <p>#volatile #membar #dragons #openjdk</p>
-            <p>#jmm #store #load #internals</p>
-            <p>#cachecoherency #omg</p>
-            <p>#jugru #jugmsk</p>
+
+            <div class="row">
+                <p>#volatile #membar #dragons #openjdk</p>
+                <p>#jmm #store #load #internals</p>
+                <p>#cachecoherency #omg</p>
+                <p>#jugru #jugmsk</p>
+            </div>
 
             <footer>
                 <h2>Gleb Smirnov</h2>
-                <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
+                <h3>me<span class="text-info text-underlined">@gvsmirnov</span>.ru</h3>
             </footer>
 
+        </div>
+    </div>
+
+    <div class="step step-slide qr" data-y="-900" data-x="1300">
+        <div class="text-center">
+            <img class="graph" src="img/qr-bingo.png"/>
+
+            <h2>
+                <a href="http://bullshit-bingo.ru/card/199">
+                    bullshit-bingo.ru/card/199
+                </a>
+            </h2>
         </div>
     </div>
 
@@ -726,10 +741,8 @@ void foo() {
         <img src="img/membar-prohibitions.png" />
 
         <div class="step spoiler visit-me">
-            <span class="text-danger text-really-giant"
-                  style="margin-left: 390px;">
-                &cross;
-            </span>
+            <span class="text-danger text-really-giant glyphicon glyphicon-remove"
+                  style="margin-left: 330px;"></span>
         </div>
     </div>
 
@@ -739,10 +752,8 @@ void foo() {
         <img src="img/membar-allowances.png" />
 
         <div class="step spoiler visit-me">
-            <span class="text-success text-really-giant"
-                  style="margin-left: 390px;">
-                &check;
-            </span>
+            <span class="text-success text-really-giant glyphicon glyphicon-ok"
+                  style="margin-left: 330px;"></span>
         </div>
     </div>
 
@@ -905,7 +916,7 @@ void foo() {
 
     <!-- LAST REMARKS -->
 
-    <div class="step step-slide" data-x="2600" data-y="3600" id="links">
+    <div class="step step-slide qr" data-x="2600" data-y="3600">
         <div class="text-center">
             <img class="graph" src="img/qr-jpoint-2014.png"/>
 
@@ -923,4 +934,31 @@ void foo() {
 
     </div>
 </body>
+
+<script src="js/custom.js"></script>
+
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+
+            $('#impress').jmpress({
+                "mouse": { clickSelects: false },
+                "beforeChange": function(element, eventData) {
+                    element = $(element);
+                    if(element.hasClass("visit-me")) {
+                        element.addClass('visited');
+                    }
+
+                    updateCurrentSlide(element);
+                }
+            });
+
+            window.prettyPrint && prettyPrint()
+            $('body').mousemove(function(e){
+                $('#laser').css('left', e.clientX).css('top', e.clientY);
+            });
+        });
+    }(window.jQuery)
+</script>
+
 </html>
