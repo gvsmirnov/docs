@@ -15,4 +15,4 @@
 var updateCurrentSlide = function(element) {
     var slideNumber = element.data("step-number");
     $("#current-slide-number").text(slideNumber);
-}
+};
