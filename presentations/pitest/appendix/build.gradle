@@ -1,14 +1,39 @@
-apply plugin: 'java'
+apply plugin: "java"
 
-group = 'ru.gvsmirnov'
-version = '0.0.1'
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_7
 
 repositories {
-    mavenLocal()
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
+    testCompile "junit:junit:4.11"
+    testCompile "org.testng:testng:6.1.1"
+    compile "args4j:args4j:2.0.21"
+}
+
+loadConfiguration()
+
+def loadConfiguration() {
+    def pitVersion = hasProperty("pit-version") ? getProperty("pit-version") : "1.0.0"
+    project.ext.set("pitVersion", pitVersion)
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.0.0'
+    }
+}
+
+apply plugin: "jacoco"
+apply plugin: "pitest"
+
+pitest {
+    pitestVersion = "$pitVersion"
+    targetClasses = ["ru.gvsmirnov.sample*"]
+    timestampedReports = false
 }

@@ -24,18 +24,16 @@
         <div class="step step-title" data-y="-800">
             <div class="jumbotron text-center">
                 <h1>
-                    Mutation Analysis:
+                    Mutation Analysis:<br/>
                 </h1>
 
-                <h2 class="well well-lg">
-                    What Code Coverage<br/>
+                <h2>
+                    What Code Coverage
                     Doesn't Tell Us
                 </h2>
 
-                <p>#junit #pitest</p>
-                <p>#juc2014</p>
-
                 <footer>
+                    <h2>#pitest #juc2014</h2>
                     <h2>Gleb Smirnov</h2>
                     <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
                 </footer>
@@ -43,27 +41,181 @@
             </div>
         </div>
 
-        <!-- LEAKY ABSTRACTIONS -->
+        <!-- CODE COVERAGE SUCKS -->
 
         <div class="step step-slide">
             <h1>Sometimes, The Tests Suck</h1>
 
-<pre class="prettyprint lang-java">
-public class NodeMapperTest {
+<pre class="prettyprint lang-java" data-jmpress="fade">
+public class SampleSmallClassTest {
 
     @Test
-    public void testGetMachineById() {
+    public void testStuff() {
         // The boss says we should write tests.
-        // Well, here you are. He-he.
+        // Doesn't seem that hard...
 
-        Assert.assertTrue(true);
+        assertTrue(true);
     }
 
 }
 </pre>
         </div>
 
-        <div class="step step-slide qr" data-x="-2600" id="links">
+        <div class="step step-slide" data-x="1300">
+            <h1>So We Use Code Coverage</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testStuff jacocoTestReport
+</pre>
+            <div class="well well-lg" data-jmpress="fade">
+
+            <table class="table table-big-text">
+                <thead>
+                <tr>
+                    <td>Element</td>
+                    <td>Missed Instructions</td>
+                    <td>Cov.</td>
+                    <td>Missed Branches</td>
+                    <td>Cov.</td>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td>47 of 47</td>
+                    <td>0%</td>
+                    <td>8 of 8</td>
+                    <td>0%</td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <tr>
+                    <td>doSomeMath(int, int)</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+                        </div>
+                    </td>
+                    <td>0%</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+                        </div>
+                    </td>
+                    <td>0%</td>
+                </tr>
+                </tbody>
+            </table>
+
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-x="1300">
+            <h1>&nbsp;</h1>
+            <div class="row well">
+                <div class="col-md-4">
+                    <img class="img-responsive img-rounded" src="img/PHP_CEO.JPG"/>
+                </div>
+                <div class="col-md-8">
+                    <h1><strong>@PHP_CEO</strong></h1>
+                    <h2>
+                        <strong>
+                            YOU GET THAT CODE COVERAGE TO 100%...<br/>
+                            OR YOU'RE FIRED !! !!!!
+                        </strong>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-x="2600">
+            <h1>It Makes Us Write Better Tests</h1>
+
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Test
+public void testStuffWithCoverage() {
+    // Need to get that coverage thing high...
+
+    for(int a = -5; a <= 5; a ++) {
+        for (int b = -5; b <= 5; b++) {
+            SampleSmallClass.doSomeMath(a, b);
+        }
+    }
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-x="3900">
+            <h1>Which Give Better Metrics</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testStuffWithCoverage jacocoTestReport
+</pre>
+
+            <div class="well well-lg" data-jmpress="fade">
+
+                <table class="table table-big-text">
+                    <thead>
+                    <tr>
+                        <td>Element</td>
+                        <td>Missed Instructions</td>
+                        <td>Cov.</td>
+                        <td>Missed Branches</td>
+                        <td>Cov.</td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td>0 of 47</td>
+                        <td>100%</td>
+                        <td>0 of 8</td>
+                        <td>100%</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td>doSomeMath(int, int)</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>100%</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>100%</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="step step-slide spoiler" data-x="3900">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-giant">
+                    But Still Suck
+                </span></h1>
+            </div>
+        </div>
+
+        <!-- CODE COVERAGE SUCKS END -->
+
+        <!-- MUTATION ANALYSIS IN A NUTSHELL -->
+
+        <div class="step step-slide" data-y="800">
+            <h1>We Can Do Better Than That</h1>
+            
+        </div>
+
+        <!-- MUTATION ANALYSIS IN A NUTSHELL ENDS -->
+
+        <div class="step step-slide qr" data-y="-800" data-x="1300" id="links">
             <div class="text-center">
                 <img class="graph" src="img/qr.png"/>
 
@@ -74,11 +226,6 @@ public class NodeMapperTest {
                 </h2>
             </div>
         </div>
-
-        <!-- LAST REMARKS END -->
-
-
-    </div>
 
     <div id="laser"></div>
 
