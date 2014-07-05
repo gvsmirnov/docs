@@ -28,8 +28,7 @@ public class SampleSmallClassTest {
     }
 
     @Test
-    @Ignore
-    public void testAndAssert() {
+    public void testProperly() {
         final int expected = 0;
 
         for(int a = -5; a <= 5; a ++) {

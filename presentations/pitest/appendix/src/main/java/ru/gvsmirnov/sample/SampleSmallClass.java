@@ -7,10 +7,11 @@ public class SampleSmallClass {
      * @return zero
      */
     public static int doSomeMath(int a, int b) {
-        long result = 0;
+        long result = b;
 
         result += a;
         result -= b;
+        result -= a;
 
         return (int) result;
     }

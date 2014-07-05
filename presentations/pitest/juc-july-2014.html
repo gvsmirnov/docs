@@ -98,17 +98,13 @@ $ gradle test --tests *testStuff jacocoTestReport
                 <tr>
                     <td>Element</td>
                     <td>Missed Instructions</td>
-                    <td>Cov.</td>
-                    <td>Missed Branches</td>
-                    <td>Cov.</td>
+                    <td>Coverage</td>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
                     <td>Total</td>
                     <td>47 of 47</td>
-                    <td>0%</td>
-                    <td>8 of 8</td>
                     <td>0%</td>
                 </tr>
                 </tfoot>
@@ -183,17 +179,13 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                     <tr>
                         <td>Element</td>
                         <td>Missed Instructions</td>
-                        <td>Cov.</td>
-                        <td>Missed Branches</td>
-                        <td>Cov.</td>
+                        <td>Coverage</td>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <td>Total</td>
                         <td>0 of 47</td>
-                        <td>100%</td>
-                        <td>0 of 8</td>
                         <td>100%</td>
                     </tr>
                     </tfoot>
@@ -373,7 +365,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
             <h1>Let's Check It Out!</h1>
 
 <pre class="prettyprint console lang-bash" data-jmpress="fade">
-$ gradle test --tests *testStuff pitest
+$ gradle test --tests *testStuffWithCoverage pitest
 </pre>
             <div class="well well-lg" data-jmpress="fade">
 
@@ -382,17 +374,13 @@ $ gradle test --tests *testStuff pitest
                     <tr>
                         <td>Name</td>
                         <td>Line Coverage</td>
-                        <td></td>
                         <td>Mutation Coverage</td>
-                        <td></td>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <td>Total</td>
-                        <td>0 of 47</td>
                         <td>100%</td>
-                        <td>14 of 14</td>
                         <td>0%</td>
                     </tr>
                     </tfoot>
@@ -404,13 +392,11 @@ $ gradle test --tests *testStuff pitest
                                 <div class="progress-bar progress-bar-success" style="width: 100%"></div>
                             </div>
                         </td>
-                        <td>100%</td>
                         <td>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
                             </div>
                         </td>
-                        <td>0%</td>
                     </tr>
                     </tbody>
                 </table>
@@ -422,10 +408,11 @@ $ gradle test --tests *testStuff pitest
             <h1>Some Very Advanced Business Logic</h1>
 <pre class="prettyprint lang-java">
 public static int doSomeMath(int a, int b) {
-    long result = 0;
+    long result = b;
 
     result += a;
     result -= b;
+    result -= a;
 
     return (int) result;
 }
@@ -436,42 +423,122 @@ public static int doSomeMath(int a, int b) {
             <h1>Pit Has Messed With Your Code (1)</h1>
 <pre class="prettyprint lang-java">
 public static int doSomeMath(int a, int b) {
-    long result = 0;
+    long result = b;
 
     result <span class="attention-here">-=</span> a;
     result -= b;
+    result -= a;
 
     return (int) result;
 }
 </pre>
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced long addition with subtraction → SURVIVED
+                </p>
+            </div>
         </div>
 
         <div class="step step-slide" data-y="3200" data-x="5200">
             <h1>Pit Has Messed With Your Code (2)</h1>
 <pre class="prettyprint lang-java">
 public static int doSomeMath(int a, int b) {
-    long result = 0;
+    long result = b;
 
-    result += b;
+    result += a;
+    result -= b;
     result <span class="attention-here">+=</span> a;
 
     return (int) result;
 }
 </pre>
+
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced long subtraction with addition → SURVIVED
+                </p>
+            </div>
         </div>
 
         <div class="step step-slide" data-y="4000" data-x="5200">
             <h1>Pit Has Messed With Your Code (3)</h1>
 <pre class="prettyprint lang-java">
 public static int doSomeMath(int a, int b) {
-    long result = 0;
+    long result = b;
 
-    result += b;
+    result += a;
+    result -= b;
     result -= a;
 
     return <span class="attention-here">((int) result == 0 ? 1 : 0)</span>;
 }
 </pre>
+
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced return value with (x == 0 ? 1 : 0) → SURVIVED
+                </p>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="6500">
+            <h1>So We Need To Assert Something</h1>
+
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Test
+public void testProperly() {
+    final int expected = 0;
+
+    for(int a = -5; a <= 5; a ++) {
+        for(int b = -5; b <= 5; b ++) {
+            assertEquals(expected, doSomeMath(a, b));
+        }
+    }
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="7800">
+            <h1>Let's Check It Out!</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testProperly pitest
+</pre>
+            <div class="well well-lg" data-jmpress="fade">
+
+                <table class="table table-big-text">
+                    <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Line Coverage</td>
+                        <td>Mutation Coverage</td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td>100%</td>
+                        <td>100%</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td>SampleSmallClass.java	</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
 
         <!-- MUTATION ANALYSIS IN A NUTSHELL ENDS -->
