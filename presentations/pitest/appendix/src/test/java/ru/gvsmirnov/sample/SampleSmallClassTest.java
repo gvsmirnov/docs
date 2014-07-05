@@ -1,5 +1,6 @@
 package ru.gvsmirnov.sample;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -27,6 +28,7 @@ public class SampleSmallClassTest {
     }
 
     @Test
+    @Ignore
     public void testAndAssert() {
         final int expected = 0;
 

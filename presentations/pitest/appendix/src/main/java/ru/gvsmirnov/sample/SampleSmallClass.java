@@ -7,30 +7,12 @@ public class SampleSmallClass {
      * @return zero
      */
     public static int doSomeMath(int a, int b) {
-        int c;
+        long result = 0;
 
-        if (a > b) {
-            c = -1;
-        } else if(a < b) {
-            c = 1;
-        } else {
-            c = 100;
-        }
+        result += a;
+        result -= b;
 
-        int d = a + b + c;
-        int e = a + b;
-
-        int x;
-
-        if (a > b) {
-            x = 1;
-        } else if(a < b) {
-            x = -1;
-        } else {
-            x = -100;
-        }
-
-        return d + x - e;
+        return (int) result;
     }
 
 }
