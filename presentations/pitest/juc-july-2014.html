@@ -15,6 +15,7 @@
     <script src="js/jmpress.impress.js"></script>
     <script src="js/google-code-prettify/prettify.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/highcharts.js"></script>
 
 </head>
 <body>
@@ -628,7 +629,7 @@ $ gradle test --tests *testProperly pitest
             </div>
         </div>
 
-        <div class="step step-slide" data-y="3600">
+        <div class="step step-slide" data-y="3200">
             <h1>Pitest Grants You Confidence</h1>
             <p data-jmpress="fade">
                 A success story from TheLadders.com
@@ -653,6 +654,102 @@ $ gradle test --tests *testProperly pitest
         </div>
 
         <!-- WHY USE PITEST ENDS -->
+
+        <!-- PITEST PERFORMANCE -->
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="1300">
+            <div class="jumbotron text-center">
+                <img src="img/slowpoke.png" class="graph">
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200" data-x="2600">
+            <h1>Let's Test It On Commons Math</h1>
+            <ul>
+                <li data-jmpress="fade">Loads of complex mathematical algorithms</li>
+                <li data-jmpress="fade"><strong>177K</strong> lines of source code</li>
+                <li data-jmpress="fade">
+                    About <strong>5K</strong> tests in <strong>109K</strong> lines of code
+                </li>
+            </ul>
+            <pre class="prettyprint console lang-bash" data-jmpress="fade">
+<span>$ svn checkout http://svn.apache.org/repos/asf/comm [...]</span>
+<span data-jmpress="fade">$ cd commons-math3</span>
+<span data-jmpress="fade">$ patch commons-math3/pom.xml commons-math3-pom-patch.diff</span></pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="2600">
+            <div class="demotivator">
+                <h1>Benchmarking</h1>
+                <img src="img/shipilev-large.jpg"/>
+                <h1>You're Doing It Wrong</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="3900">
+            <h1>Baseline: Just Run Teh Tests</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test
+
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">
+Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
+
+[INFO] ---------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ---------------------------------------------
+[INFO] Total time: 05:17 min</span>
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="4000" data-x="3900">
+            <h1>Go pitest!</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test pitest:mutationCoverage
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================</span>
+<span data-jmpress="fade">> scan classpath : < 1 second</span>
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">27 minutes and 31 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : 7 seconds</span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">3 hours, 47 minutes and 7 seconds</span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">4 hours, 14 minutes and 46 seconds</span></span>
+</pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4000" data-x="3900">
+            <div class="jumbotron text-center text-giant text-v-center">
+                <h1>Mutation Coverage: 79%</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="4800" data-x="3900">
+            <h1>Throw In More Threads, Maybe?</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test pitest:mutationCoverage -Dpit.threads=2
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================</span>
+<span data-jmpress="fade">> scan classpath : < 1 second</span>
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">27 minutes and 28 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : 3 seconds</span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">2 hours, 2 minutes and 1 seconds</span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">2 hours, 29 minutes and 33 seconds</span></span>
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="5600" data-x="3900">
+            <h1>Pitest Performance Over Time</h1>
+            <div id="pitest-perf">
+
+            </div>
+        </div>
+        <!-- PITEST PERFORMANCE ENDS -->
+
 
         <div class="step step-slide qr" data-y="-800" data-x="1300" id="links">
             <div class="text-center">
@@ -691,7 +788,122 @@ $ gradle test --tests *testProperly pitest
                     $('#laser').css('left', e.clientX).css('top', e.clientY);
                 });
             });
-        }(window.jQuery)
+        }(window.jQuery);
+
+
+
+        $(function () {
+
+            var s = function(h, m, s) {
+                return s + 60 * (m + 60 * h);
+            };
+
+            var coverageColor = '#1AB9CC';
+            var overheadColor = '#FF484D';
+            var expectedColor = '#18CCB1';
+
+            $('#pitest-perf').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: '',
+                xAxis: {
+                    categories: ['PIT 0.29', 'PIT 0.30', 'PIT 0.31', 'PIT 1.0.0']
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Analysis Time [s]'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [
+                    {// 1 thread
+                        name: 'Overhead',
+                        data: [0, 0, 0, 0],
+                        stack: '1 thread',
+                        color: overheadColor
+                    },
+                    {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0), s(3,31,0), s(3,19,0), s(3,7,0)],
+                        stack: '1 thread',
+                        color: expectedColor
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '1 thread',
+                        color: coverageColor
+                    },
+                    {// 2 threads
+                        name: 'Overhead',
+                        data: [s(0,15,0), 34, 31, 20],
+                        stack: '2 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/2, s(3,31,0)/2, s(3,19,0)/2, s(3,7,0)/2],
+                        stack: '2 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '2 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    },
+                    {//4 threads
+                        name: 'Overhead',
+                        data: [s(0,31,17), 45, 42, 37],
+                        stack: '4 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    }, {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/4, s(3,31,0)/4, s(3,19,0)/4, s(3,7,0)/4],
+                        stack: '4 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '4 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    },
+                    {//8 threads
+                        name: 'Overhead',
+                        data: [s(0,56,17), s(0,8,10), s(0,9,0), s(0,8,54)],
+                        stack: '8 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    }, {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/8, s(3,31,0)/8, s(3,19,0)/8, s(3,7,0)/8],
+                        stack: '8 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '8 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    }
+                ]
+            });
+        });
     </script>
 </body>
 </html>
