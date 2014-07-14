@@ -269,6 +269,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                         <th>Java</th>
                         <th>TestNG</th>
                         <th>*Mock*</th>
+                        <th>CI</th>
                         <th>Last Update</th>
                     </tr>
                 </thead>
@@ -282,6 +283,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                         <td class="danger">5-6</td> <!-- Java -->
                         <td class="danger">N</td> <!-- TestNG -->
                         <td>?</td> <!-- *Mock* -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">2009</td> <!-- Last Update -->
                     </tr>
 
@@ -293,6 +295,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                         <td class="danger">5-6</td> <!-- Java -->
                         <td class="danger">N</td> <!-- TestNG -->
                         <td>?</td> <!-- *Mock* -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">2011</td> <!-- Last Update -->
                     </tr>
 
@@ -304,6 +307,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                         <td class="danger">4-6</td> <!-- Java -->
                         <td class="success">Y</td> <!-- TestNG -->
                         <td class="info">3/6</td> <!-- *Mock* -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="warning">2013</td> <!-- Last Update -->
                     </tr>
 
@@ -315,6 +319,7 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                         <td class="success">5-8</td> <!-- Java -->
                         <td class="success">Y</td> <!-- TestNG -->
                         <td class="success">6/6</td> <!-- *Mock* -->
+                        <td class="success">Y</td> <!-- CI -->
                         <td class="success">Yesterday</td> <!-- Last Update -->
                     </tr>
                 </tbody>
@@ -838,7 +843,7 @@ public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
         return new Array2DRowFieldMatrix&lt;T&gt;(field, d, false);</span>
 }</pre>
 
-            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="appear after 1 ms">
+            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="appear after 1ms">
 public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
     createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
 <span class="covered">        final T zero = field.getZero();
@@ -869,8 +874,8 @@ $ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
 <span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">7 minutes and 3 seconds</span></span>
 <span data-jmpress="fade">> build mutation tests : <span class="nb">1 minutes and 1 seconds</span></span>
 <span data-jmpress="fade">> run mutation analysis : <span class="nb">56 seconds</span></span>
-======================================================
-<span data-jmpress="fade">> Total  : <span class="nb">9 minutes and 0 seconds</span></span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">9 minutes and 0 seconds</span></span></span>
 </pre>
             </pre>
         </div>
@@ -883,7 +888,56 @@ $ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
 
         <!-- PITFALLS -->
 
+        <div class="step step-slide text-center" data-y="7200">
+            <h1>Get Pitest NOW!</h1>
+            <img class="graph" src="img/epic-meme.jpg"/>
+        </div>
 
+        <div class="step step-slide spoiler" data-y="7200" data-x="1300">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-giant">
+                    Nothing Is Perfect
+                </span></h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="2600">
+            <h1>Pitest vs. Defensive Programming</h1>
+            <pre class="prettyprint smaller lang-java linenums:5">
+public int evaluate(final int distance) {
+    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");
+    }
+
+    int result = 0;
+    if(distance > 0) {
+        result += calculateDistanceAdjustment(distance);
+    }
+
+    return result;
+}</pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="7200" data-x="2600">
+            <h1>Pitest vs. Defensive Programming</h1>
+            <pre class="prettyprint smaller lang-java linenums:5">
+public int evaluate(final int distance) {
+<span class="covered">    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");
+    }
+
+    int result = 0;</span>
+<span class="not-covered">    if(distance > 0) {</span>
+<span class="covered">        result += calculateDistanceAdjustment(distance);
+    }
+
+    return result;</span>
+}</pre>
+
+            <p class="not-covered">
+                11: changed conditional boundary → SURVIVED
+            </p>
+        </div>
 
         <!-- PITFALLS END -->
 
