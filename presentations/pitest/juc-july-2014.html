@@ -610,7 +610,7 @@ $ gradle test --tests *testProperly pitest
         <div class="step step-slide text-center" data-y="2400" data-x="2600">
             <div class="v-center">
                 <h2>&nbsp;</h2>
-                <h1>Do Not Write Any <span data-jmpress="appear">More</span> Unit Tests</h1>
+                <h1>Do Not Write Any <span data-jmpress="appear-inline">More</span> Unit Tests</h1>
                 <h1 data-jmpress="fade">Than Is Sufficient To Fail</h1>
                 <h1 data-jmpress="fade" class="text-muted">
                     (Compilation Failures Are Failures, Too)
@@ -698,7 +698,7 @@ Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
 [INFO] ---------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ---------------------------------------------
-[INFO] Total time: 05:17 min</span>
+[INFO] Total time: <span class="nb">05:17 min</span></span>
 </pre>
         </div>
 
@@ -748,7 +748,120 @@ $ mvn clean test pitest:mutationCoverage -Dpit.threads=2
 
             </div>
         </div>
+
+        <div class="step step-slide spoiler" data-y="5600" data-x="3900">
+            <div class="jumbotron text-center text-giant text-v-center">
+                <h1>Still, An Hour Is Too Much!</h1>
+            </div>
+        </div>
+
         <!-- PITEST PERFORMANCE ENDS -->
+
+        <!-- INCREMENTAL ANALYSIS -->
+
+        <div class="step step-slide" data-y="6400">
+            <h1>Incremental analysis</h1>
+            <p data-jmpress="fade">
+                Store the following info between runs:
+            </p>
+            <ul>
+                <li data-jmpress="fade">The hashes of all tested classes</li>
+                <li data-jmpress="fade">The hashes of all the tests</li>
+                <li data-jmpress="fade">Analysis results</li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="1300">
+            <h1>Incremental analysis: Heuristics</h1>
+            <p data-jmpress="fade">
+                Do not check a mutant, if in the previous run:
+            </p>
+            <ul>
+                <li data-jmpress="fade">
+                    It <span class="text-info">timed out</span>, and the class has not changed
+                </li>
+                <li data-jmpress="fade">It was <span class="text-success">killed</span>, and neither the class nor the test have changed</li>
+                <li data-jmpress="fade">It <span class="text-danger">survived</span>, and there are no new/changed tests for it</li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="2600">
+            <h1>Incremental Analysis: Overhead</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================
+> scan classpath : < 1 second
+> coverage and dependency analysis : <span class="nb">7 minutes and 15 seconds</span>
+> build mutation tests : 2 seconds
+> run mutation analysis : <span class="nb">55 minutes and 41 seconds</span>
+======================================================
+> Total  : <span class="nb">1 hours, 2 minutes and 59 seconds</span></span>
+</pre>
+            </pre>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="3900">
+            <h1><code>o.a.c.math3.linear.MatrixUtils</code></h1>
+
+            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="disappear">
+public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
+    createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
+<span class="covered">        final T zero = field.getZero();
+        final T one  = field.getOne();
+        final T[][] d = MathArrays.buildArray(field, dimension, dimension);
+        for (int row = 0; row < dimension; row++) {
+            final T[] dRow = d[row];</span>
+<span class="not-covered">            Arrays.fill(dRow, zero);</span>
+<span class="covered">            dRow[row] = one;
+        }
+        return new Array2DRowFieldMatrix&lt;T&gt;(field, d, false);</span>
+}</pre>
+
+            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="appear after 1 ms">
+public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
+    createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
+<span class="covered">        final T zero = field.getZero();
+        final T one  = field.getOne();
+        final T[][] d = MathArrays.buildArray(field, dimension, dimension);
+        for (int row = 0; row < dimension; row++) {
+            final T[] dRow = d[row];
+            dRow[row] = one;
+        }
+        return new Array2DRowFieldMatrix&lt;T&gt;(field, d, false);</span>
+}</pre>
+
+            <p class="not-covered">
+                200: removed call to java/util/Arrays::fill : SURVIVED
+            </p>
+
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="5200">
+            <h1>Incremental Analysis: Profit</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================
+> scan classpath : < 1 second
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">7 minutes and 3 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : <span class="nb">1 minutes and 1 seconds</span></span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">56 seconds</span></span>
+======================================================
+<span data-jmpress="fade">> Total  : <span class="nb">9 minutes and 0 seconds</span></span></span>
+</pre>
+            </pre>
+        </div>
+
+        <div class="step step-slide text-center spoiler" data-y="6400" data-x="5200">
+            <img class="graph" src="img/cool-jenkins.png"/>
+        </div>
+
+        <!-- INCREMENTAL ANALYSIS ENDS -->
 
 
         <div class="step step-slide qr" data-y="-800" data-x="1300" id="links">
@@ -813,7 +926,7 @@ $ mvn clean test pitest:mutationCoverage -Dpit.threads=2
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Analysis Time [s]'
+                        text: 'Time [s]'
                     }
                 },
                 plotOptions: {
