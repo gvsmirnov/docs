@@ -263,69 +263,69 @@ $ gradle test --tests *testStuffWithCoverage jacocoTestReport
                 <thead>
                     <tr>
                         <th>Tool</th>
-                        <th>Ant</th>
-                        <th>Maven</th>
-                        <th>Gradle</th>
-                        <th>Java</th>
-                        <th>TestNG</th>
-                        <th>*Mock*</th>
-                        <th>CI</th>
-                        <th>Last Update</th>
+                        <th data-jmpress="fade">Java</th>
+                        <th data-jmpress="fade">Ant</th>
+                        <th data-jmpress="fade">Maven</th>
+                        <th data-jmpress="fade">Gradle</th>
+                        <th data-jmpress="fade">CI</th>
+                        <th data-jmpress="fade">TestNG</th>
+                        <th data-jmpress="fade" id="mocks">Mocks*</th>
+                        <th data-jmpress="fade">Last Update</th>
                     </tr>
                 </thead>
                 <tbody>
 
                     <tr data-jmpress="fade">
                         <td style="text-align: left">Simple Jester</td> <!-- Tool -->
+                        <td class="danger">5-6</td> <!-- Java -->
                         <td class="danger">N</td> <!-- Ant -->
                         <td class="danger">N</td> <!-- Maven -->
                         <td class="danger">N</td> <!-- Gradle -->
-                        <td class="danger">5-6</td> <!-- Java -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">N</td> <!-- TestNG -->
                         <td>?</td> <!-- *Mock* -->
-                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">2009</td> <!-- Last Update -->
                     </tr>
 
                     <tr data-jmpress="fade">
                         <td style="text-align: left">javaLanche</td> <!-- Tool -->
+                        <td class="danger">5-6</td> <!-- Java -->
                         <td class="danger">N</td> <!-- Ant -->
                         <td class="danger">N</td> <!-- Maven -->
                         <td class="danger">N</td> <!-- Gradle -->
-                        <td class="danger">5-6</td> <!-- Java -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">N</td> <!-- TestNG -->
                         <td>?</td> <!-- *Mock* -->
-                        <td class="danger">N</td> <!-- CI -->
                         <td class="danger">2011</td> <!-- Last Update -->
                     </tr>
 
                     <tr data-jmpress="fade">
                         <td style="text-align: left">Jumble</td> <!-- Tool -->
+                        <td class="danger">4-6</td> <!-- Java -->
                         <td class="success">Y</td> <!-- Ant -->
                         <td class="danger">N</td> <!-- Maven -->
                         <td class="danger">N</td> <!-- Gradle -->
-                        <td class="danger">4-6</td> <!-- Java -->
+                        <td class="danger">N</td> <!-- CI -->
                         <td class="success">Y</td> <!-- TestNG -->
                         <td class="info">3/6</td> <!-- *Mock* -->
-                        <td class="danger">N</td> <!-- CI -->
                         <td class="warning">2013</td> <!-- Last Update -->
                     </tr>
 
                     <tr data-jmpress="fade">
                         <td style="text-align: left">Pitest</td> <!-- Tool -->
+                        <td class="success">5-8</td> <!-- Java -->
                         <td class="success">Y</td> <!-- Ant -->
                         <td class="success">Y</td> <!-- Maven -->
                         <td class="success">Y</td> <!-- Gradle -->
-                        <td class="success">5-8</td> <!-- Java -->
+                        <td class="success">Y</td> <!-- CI -->
                         <td class="success">Y</td> <!-- TestNG -->
                         <td class="success">6/6</td> <!-- *Mock* -->
-                        <td class="success">Y</td> <!-- CI -->
                         <td class="success">Yesterday</td> <!-- Last Update -->
                     </tr>
                 </tbody>
             </table>
 
-            <footer>
+            <footer data-jmpress="fade after 1 #mocks">
                 <p class="text-bigger text-muted">
                     <br/>
                     * Powermock, JMock, JMock2, Mockito, JMockit, EasyMock
@@ -939,10 +939,98 @@ public int evaluate(final int distance) {
             </p>
         </div>
 
+        <div class="step step-slide" data-y="7200" data-x="3900">
+            <h1>Pitest vs. Dangerous Code</h1>
+            <pre class="prettyprint smaller lang-java">
+public class Minitrue {
+    public static void rectify(String path) {
+        ensurePathIsSecure(path);
+        rmRf(path);
+    }
+
+    private static final void rmRf(String path) {
+        String command = "$ rm -rf " + path;
+        System.out.println("Executing: " + command);
+        exec(command);
+    }
+
+    // ...
+}</pre>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="5200">
+            <h1>Pitest vs. Dangerous Code</h1>
+            <pre class="prettyprint smaller lang-java">
+@Test
+public void testRectifySecurity() {
+    boolean rejected = false;
+
+    try {
+        Minitrue.rectify("/");
+    } catch(SecurityException e) {
+        rejected = true;
+    }
+
+    Assert.assertTrue(rejected);
+    Assert.assertFalse(Minitrue.isUnpath("/"));
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="6500">
+            <h1>What Could Possibly Go Wrong?</h1>
+            <pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">stderr  : PIT >> Running mutation  <span class="text-muted">[...]</span>
+<span data-jmpress="fade">          mutator=<span class="text-info">VoidMethodCallMutator</span>,</span>
+<span data-jmpress="fade">          description=<span class="text-warning">removed call to Minitrue::ensurePathIsSecure</span></span>
+
+<span data-jmpress="fade" class="text-muted">stderr  : PIT >> mutating method rectify
+stderr  : PIT >> 2 relevant test for rectify
+stderr  : PIT >> Running 1 units</span>
+
+<span data-jmpress="fade" class="text-danger">stdout  : Executing: rm -rf /</span>
+</span></pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="7200" data-x="6500">
+            <div class="jumbotron text-center text-v-center">
+                <h1><span class="text-giant">
+                    I Accidentally Your Data
+                </span></h1>
+            </div>
+        </div>
+
         <!-- PITFALLS END -->
 
+        <div class="step step-slide" data-y="-1600" data-x="1300">
+            <h1>See Also</h1>
+            <ul>
+                <li>
+                    Official Guide:
+                    <a href="http://pitest.org/quickstart/">pitest.org/quickstart/</a>
+                </li>
+                <li>
+                    Jenkins Plugin:
+                    <a href="https://github.com/edwardwe7/pitmutation-jenkins">github.com/edwardwe7/pitmutation-jenkins</a>
+                </li>
+                <li>
+                    Gradle Sample:
+                    <a href="https://github.com/gvsmirnov/pitest-gradle-sample">github.com/gvsmirnov/pitest-gradle-sample</a>
+                </li>
+                <li>
+                    Maven Sample:
+                    <a href="https://github.com/gvsmirnov/pitest-sample">github.com/gvsmirnov/pitest-sample</a>
+                </li>
+                <li>
+                    <a href="http://vimeo.com/89083982">vimeo.com/89083982</a>
+                </li>
+                <li>
+                    <a href="http://www.slideshare.net/filipvanlaenen/mutation-testing-11298526">slideshare.net/filipvanlaenen/mutation-testing-11298526</a>
+                </li>
+            </ul>
+        </div>
 
-        <div class="step step-slide qr" data-y="-800" data-x="1300" id="links">
+        <div class="step step-slide qr" data-y="-800" data-x="1300">
             <div class="text-center">
                 <img class="graph" src="img/qr.png"/>
 
@@ -952,6 +1040,39 @@ public int evaluate(final int distance) {
                     </a>
                 </h2>
             </div>
+        </div>
+
+        <div class="step text-center" id="sponsors" data-x="2600" data-y="3200" data-scale="5" data-z="1000">
+            <h1 class="well">Thank You To JUC Sponsors</h1>
+                <div class="row platinum well">
+                    <div class="col-md-5 col-md-offset-1">
+                        <img src="img/cloud-bees.png" class="img-responsive img-center"/>
+                    </div>
+                    <div class="col-md-5">
+                        <img src="img/jfrog.png" class="img-responsive img-center"/>
+                    </div>
+                </div>
+
+                <div class="row golden well">
+                    <div class="col-md-3">
+                        <img src="img/blackduck.png" class="img-responsive img-center"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="img/ravello.png" class="img-responsive img-center"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="img/blazemeter.png" class="img-responsive img-center"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="img/perforce.png" class="img-responsive img-center"/>
+                    </div>
+                </div>
+
+                <div class="row silver">
+                    <div class="col-md-4 col-md-offset-4 well">
+                        <img src="img/redhat.png" class="img-responsive img-center"/>
+                    </div>
+                </div>
         </div>
 
     </div>
