@@ -694,7 +694,7 @@ if(isValid(authData)) {
             </div>
 
             <div class="step spoiler visit-me">
-                <div class="text-center text-v-center">
+                <div class="text-center text-v-center well">
                     <h1 class="text-giant">Conditionals</h1>
                 </div>
             </div>
@@ -855,7 +855,7 @@ for(...) {
             </div>
 
             <div class="step spoiler visit-me">
-                <div class="text-center text-v-center">
+                <div class="text-center text-v-center well">
                     <h1 class="text-giant">Math</h1>
                 </div>
             </div>
@@ -987,7 +987,7 @@ else
             </div>
 
             <div class="step spoiler visit-me">
-                <div class="text-center text-v-center">
+                <div class="text-center text-v-center well">
                     <h1 class="text-giant">Calls</h1>
                 </div>
             </div>
@@ -1129,7 +1129,7 @@ switch(condition) {
 
 
             <div class="step spoiler visit-me">
-                <div class="text-center text-v-center">
+                <div class="text-center text-v-center well">
                     <h1 class="text-giant">Misc</h1>
                 </div>
             </div>
@@ -1165,7 +1165,9 @@ switch(condition) {
         </div>
 
         <div class="step step-slide text-center spoiler" data-y="2400">
-            <img class="graph" src="img/the-three-rules.jpg"/>
+            <div class="jumbotron">
+                <img class="graph" src="img/the-three-rules.jpg"/>
+            </div>
         </div>
 
         <div class="step step-slide text-center" data-y="2400" data-x="1300">
@@ -1254,12 +1256,10 @@ switch(condition) {
 <span data-jmpress="fade">$ patch commons-math3/pom.xml commons-math3-pom-patch.diff</span></pre>
         </div>
 
-        <div class="step step-slide spoiler" data-y="3200" data-x="2600">
-            <div class="demotivator">
-                <h1>Benchmarking</h1>
-                <img src="img/shipilev-large.jpg"/>
-                <h1>You're Doing It Wrong</h1>
-            </div>
+        <div class="step demotivator step-slide spoiler" data-y="3200" data-x="2600">
+            <h1 class="top">Benchmarking</h1>
+            <img src="img/shipilev-large.jpg"/>
+            <h1 class="bottom">You're Doing It Wrong</h1>
         </div>
 
         <div class="step step-slide spoiler" data-y="3200" data-x="3900">
@@ -1294,7 +1294,7 @@ $ mvn clean test pitest:mutationCoverage
 > Total  : <span class="nb">4 hours, 14 minutes and 46 seconds</span></span>
 </pre>
             <div id="slowpoke" data-jmpress="drive-left">
-                <img src="img/slowpoke.png"/>
+                <img src="img/slowpoke.png" data-jmpress="disappear"/>
             </div>
         </div>
 
@@ -1323,12 +1323,10 @@ $ mvn clean test pitest:mutationCoverage -Dpit.threads=2
 
         <div class="step step-slide" data-y="5600" data-x="3900">
             <h1>Pitest Performance Over Time</h1>
-            <div id="pitest-perf">
-
-            </div>
+            <div id="pitest-perf"></div>
         </div>
 
-        <div class="step step-slide spoiler" data-y="5600" data-x="3900">
+        <div class="step step-slide" data-y="5600" data-x="5200">
             <div class="jumbotron text-center text-giant text-v-center">
                 <h1>Still, An Hour?</h1>
             </div>
@@ -1581,10 +1579,12 @@ stderr  : PIT >> Running 1 units</span>
                     <a href="https://github.com/gvsmirnov/pitest-sample">github.com/gvsmirnov/pitest-sample</a>
                 </li>
                 <li>
-                    <a href="http://vimeo.com/89083982">vimeo.com/89083982</a>
+                    Talk by Henry Coles
+                    <a href="http://vimeo.com/89083982">goo.gl/AYhkm7</a>
                 </li>
                 <li>
-                    <a href="http://www.slideshare.net/filipvanlaenen/mutation-testing-11298526">slideshare.net/filipvanlaenen/mutation-testing-11298526</a>
+                    Talk by Filip Van Laenen
+                    <a href="http://www.slideshare.net/filipvanlaenen/mutation-testing-11298526">goo.gl/Cu8jUh</a>
                 </li>
             </ul>
         </div>
@@ -1669,6 +1669,14 @@ stderr  : PIT >> Running 1 units</span>
                 return s + 60 * (m + 60 * h);
             };
 
+            // Thank you, StackOverflow!
+            var h = function(seconds)
+            {
+                var date = new Date(1970,0,1);
+                date.setSeconds(seconds);
+                return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            }
+
             var coverageColor = '#1AB9CC';
             var overheadColor = '#FF484D';
             var expectedColor = '#18CCB1';
@@ -1676,6 +1684,13 @@ stderr  : PIT >> Running 1 units</span>
             $('#pitest-perf').highcharts({
                 chart: {
                     type: 'column'
+                },
+                tooltip: {
+                    formatter: function() {
+                        var stack = this.series.stackKey.substr(6);
+                        return this.series.name + ": " + h(this.y) + " s in " + stack;
+
+                    }
                 },
                 title: '',
                 xAxis: {
