@@ -4,7 +4,7 @@
  - Trollface from the logs
  - Search the web
  - Stackoverflow
- - Ask someone who knows
+ - Ask someone who knows (https://twitter.com/shipilev/status/522481181003354112)
  - DIY!
 
 * Give a real example: the `_last_ditch_collection` and `_no_gc`
@@ -14,7 +14,7 @@
  - Investigate `_no_gc`
  - Find the relevant changeset
  - Get the relevan VM build
- - Reproduce `_no_gc`
+ - Reproduce `_no_gc` (jstat -gccause -t `jps | grep NoGc | cut -d' ' -f1` 100)
  - http://bugs.java.com/view_bug.do?bug_id=7015169
 
 * Outtakes:

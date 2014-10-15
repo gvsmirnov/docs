@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Ахаха, Hotspot, Что Ты Делаешь, Прекрати!</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/whhg.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                JokerConf 2014
+            </a>
+
+            <p class="navbar-text">
+                Ахаха, Hotspot, Что Ты Делаешь, Прекрати <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+            </p>
+
+
+        </div>
+        <div class="navbar-right">
+            <a class="navbar-brand">
+                Слайд <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+
+<div id="laser"></div>
+
+
+<div id="impress">
+
+<div class="step step-title" data-y="-800">
+    <div class="jumbotron text-center">
+        <div class="title">
+            <h1>
+                Ахаха, Hotspot
+            </h1>
+            <h2>
+                Что Ты Делаешь,
+                Прекрати!
+            </h2>
+        </div>
+        <p>#openjdk #mystery #hotspot</p>
+        <p>#jokerconf #jugru</p>
+
+        <footer>
+            <h2>Gleb Smirnov</h2>
+            <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
+        </footer>
+
+    </div>
+</div>
+
+<!-- INTRO -->
+
+<div class="step step-slide">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/trollface.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="1300">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/duckduckgo.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="2600">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/stackoverflow.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="3900">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/twitter.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="5200">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/okay.png"/>
+    </div>
+</div>
+
+<!-- INTRO ENDS -->
+
+<!-- GC CAUSES -->
+
+<div class="step step-slide" data-y="900">
+    <h1>Реальная Проблема</h1>
+
+<pre class="console prettyprint" data-jmpress="fade">
+$ jstat -gccause [...]
+
+<span class="nocode">Timestamp     LGCC                                       GCC
+1.6           Last ditch collection                    <span class="text-danger">No GC</span>
+1.7           <span class="text-danger">No GC</span>                    Last ditch collection
+1.8           <span class="text-danger">No GC</span>                    Last ditch collection
+1.9           <span class="text-danger">No GC</span>                    Last ditch collection
+2.0           <span class="text-danger">No GC</span>                    Last ditch collection</span>
+</pre>
+
+</div>
+
+<!-- GC CAUSES END -->
+
+<!-- JCSTRESS -->
+
+<div class="step step-slide" data-y="1800">
+    <h1>The Empirical Approach</h1>
+
+    <ul>
+        <li data-jmpress="fade">
+            Running the test once is not conclusive
+        </li>
+        <li data-jmpress="fade">
+            Could run it lots of times <span data-jmpress="fade">... a real lot!</span>
+        </li>
+        <li data-jmpress="fade">
+            If it still doesn't fail, then it <b>probably</b> shouldn't
+        </li>
+    </ul>
+</div>
+
+<div class="step step-slide" data-y="1800" data-x="1300">
+    <h1>Thou Shalt Not Reinvent The Wheel</h1>
+
+    <ul>
+        <li data-jmpress="fade">
+            The community has got it all covered
+        </li>
+        <li data-jmpress="fade">
+            <code>jcstress</code> was created precisely for such research
+        </li>
+        <li data-jmpress="fade">
+            Moreover, it contains just the test we need
+        </li>
+    </ul>
+</div>
+
+<div class="step step-slide" data-y="1800" data-x="2600">
+    <div class="jumbotron text-center text-v-center">
+        <h1>
+            <span class="text-bigger"><code>jcstress</code> demo</span>
+        </h1>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="1800" data-x="3900">
+    <h1 class="text-center">Test Results (x86)</h1>
+
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 3</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 0</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4 left-tit">
+            <img align="right" class="img-responsive" src="img/left-tit-x86-c2.png"/>
+        </div>
+        <div class="col-md-4 right-tit" data-jmpress="fade">
+            <img class="img-responsive" src="img/right-tit-x86-c2.png"/>
+        </div>
+        <div class="col-md-2" data-jmpress="fade">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 0</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 3</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="1800" data-x="5200">
+    <h1 class="text-center">Test Results (ARM)</h1>
+    <!-- TODO: https://gist.github.com/shipilev/9595796 -->
+
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 3</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 0</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4 left-tit">
+            <img align="right" class="img-responsive" src="img/left-tit-arm.png"/>
+        </div>
+        <div class="col-md-4 right-tit">
+            <img class="img-responsive" src="img/right-tit-arm.png"/>
+        </div>
+        <div class="col-md-2">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 0</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 3</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="1800" data-x="6500">
+    <h1 class="text-center">Test Results (x86, C1)</h1>
+
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 3</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 0, x: 0</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4 left-tit">
+            <img align="right" class="img-responsive" src="img/left-tit-x86-c1.png"/>
+        </div>
+        <div class="col-md-4 right-tit">
+            <img class="img-responsive" src="img/right-tit-x86-c1.png"/>
+        </div>
+        <div class="col-md-2">
+            <ul class="legend list-unstyled">
+                <li class="legend-smaller-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 0</span>
+                </li>
+                <li class="legend-bigger-part">
+                    <span class="box"></span>
+                    <span class="text-mono">y: 1, x: 3</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- JCSTRESS ENDS -->
+
+<!-- DIAGRAMS -->
+
+
+<div class="step nested-steps" id="leaks" data-y="2700">
+    <h1 class="text-center">Where Did The Abstractions Leak To?</h1>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+<pre class="prettyprint lang-java">
+    void executedOnCpu0() {
+        value = 10;
+        finished = true;
+    }
+</pre>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-y="250">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="text-giant">
+                    &darr;
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" id="duke" data-y="450" data-z="2">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
+                <img src="img/duke-java.png"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-y="700">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="text-giant">
+                    &darr;
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-y="950">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img src="img/platforms.png"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-y="1280">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="text-giant">
+                    &darr;
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-y="1400">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img src="img/arm-amd-intel.png"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me spoiler" data-y="1400" data-z="200" id="cloud">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img class="graph scale-to-fit-h" src="img/cloud.png"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me spoiler step-slide" data-y="1400" data-z="-200" data-scale="0.2">
+        <h1>Nobody Wants To Be The Slow One</h1>
+        <ul>
+            <li data-jmpress="fade">Each layer may apply some <b>optimizations</b></li>
+            <li data-jmpress="fade">Some optimizations may change the <b>observed behaviour</b></li>
+            <li data-jmpress="fade">Sometimes, it is perfectly acceptable</li>
+            <li data-jmpress="fade">Some other times, it is not</li>
+            <li data-jmpress="fade">The hardware engineers <b>cannot know this in advance</b></li>
+        </ul>
+    </div>
+</div>
+
+<!-- DIAGRAMS END -->
+
+<!-- CACHES EXAMPLE -->
+
+<div class="step step-slide" data-y="4500" data-x="1300">
+    <h1>
+        For Instance: Cache Coherency
+    </h1>
+    <ul>
+        <li data-jmpress="fade">
+            Accessing RAM is an <b>expensive operation</b>
+        </li>
+
+        <li data-jmpress="fade">
+            A CPU has <b>copies</b> of frequently used data at hand
+        </li>
+
+        <li data-jmpress="fade">
+            If there is more than one CPU, things can go awry
+        </li>
+    </ul>
+</div>
+
+<div class="step nested-steps" data-y="4500" data-x="2600">
+
+    <div class="visit-me">
+        <div class="row">
+            <div class="col-md-5">
+                <img class="img-responsive" src="img/cpu.png"/>
+            </div>
+            <div class="col-md-7">
+                <table class="table table-big-text table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Cached Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>finished</code></td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr class="active">
+                        <td><code>value</code></td>
+                        <td>N/A</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="1600">
+        <div class="row">
+            <div class="col-md-5">
+                <img class="img-responsive" src="img/cpu.png"/>
+            </div>
+            <div class="col-md-7">
+                <table class="table table-big-text table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Cached Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="active">
+                        <td><code>finished</code></td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td><code>value</code></td>
+                        <td><code>0</code></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="800" data-y="600" data-scale="2.3">
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+            </div>
+
+            <div class="col-md-2" data-jmpress="fade">
+                <h1 class="text-center">
+                    <span class="glyphicon glyphicon-transfer"></span>
+                </h1>
+            </div>
+
+            <div class="col-md-5">
+                <ul class="list-unstyled">
+                    <li data-jmpress="fade">&mdash; Invalidate this!</li>
+                    <li data-jmpress="fade">...</li>
+                    <li data-jmpress="fade">...</li>
+                    <li data-jmpress="fade">&mdash; Done!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="800" data-y="1200" data-scale="2.3">
+
+        <div class="row">
+            <hr/>
+
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+            </div>
+
+            <div class="col-md-7">
+                <ul>
+                    <li data-jmpress="fade">Had to wait for a long time</li>
+                    <li data-jmpress="fade">The CPU was stalled</li>
+                    <li data-jmpress="fade">Optimization time!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="800" data-y="1600" data-scale="2.3">
+        <div class="row">
+            <hr/>
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+            </div>
+
+            <div class="col-md-1" data-jmpress="fade">
+                <h1 class="text-center text-v-top">
+                    &rarr;
+                </h1>
+            </div>
+
+            <div class="col-md-6" data-jmpress="fade">
+                <h2 class="text-v-top">(executed asynchronously)</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+            </div>
+
+            <div class="col-md-1" data-jmpress="fade">
+                <h1 class="text-center text-v-top">
+                    &rarr;
+                </h1>
+            </div>
+
+            <div class="col-md-6" data-jmpress="fade">
+                <h2 class="text-v-top">(likewise)</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="step spoiler" data-x="800" data-y="800" data-scale="3.5" data-z="1000">
+        <h1 class="text-center">
+            <img src="img/explosion1.png"/>
+        </h1>
+    </div>
+
+</div>
+<!-- CACHES EXAMPLE END -->
+
+<!-- HIGH-LEVEL BARRIERS -->
+
+<div class="step step-slide" data-y="5400" data-x="1300">
+    <h1>Why We Need A Memory Model</h1>
+    <ul>
+        <li data-jmpress="fade">
+            Software engineers know how their code is supposed to work
+        </li>
+        <li data-jmpress="fade">
+            This must be relayed to the hardware
+        </li>
+        <li class="list-unstyled" data-jmpress="fade">
+            <blockquote>
+                <p>Memory Model is a trade-off between:</p>
+                <ul>
+                    <li data-jmpress="fade">How messed up writing code in a given <em>language</em> is</li>
+                    <li data-jmpress="fade">How messed up a <em>fast and correct language implementation</em> is</li>
+                    <li data-jmpress="fade">How messed up <em>the hardware</em> is</li>
+                </ul>
+                <p><footer data-jmpress="fade">Aleksey Shipilёv</footer></p>
+            </blockquote>
+        </li>
+    </ul>
+</div>
+
+<div class="step step-slide" data-y="6300" data-x="1300">
+    <h1 class="text-center">Memory Barriers</h1>
+
+    <div class="row">
+        <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    value = 10;
+    <span class="nocode text-success" data-jmpress="appear">magicUnicorn();</span>
+    finished = true;
+}
+</pre>
+        </div>
+
+        <div class="col-md-2" data-jmpress="fade">
+            <h1 class="text-center text-giant text-danger">&nrarr;</h1>
+        </div>
+
+        <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    finished = true;
+    <span class="nocode text-success">magicUnicorn();</span>
+    value = 10;
+}
+</pre>
+        </div>
+    </div>
+    <h2 class="text-center" data-jmpress="fade">
+        <em>(As seen by another thread)</em>
+    </h2>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="1300">
+    <h1 class="text-center">The Two Types Of Memory Operations</h1>
+
+    <div class="row" data-jmpress="fade">
+        <div class="col-md-offset-1 col-md-5 text-center">
+            <code class="text-bigger">Write</code>
+        </div>
+        <div class="col-md-5 text-center">
+            <code class="text-bigger">Read</code>
+        </div>
+    </div>
+
+    <div class="row" data-jmpress="fade">
+        <div class="col-md-offset-1 col-md-5 text-center">
+            <code class="text-bigger">Store</code>
+        </div>
+        <div class="col-md-5 text-center">
+            <code class="text-bigger">Load</code>
+        </div>
+    </div>
+
+    <div class="row" data-jmpress="fade">
+        <div class="col-md-offset-1 col-md-5 text-center">
+            <code class="text-bigger">ST</code>
+        </div>
+        <div class="col-md-5 text-center">
+            <code class="text-bigger">LD</code>
+        </div>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="2600">
+    <h1>They Should Not Be Treated Equally</h1>
+    <ul>
+        <li data-jmpress="fade">Restricting <b>all</b> the reorderings is slow</li>
+        <li data-jmpress="fade">
+            Sometimes it's fine to reorder
+            a <code>Store</code> and a <code>Load</code>
+        </li>
+        <li data-jmpress="fade" class="list-unstyled">
+            but not a <code>Store</code> and another <code>Store</code>
+        </li>
+        <li data-jmpress="fade">Need more fine-grained control</li>
+        <li data-jmpress="fade">Let's introduce memory barriers of type <code>XY</code></li>
+        <li class="list-unstyled" data-jmpress="fade">(<code>X</code> and <code>Y</code> take the values <code>Store</code> and <code>Load</code>)</li>
+    </ul>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="3900">
+    <h1>For X, Y in [Store, Load]:</h1>
+
+    <div class="text-center well" data-jmpress="fade">
+        <p>
+            All <code>X</code> operations before an <code>XY</code> barrier
+        </p>
+        <p data-jmpress="fade">
+            <b>must complete before</b>
+        </p>
+        <p data-jmpress="fade">
+            Any <code>Y</code> operation after that barrier starts
+        </p>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="5200">
+    <h1>Not Allowed</h1>
+
+    <img src="img/membar-prohibitions.png" />
+
+    <div class="step spoiler visit-me">
+            <span class="text-danger text-really-giant glyphicon glyphicon-remove"
+                  style="margin-left: 330px;"></span>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="6500">
+    <h1>Allowed</h1>
+
+    <img src="img/membar-allowances.png" />
+
+    <div class="step spoiler visit-me">
+            <span class="text-success text-really-giant glyphicon glyphicon-ok"
+                  style="margin-left: 330px;"></span>
+    </div>
+</div>
+
+<div class="step step-slide" data-y="7200" data-x="7800">
+    <h1>Acquire And Release Semantice</h1>
+    <blockquote>
+        <p>
+            The source of a <em>synchronizes-with</em> edge is called a <strong>release</strong>,
+            and the destination is called an <strong>acquire</strong>
+        </p>
+    </blockquote>
+
+    <div data-jmpress="fade">
+        <div class="row">
+            <div class="col-md-4">
+                <code class="text-mid">vstore(a.f, 1)</code>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-6" data-jmpress="fade">
+                <code class="text-mid">\---(sync-with)---></code>
+            </div>
+            <div class="col-md-4">
+                <code class="text-mid">vread(a.f, 1)</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HIGH-LEVEL BARRIERS END -->
+
+<!-- JVM STUFF -->
+
+<div class="step" data-y="3150"></div>
+
+<div class="step visit-me spoiler nested-steps" data-y="3150" data-z="-200" data-scale="0.2">
+    <h1 class="text-center">
+        <img src="img/openjdk-diagram.png"/>
+    </h1>
+
+    <div class="step visit-me" data-x="600">
+        <div class="row text-center annotation">(source)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="900">
+        <h1 class="text-center text-giant"><code class="well">javac</code></h1>
+    </div>
+
+    <div class="step visit-me" data-x="1200">
+        <div class="row text-center annotation">(bytecode)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="1450">
+        <h1 class="text-center"><span class="well">Frontend</span></h1>
+    </div>
+
+    <div class="step visit-me" data-x="1700">
+        <div class="row text-center annotation">(HIR)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="2050">
+        <h1 class="text-center"><span class="well dashed-border-stack">JIT Optimizer</span></h1>
+    </div>
+
+    <div class="step visit-me" data-x="2400">
+        <div class="row text-center annotation">(LIR)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="2650">
+        <h1 class="text-center"><span class="well">Backend</span></h1>
+    </div>
+
+    <div class="step visit-me" data-x="2900">
+        <div class="row text-center annotation">(native code)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="3050">
+        <h1 class="text-center"><span class="well">...</span></h1>
+    </div>
+
+    <div class="step visit-me" data-x="3200">
+        <div class="row text-center annotation">(???)</div>
+        <div class="row">
+            <h1 class="text-center text-giant">&rarr;</h1>
+        </div>
+    </div>
+
+    <div class="step visit-me" data-x="3420">
+        <h1 class="text-center"><span class="well">PROFIT!</span></h1>
+    </div>
+</div>
+
+<div class="step" data-y="3150"></div>
+
+<!-- JVM STUFF ENDS -->
+
+
+<!-- LIVE DEMO STUFF -->
+
+<div class="step spoiler very-spoiler" id="mad-scientist" data-z="1" data-x="600" data-y="3700" data-scale="3">
+    <div class="text-center">
+        <img class="graph" src="img/mad-scientist-flipped.png"/>
+        <h1><span class="well">LIVE DEMO TIME!</span></h1>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="1300" data-y="3600">
+    <h1>
+        Useful References
+    </h1>
+
+    <ul>
+        <li>
+            Papers:
+            <ul>
+                <li>Memory Barriers: A Hardware View For Software Hackers</li>
+            </ul>
+        </li>
+        <li>
+            Blogs:
+            <ul>
+                <li><a href="http://shipilev.net/">http://shipilev.net/</a></li>
+                <li><a href="http://mechanical-sympathy.blogspot.com/">http://mechanical-sympathy.blogspot.com/</a></li>
+                <li><a href="http://psy-lob-saw.blogspot.com/">http://psy-lob-saw.blogspot.com/</a></li>
+                <li><a href="http://gvsmirnov.ru/blog">http://gvsmirnov.ru/blog/</a></li>
+            </ul>
+        </li>
+        <li>
+            People are the best source: <a href="https://twitter.com/gvsmirnov/lists/java">https://twitter.com/gvsmirnov/lists/java</a>
+        </li>
+    </ul>
+</div>
+
+<!-- LIVE DEMO STUFF ENDS -->
+
+<!-- LAST REMARKS -->
+
+<div class="step step-slide qr" data-x="2600" data-y="3600">
+    <div class="text-center">
+        <img class="graph" src="img/qr-javaone-2014.png"/>
+
+        <h2>
+            <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on/javaone-sep-2014.html">
+                goo.gl/9WDvf7
+            </a>
+        </h2>
+    </div>
+</div>
+
+<!-- LAST REMARKS END -->
+
+<div class="step" data-x="2600" data-y="3600" id="overview" data-scale="7"></div>
+
+</div>
+</body>
+
+<script src="js/custom.js"></script>
+
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+
+            $('#impress').jmpress({
+                "mouse": { clickSelects: false },
+                "beforeChange": function(element, eventData) {
+                    element = $(element);
+                    if(element.hasClass("visit-me")) {
+                        element.addClass('visited');
+                    }
+
+                    updateCurrentSlide(element);
+                }
+            });
+
+            window.prettyPrint && prettyPrint()
+            $('body').mousemove(function(e){
+                $('#laser').css('left', e.clientX).css('top', e.clientY);
+            });
+        });
+    }(window.jQuery)
+</script>
+
+</html>
