@@ -1,47 +1,35 @@
-# Java Concurrency Intro: OpenJDK Hands-On
+# What Do You Think You Are Doing, Hotspot?
 
-## Java Memory Model Under The Hood
+* Explain why we are here
+ - Trollface from the logs
+ - Search the web
+ - Stackoverflow
+ - Ask someone who knows
+ - DIY!
 
-### Presentation:
-* Leaky abstractions
-* Memory Wall that introduces caches
-* Multiple processors
-* Cache coherency protocols
-* MESI example
-* Store Buffers, Invalidate Queues
-* Memory Barriers in MESI
-* Higher-level abstractions (LoadLoad, LoadStore, StoreLoad, StoreStore)
-* Acquire/release semantics
+* Give a real example: the `_last_ditch_collection` and `_no_gc`
+ - Show a piece of GC logs that have weird stuff in them
+ - Investigate `_last_ditch_collection`
+ - Reproduce `_last_ditch_collection`
+ - Investigate `_no_gc`
+ - Find the relevant changeset
+ - Get the relevan VM build
+ - Reproduce `_no_gc`
+ - http://bugs.java.com/view_bug.do?bug_id=7015169
 
-### Live Demo:
-* Use jcstress to demonstrate how things will fail without ```volatile```
-  (```fences/UnfencedAcquireReleaseTest.java```, ``````)
-* Write up a simple class with acquire/release
-* Walk through its bytecode
-* Find all the ```getfield```/```putfield``` usages in openjdk sources
-* Oh, that's too much! Find where the information on volatility is kept (```share/vm/ci/ciField.hpp```)
-* Find all usages of ```is_volatile```, end up in ```share/vm/c1/c1_LIRGenerator.cpp```
-* Show how ```do_StoreField``` adds ```membar_release``` and a ```membar```
-* Show how ```do_LoadField``` adds a ```membar_acquire```
-* Go to ```share/vm/c1/c1_LIRAssembler.cpp``` and show what's emitted on x86
-* Remove special handling of volatile fields and see what happens
-* RUN FOR YOUR LIVES!!!
+* Outtakes:
+ - Use `grep`, Luke!
+ - Things may be already fixed. So use `hg grep`
+ - How to determine the proper jdk build for a changeset
+ - Always try to confirm your theories experimentally
 
-## Java Threading Under The Hood
+* Another real example: non-zero-filled arrays
+ - Show a piece of code
+ - Vote on whether the assertion may fail
+ - Investigate how it may happen
+ - (TODO)
+ - http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7196857
 
-### Presentation:
-* Visibility is just not enough
-* Atomicity
-* Mutual Exclusion
-* Monitor: Thin, Fat, Biased
-  * synchronized blocks
-  * j.u.c.locks
-* Synchronization
-  * wait/notify
-  * LockSupport
-  * j.u.c.{CountDownLatch, Phaser, CyclicBarrier, ...}
-
-### Live demo:
-* AtomicInteger (```Unsafe#getAndAddInt```)
-* synchronized
-* ReentrantLock (```Unsafe#park```)
+* Further Material
+ - The book by Marcus
+ - JavaOne talk on Hotspot internals
