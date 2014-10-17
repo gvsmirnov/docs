@@ -105,13 +105,12 @@
 <!-- GC CAUSES -->
 
 <div class="step step-slide" data-y="900">
-    <h1>Реальная Проблема</h1>
 
 <pre class="console prettyprint" data-jmpress="fade">
 $ jstat -gccause [...]
 
 <span class="nocode">Timestamp     LGCC                                       GCC
-1.6           Last ditch collection                    <span class="text-danger">No GC</span>
+1.6           Last ditch collection                    No GC
 1.7           <span class="text-danger">No GC</span>                    Last ditch collection
 1.8           <span class="text-danger">No GC</span>                    Last ditch collection
 1.9           <span class="text-danger">No GC</span>                    Last ditch collection
@@ -120,163 +119,42 @@ $ jstat -gccause [...]
 
 </div>
 
+<div class="step step-slide" data-y="900" data-x="1300">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/excellent.png"/>
+    </div>
+</div>
+
 <!-- GC CAUSES END -->
 
-<!-- JCSTRESS -->
+<!-- OUTTAKES -->
 
 <div class="step step-slide" data-y="1800">
-    <h1>The Empirical Approach</h1>
+    <h1>Структура Папок Hotspot</h1>
+    <pre class="console prettyprint" data-jmpress="fade">
+<span class="nocode">hotspot/src/
+├── cpu <span class="text-info" data-jmpress="fade"># CPU specific</span>
+│   └── [x86, sparc, ...]
+├── os <span class="text-info" data-jmpress="fade"># OS specific</span>
+│   └── [bsd, linux, windows, ...]
+├── os_cpu <span class="text-info" data-jmpress="fade"># CPU and OS specific</span>
+│   └── [bsd_zero, linux_sparc, windows_x86, ...]
+└── share <span class="text-info" data-jmpress="fade"># Common</span>
+    ├── tools
+    └── vm</span>
+</div>
+
+<div class="step step-slide" data-x="1300" data-y="1800">
+    <h1>Use <code>grep</code>, Luke!</h1>
 
     <ul>
-        <li data-jmpress="fade">
-            Running the test once is not conclusive
-        </li>
-        <li data-jmpress="fade">
-            Could run it lots of times <span data-jmpress="fade">... a real lot!</span>
-        </li>
-        <li data-jmpress="fade">
-            If it still doesn't fail, then it <b>probably</b> shouldn't
-        </li>
+
+
     </ul>
+
 </div>
 
-<div class="step step-slide" data-y="1800" data-x="1300">
-    <h1>Thou Shalt Not Reinvent The Wheel</h1>
-
-    <ul>
-        <li data-jmpress="fade">
-            The community has got it all covered
-        </li>
-        <li data-jmpress="fade">
-            <code>jcstress</code> was created precisely for such research
-        </li>
-        <li data-jmpress="fade">
-            Moreover, it contains just the test we need
-        </li>
-    </ul>
-</div>
-
-<div class="step step-slide" data-y="1800" data-x="2600">
-    <div class="jumbotron text-center text-v-center">
-        <h1>
-            <span class="text-bigger"><code>jcstress</code> demo</span>
-        </h1>
-    </div>
-</div>
-
-<div class="step step-slide" data-y="1800" data-x="3900">
-    <h1 class="text-center">Test Results (x86)</h1>
-
-    <div class="row">
-        <div class="col-md-2">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 3</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 0</span>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-4 left-tit">
-            <img align="right" class="img-responsive" src="img/left-tit-x86-c2.png"/>
-        </div>
-        <div class="col-md-4 right-tit" data-jmpress="fade">
-            <img class="img-responsive" src="img/right-tit-x86-c2.png"/>
-        </div>
-        <div class="col-md-2" data-jmpress="fade">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 0</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 3</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div class="step step-slide" data-y="1800" data-x="5200">
-    <h1 class="text-center">Test Results (ARM)</h1>
-    <!-- TODO: https://gist.github.com/shipilev/9595796 -->
-
-    <div class="row">
-        <div class="col-md-2">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 3</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 0</span>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-4 left-tit">
-            <img align="right" class="img-responsive" src="img/left-tit-arm.png"/>
-        </div>
-        <div class="col-md-4 right-tit">
-            <img class="img-responsive" src="img/right-tit-arm.png"/>
-        </div>
-        <div class="col-md-2">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 0</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 3</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div class="step step-slide" data-y="1800" data-x="6500">
-    <h1 class="text-center">Test Results (x86, C1)</h1>
-
-    <div class="row">
-        <div class="col-md-2">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 3</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 0, x: 0</span>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-4 left-tit">
-            <img align="right" class="img-responsive" src="img/left-tit-x86-c1.png"/>
-        </div>
-        <div class="col-md-4 right-tit">
-            <img class="img-responsive" src="img/right-tit-x86-c1.png"/>
-        </div>
-        <div class="col-md-2">
-            <ul class="legend list-unstyled">
-                <li class="legend-smaller-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 0</span>
-                </li>
-                <li class="legend-bigger-part">
-                    <span class="box"></span>
-                    <span class="text-mono">y: 1, x: 3</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- JCSTRESS ENDS -->
+<!-- OUTTAKES END -->
 
 <!-- DIAGRAMS -->
 
