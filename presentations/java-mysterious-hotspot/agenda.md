@@ -18,7 +18,9 @@
  - http://bugs.java.com/view_bug.do?bug_id=7015169
 
 * Outtakes:
+ - Hotspot folder layout
  - Use `grep`, Luke!
+ - Use NetBeans, Luke
  - Things may be already fixed. So use `hg grep`
  - How to determine the proper jdk build for a changeset
  - Always try to confirm your theories experimentally
