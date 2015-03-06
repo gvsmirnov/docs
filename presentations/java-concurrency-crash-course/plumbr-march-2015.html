@@ -473,8 +473,8 @@ void executedOnCpu1() {
             </div>
         </div>
 
-        <div class="step step-slide" data-y="3200" data-x="1300">
-            <div class="row" data-jmpress="fade">
+        <div class="step step-slide" data-y="3200" data-x="2600">
+            <div class="row">
                 <div class="col-md-12">
 <pre class="prettyprint lang-java">
 class Holder {
@@ -514,7 +514,7 @@ void executedOnCpu1() {
             </div>
         </div>
 
-        <div class="step step-slide spoiler" data-y="3200" data-x="1300">
+        <div class="step step-slide spoiler" data-y="3200" data-x="2600">
             <div class="jumbotron text-center">
                 <h1 class="margin-a-bit">
                     <span class="text-danger text-giant">
@@ -525,7 +525,7 @@ void executedOnCpu1() {
             </div>
         </div>
 
-        <div class="step step-slide" data-y="3200" data-x="2600">
+        <div class="step step-slide" data-y="3200" data-x="3900">
             <div class="row">
                 <div class="col-md-12">
 <pre class="prettyprint lang-java">
@@ -566,23 +566,33 @@ void executedOnCpu1() {
             </div>
         </div>
 
-        <div class="step step-slide spoiler" data-y="3200" data-x="2600">
+        <div class="step step-slide spoiler" data-y="3200" data-x="3900">
             <div class="jumbotron text-center">
                 <h1 class="margin-a-lot">
-                    All stores to all <code>final</code> fields <br/>
+                    Stores to all <code>final</code> fields <br/>
                     are visible to all loads
                 </h1>
             </div>
         </div>
 
-        <div class="step step-slide" data-y="3200" data-x="3900">
+        <div class="step step-slide" data-y="3200" data-x="5200">
             <div class="row" data-jmpress="fade">
-                <div class="col-md-12">
+                <div class="col-md-6">
 <pre class="prettyprint lang-java">
-class Holder {
-    int first; final int second;
-    Holder(int first, second) {
-        this.first = first; this.second = second;
+class Pair {
+    int a, b;
+    Holder(int a, int b) {
+        //...
+    }
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+class PairHolder {
+    final Pair pair;
+    PairHolder(Pair pair) {
+        this.pair = pair;
     }
 }
 </pre>
@@ -592,7 +602,7 @@ class Holder {
             <div class="row" data-jmpress="fade">
                 <div class="col-md-12">
 <pre class="prettyprint lang-java">
-Holder holder;
+PairHolder holder;
 </pre>
                 </div>
             </div>
@@ -601,7 +611,9 @@ Holder holder;
                 <div class="col-md-6">
 <pre class="prettyprint lang-java">
 void executedOnCpu0() {
-    holder = new Holder(4, 2);
+    holder = new PairHolder(
+        new Pair(4, 2)
+    );
 }
 </pre>
                 </div>
@@ -609,11 +621,418 @@ void executedOnCpu0() {
 <pre class="prettyprint lang-java">
 void executedOnCpu1() {
     while(holder == null);
-    assert holder.first == 4;
+    assert holder.pair.a == 4;
+    assert holder.pair.a == 2;
 }
 </pre>
                 </div>
             </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="5200">
+            <div class="jumbotron text-center">
+                <h2 class="margin-a-bit">
+                    Stores to the <b>dereference chain</b>
+                    of a <code>final</code> <br/>
+                </h2>
+                <h2 data-jmpress="fade">
+                    are visible if they <i>happen-before</i>
+                </h2>
+                <h2 data-jmpress="fade">
+                    the store to the <code>final</code> field itself
+                </h2>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="4000" data-x="1300">
+            <h1>Atomicity</h1>
+
+            <p class="text-bigger">
+                When you want <b>multiple operations</b> to be executed <b>as if</b><br/>
+                it were a <b>single operation</b>, meaning that no other operation in any other thread
+                interjects, atomicity is what you want.
+            </p>
+        </div>
+
+        <div class="step step-slide" data-y="4000" data-x="2600">
+            <h1>Compare And Set</h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+class Holder&lt;T&gt; {
+    volatile T value;
+    <span data-jmpress="fade">public boolean compareAndSet(T expectedValue, T newValue) {
+        <span id="cas-if" data-jmpress="fade">if(Objects.equals(value, expectedValue)) {<span data-jmpress="appear-inline after #cas-else">
+            // another thread overwrites $value here</span>
+            value = newValue;
+            return true;
+        }</span> <span id="cas-else" data-jmpress="fade after #cas-if">else {
+            return false;
+        }</span>
+    }</span>
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler filled" data-y="4000" data-x="2600">
+            <div class="row text-giant margin-a-lot">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+volatile int online = 0;
+
+public void onLogIn() {
+    online ++;
+}
+</pre>
+                </div>
+                <div class="col-md-2" data-jmpress="fade">
+                    &rarr;
+                </div>
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+2: getfield<span data-jmpress="appear-inline after #cas-else">
+// another thread</span>
+5: iconst_1<span data-jmpress="appear-inline after #cas-else">
+// another thread</span>
+6: iadd<span data-jmpress="appear-inline after #cas-else">
+// another thread</span>
+7: putfield
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler filled" data-y="4000" data-x="3900">
+            <h1><code>java.util.concurrent.atomic.*</code></h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+final AtomicReference&lt;Integer&gt; online = /*...*/;
+
+public void onLogIn() {
+    while(true) {
+        int previous = online.get();
+        if(online.compareAndSet(previous, previous + 1)) {
+            break;
+        }
+    }
+}
+
+public void onlineNow() { return online.get(); }
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler filled" data-y="4000" data-x="5200">
+            <h1><code>java.util.concurrent.atomic.*</code></h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+final AtomicInteger online = new AtomicInteger();
+
+public void onLogIn()   { int current = online.incrementAndGet(); }
+public void onlineNow() { return online.get(); }
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+final LongAdder online = new LongAdder;
+
+public void onLogIn()   { online.increment(); }
+public long onlineNow() { return online.sum(); }
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="4800" data-x="1300">
+            <h1>Mutual Exclusion</h1>
+
+            <p class="text-bigger">
+                When you want to ensure that no other thread observes
+                an object in an <b>inconsistent state</b> in the middle
+                of a complex operation, you want mutual exclusion.
+            </p>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4800" data-x="2600">
+            <h1>Critical Sections</h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+class AccessHistory {
+    long lastAccess;
+    long lastUserId;
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void logAccess(long userId) {
+    lastAccess = now();
+    lastUserId = userId;
+
+    // ...
+}
+</pre>
+                </div>
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+AccessInfo getLastAccess() {
+    return new AccessInfo(
+        this.lastAccess,
+        this.lastUserId
+    );
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4800" data-x="3900">
+            <h1>The <code>synchronized</code> keyword</h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+synchronized void logAccess(long userId) {
+    lastAccess = now();
+    lastUserId = userId;
+}
+</pre>
+                </div>
+            </div>
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+synchronized AccessInfo getLastAccess() {
+    return new AccessInfo(
+        this.lastAccess,
+        this.lastUserId
+    );
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4800" data-x="5200">
+            <h1>The <code>synchronized</code> keyword</h1>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+void logAccess(long userId) {
+    synchronized(this) {
+        lastAccess = now();
+        lastUserId = userId;
+    }
+}
+</pre>
+                </div>
+            </div>
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+AccessInfo getLastAccess() {
+    synchronized(this) {
+        return new AccessInfo(this.lastAccess, this.lastUserId);
+    }
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4800" data-x="6500">
+
+            <div class="row" data-jmpress="fade" id="locks">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private final Object accessLock    = new Object();<span data-jmpress="appear-inline after #get-access">
+private final Object someOtherLock = new Object();</span>
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade after #locks" id="log-access">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+void logAccess(long userId) {
+    synchronized(accessLock) {
+        lastAccess = now();
+        lastUserId = userId;
+    }
+}
+</pre>
+                </div>
+            </div>
+            <div class="row" data-jmpress="fade after #log-access" id="get-access">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+AccessInfo getLastAccess() {
+    synchronized(accessLock) {
+        return new AccessInfo(this.lastAccess, this.lastUserId);
+    }
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4800" data-x="7800">
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private final ReentrantLock accessLock = new ReentrantLock();
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade after">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+void logAccess(long userId) {
+    accessLock.lock();
+    try {
+        lastAccess = now();
+        lastUserId = userId;
+    } finally { accessLock.unlock(); }
+}
+</pre>
+                </div>
+            </div>
+            <div class="row" data-jmpress="fade after">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+AccessInfo getLastAccess() {
+    accessLock.lock();
+    try {
+        return new AccessInfo(this.lastAccess, this.lastUserId);
+    } finally { accessLock.unlock(); }
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="5600" data-x="1300">
+            <h1>Synchronization</h1>
+
+            <p class="text-bigger">
+                When you want to ensure that some <b>state has been reached</b>
+                before you proceed, synchronization is what you want.
+            </p>
+        </div>
+
+        <div class="step step-slide" data-y="5600" data-x="2600">
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+final CountDownLatch finished = new CountDownLatch(1);
+int value = 0;
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished.countDown();
+}
+</pre>
+                </div>
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    finished.await();
+    assert value == 10;
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+final CountDownLatch players = new CountDownLatch(nOfPlayers);
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void onPlayerConnected() {
+    players.countDown();
+}
+</pre>
+                </div>
+                <div class="col-md-6" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void startTheGame() {
+    players.await();
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="1300">
+            <h1>And Many, Many More</h1>
+            <ul>
+                <li data-jmpress="fade">
+                    Thread Management: <code>j.u.c.Executors</code>
+                </li>
+                <li data-jmpress="fade">
+                    Concurrent Queues: <code>j.u.c.*Queue</code>
+                </li>
+                <li data-jmpress="fade">
+                    Concurrent Collections: <code>j.u.c.ConcurrentHashMap</code>,
+                    <code>j.u.c.CopyOnWriteArrayList</code>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="2600">
+            <h1>Further Materials</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    <a href="http://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html">
+                        http://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html
+                    </a>
+                </li>
+                <li data-jmpress="fade">
+                    <a href="http://shipilev.net/blog/2014/jmm-pragmatics/">
+                        http://shipilev.net/blog/2014/jmm-pragmatics/
+                    </a>
+                </li>
+                <li data-jmpress="fade">
+                    <a href="http://jcip.net/">
+                        http://jcip.net/
+                    </a>
+                </li>
+                <li data-jmpress="fade">
+                    <a href="http://cs.oswego.edu/pipermail/concurrency-interest/">
+                        http://cs.oswego.edu/pipermail/concurrency-interest/
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <div class="step step-slide qr" data-y="-800" data-x="1300">
