@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Java Concurrency Crash Course</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/highcharts.js"></script>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Plumbr Internal
+                </a>
+
+                <p class="navbar-text">
+                    Java Concurrency Crash Course
+                    <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+                </p>
+
+
+            </div>
+            <div class="navbar-right">
+                <a class="navbar-brand">
+                    Step <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="laser"></div>
+
+    <div id="impress">
+
+        <div class="step step-title" data-y="-800">
+            <div class="jumbotron text-center">
+                <h1>
+                    Java Concurrency<br/>
+                </h1>
+
+                <h2>
+                    Crash Course
+                </h2>
+
+                <footer>
+                    <h2>Gleb Smirnov</h2>
+                    <h3>me<span class="text-info">@gvsmirnov</span>.ru</h3>
+                </footer>
+
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler filled" data-y="-800">
+            <h1>Disclaimer</h1>
+            <p>
+                This presentation is <b>not authoritative material</b> that you
+                should refer to when in doubt about how something works, be it
+                writing code, discussing concurrency or anything else.
+            </p>
+            <p>
+                This is a <b>simplified overview</b> with a lot of details omitted.
+                The subject is much, much more sophisticated than what you will see here.
+                Still, it should be enough to avoid a huge number of basic
+                mistakes that you are bound to make unless you know what comes next.
+            </p>
+        </div>
+
+        <div class="step step-slide">
+            <h1>Moore's Law</h1>
+
+            <blockquote>
+                <!-- http://www.intel.com/content/www/us/en/history/museum-gordon-moore-law.html -->
+                <p>
+                    The number of transistors incorporated in a chip
+                    will approximately double every 24 months
+                </p>
+                <footer>Gordon Earle Moore, 1964</footer>
+            </blockquote>
+
+        </div>
+
+        <div class="step" data-x="1300">
+            <div class="text-center">
+                <img class="graph scale-to-fit-h" src="img/moores-law.jpg"/>
+            </div>
+        </div>
+
+        <div class="step" data-x="2600">
+            <div class="text-center">
+                <!-- http://queue.acm.org/detail.cfm?id=2181798 -->
+                <img class="graph scale-to-fit-h" src="img/horowitz_fig7.png"/>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-x="3900">
+            <h1>So What Happened?</h1>
+            <ul>
+                <li data-jmpress="fade">
+                    Smaller transistors &rArr; more resistance &rArr; smaller frequency
+                </li>
+                <li data-jmpress="fade">
+                    Less power consumption &rArr; smaller frequency
+                </li>
+                <li data-jmpress="fade">
+                    We still want the performance to double
+                </li>
+                <li data-jmpress="fade">
+                    Have "spare" transistors
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide spoiler" data-x="3900">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Multicore!</span></h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-x="5200">
+            <h1>But There's A Small Difficulty</h1>
+            <ul>
+                <li data-jmpress="fade">
+                    Accessing RAM can take <b>hundreds of nanoseconds</b>
+                </li>
+                <li data-jmpress="fade">
+                    Basic instructions are several <b>orders of magnitude</b> faster
+                </li>
+                <li data-jmpress="fade">
+                    Don't want to stall the CPU much
+                </li>
+                <li data-jmpress="fade">
+                    Better keep the most frequently used data at hand
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide spoiler" data-x="5200">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Caches!</span></h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800">
+            <h1>Cache Coherency</h1>
+
+            <blockquote>
+                <p>
+                    Processor <b>A</b> has the value of <b>x</b> in its cache. <br/>
+                    <span data-jmpress="fade">
+                        Processor <b>B</b> modifies the value of <b>x</b>. <br/>
+                    </span>
+                    <span data-jmpress="fade" id="the-dude-asks">
+                        How does processor <b>A</b> know?
+                    </span>
+                </p>
+                <footer data-jmpress="fade after #the-dude-asks">A Dangerously Curious Dude</footer>
+            </blockquote>
+        </div>
+
+        <div class="step spoiler" data-y="800">
+            <div class="text-center">
+                <!-- http://explosm.net/comics/2334/ -->
+                <img class="graph scale-to-fit-h" src="img/comicsplittingtheatom1.png"/>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="1300">
+            <h1>Cache Coherency Protocols</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    The processors must maintain a <b>consistent</b> view of the world
+                </li>
+                <li data-jmpress="fade">
+                    Always using <b>main memory</b> would ruin performance
+                </li>
+                <li data-jmpress="fade">
+                    The processors need to <b>communicate</b> with each other
+                </li>
+                <li data-jmpress="fade">
+                    Various communication <b>protocols</b> are possible
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="2600">
+            <h1>A World Of Pain</h1>
+
+            <ul>
+                <li data-jmpress="fade">
+                    There are many possible solutions
+                </li>
+                <li data-jmpress="fade">
+                    There are many hardware vendors
+                </li>
+                <li data-jmpress="fade">
+                    Each of them has a lot of different CPUs
+                </li>
+                <li data-jmpress="fade">
+                    Tons and tons of platform-specific stuff
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="800" data-x="2600">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-danger text-bigger">(ノಠ益ಠ)ノ彡┻━┻</span></h1>
+            </div>
+        </div>
+
+        <div class="step" data-y="1600">
+            <div class="text-center">
+                <h1 style="color: #ea2d2e;">Write Once</h1>
+                <img src="img/java-logo.png" />
+                <h1 style="color: #0074bd;">Run Anywhere</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="1600" data-x="1300">
+            <div class="row">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private int value = 0;
+private boolean finished = false;
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12 text-center">
+                    <h1>
+                        Can the assertion fail?
+                    </h1>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12 text-center">
+                    <h1>
+                        What if it's ran on x86?
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="1600" data-x="2600">
+            <h1>Java Memory Model</h1>
+
+            <p class="text-bigger">
+                A set of rules that restricts possible <b>outcomes</b>
+                that instructions of an application executed by the JVM can have
+            </p>
+
+            <p class="text-bigger" data-jmpress="fade">
+                JMM, like everything Java, is platform-independent.
+                So, if your code is <b>correct</b> under JMM, its behavior will be
+                the same on all the hardware
+                <span class="text-muted" data-jmpress="fade">(although the performance might differ)</span>
+            </p>
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="1300">
+            <h1>Visibility</h1>
+
+            <p class="text-bigger">
+                When you want a <b>read executed by one thread</b>
+                to return the <b>value written by another thread</b>,
+                visibility is what you want.
+            </p>
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="2600">
+            <div class="row">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private <span data-jmpress="appear-inline">volatile </span>boolean shouldStop = false;
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void serve() {
+    while(!shouldStop) {
+        doTheStuff();
+    }
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void stop() {
+    shouldStop = true;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="3900">
+            <div class="row">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private <span data-jmpress="appear-inline">volatile </span>boolean finished = false;
+private <span data-jmpress="appear-inline after 1">volatile </span>int value = 0;
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+                </div>
+            </div>
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12 text-center">
+                    <h1>
+                        Too much <code>volatile</code>!
+                    </h1>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="5200">
+            <h1>The <i>happens-before</i> Order</h1>
+
+            <p data-jmpress="fade">
+                Given:
+            </p>
+
+            <ul>
+                <li data-jmpress="fade">
+                    Threads <b class="text-success">X</b> and <b class="text-danger">Y</b>
+                    <span class="text-muted">(may be the same)</span>
+                </li>
+                <li data-jmpress="fade">
+                    Operations <b class="text-success">A</b>
+                    <span class="text-muted">(executed by <b class="text-success">X</b>)</span>
+                    and <b class="text-danger">B</b>
+                    <span class="text-muted">(executed by <b class="text-danger">Y</b>)</span>
+                </li>
+            </ul>
+
+            <hr data-jmpress="fade after 1"/>
+
+            <p data-jmpress="fade">
+                <span>Define</span>
+                <span class="well well-sm">
+                    <b class="text-success">A</b>
+                    <i>happens-before</i>
+                    <b class="text-danger">B</b></span>
+
+                <span>as:</span>
+            </p>
+
+            <ul>
+                <li data-jmpress="fade" class="list-unstyled">
+                    All the <b class="text-success">stores</b>
+                    done by <b class="text-success">X</b>
+                    up to and including <b class="text-success">A</b>
+                </li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    Will be <b>visible</b>
+                </li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    To all the <b class="text-danger">loads</b>
+                    done by <b class="text-danger">Y</b>
+                    starting at <b class="text-danger">B</b>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="6500">
+            <div class="text-center text-bigger">
+                <h1>The <i>happens-before</i> Order Is Transitive</h1>
+                <span data-jmpress="fade">
+                    <span class="well well-sm"><b class="text-success">A</b> <i>hb</i> <b class="text-warning">B</b></span>
+                    and
+                    <span class="well well-sm"><b class="text-warning">B</b> <i>hb</i> <b class="text-danger">C</b></span>
+                    <br/>
+                </span>
+                <span data-jmpress="fade">
+                    &dArr;<br/>
+                </span>
+                <span data-jmpress="fade">
+                    <span class="well well-sm"><b class="text-success">A</b> <i>hb</i> <b class="text-danger">C</b></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="2400" data-x="7800">
+            <div class="text-center">
+                <h1>
+                    <span class="well well-sm">
+                        <b class="text-success">volatile store</b>
+                        <i>hb</i>
+                        <b class="text-danger">volatile load</b></span>
+                </h1>
+            </div>
+
+            <div data-jmpress="fade">
+                <div class="row">
+                    <div class="col-md-12">
+<pre class="prettyprint lang-java">
+private volatile boolean finished = false;
+private <span data-jmpress="strike">volatile</span> int value = 0;
+</pre>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+                    </div>
+                    <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200" data-x="1300">
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+class Holder {
+    int first; final int second;
+    Holder(int first, second) {
+        this.first = first; this.second = second;
+    }
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+Holder holder;
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    holder = new Holder(4, 2);
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(holder == null);
+    assert holder.first == 4;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="1300">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-bit">
+                    <span class="text-danger text-giant">
+                        Final Fields <br/>
+                        Work Differently
+                    </span>
+                </h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200" data-x="2600">
+            <div class="row">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+class Holder {
+    <span data-jmpress="appear-inline">final </span>int first; final int second;
+    Holder(int first, second) {
+        this.first = first; this.second = second;
+    }
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+Holder holder;
+</pre>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    holder = new Holder(4, 2);
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(holder == null);
+    assert holder.first == 4;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="2600">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot">
+                    All stores to all <code>final</code> fields <br/>
+                    are visible to all loads
+                </h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200" data-x="3900">
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+class Holder {
+    int first; final int second;
+    Holder(int first, second) {
+        this.first = first; this.second = second;
+    }
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-12">
+<pre class="prettyprint lang-java">
+Holder holder;
+</pre>
+                </div>
+            </div>
+
+            <div class="row" data-jmpress="fade">
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    holder = new Holder(4, 2);
+}
+</pre>
+                </div>
+                <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(holder == null);
+    assert holder.first == 4;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide qr" data-y="-800" data-x="1300">
+            <div class="text-center">
+                <img class="graph" src="img/qr.png"/>
+
+                <h2>
+                    <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-crash-course/plumbr-march-2015.html">
+                        goo.gl/OyAbcD
+                    </a>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/custom.js"></script>
+
+    <script type="text/javascript">
+        !function ($) {
+            $(function(){
+
+                $('#impress').jmpress({
+                    "mouse": { clickSelects: false },
+                    "beforeChange": function(element, eventData) {
+                        element = $(element);
+                        if(element.hasClass("visit-me")) {
+                            element.addClass('visited');
+                        }
+
+                        updateCurrentSlide(element);
+                    }
+                });
+
+                window.prettyPrint && prettyPrint()
+                $('body').mousemove(function(e){
+                    $('#laser').css('left', e.clientX).css('top', e.clientY);
+                });
+            });
+        }(window.jQuery);
+    </script>
+</body>
+</html>
