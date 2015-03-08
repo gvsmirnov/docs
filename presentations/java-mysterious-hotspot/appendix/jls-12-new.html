@@ -1,0 +1,1856 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;12.&nbsp;Execution</title>
+      <link rel="stylesheet" type="text/css" href="../../../javaspec.css">
+      <meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1">
+      <link rel="home" href="index.html" title="The Java&reg; Language Specification">
+      <link rel="up" href="index.html" title="The Java&reg; Language Specification">
+      <link rel="prev" href="jls-11.html" title="Chapter&nbsp;11.&nbsp;Exceptions">
+      <link rel="next" href="jls-13.html" title="Chapter&nbsp;13.&nbsp;Binary Compatibility">
+      <link rel="copyright" href="jls-0-front.html" title="Legal Notice">
+   
+                  <script type="text/javascript">
+                    var AKSB=AKSB||{};AKSB.q=[];AKSB.mark=function(c,b){AKSB.q.push(["mark",c,b||(new Date).getTime()])};AKSB.measure=function(c,b,a){AKSB.q.push(["measure",c,b,a||(new Date).getTime()])};AKSB.done=function(c){AKSB.q.push(["done",c])};AKSB.mark("firstbyte",(new Date).getTime());AKSB.prof={custid:"322179",ustr:"",originlat:0,clientrtt:71,ghostip:"80.239.237.93",ipv6:false,pct:10,xhrtest:false,clientip:"213.180.22.106",requestid:"1c09769a"};
+                    (function(b){var a=document.createElement("iframe");a.src="javascript:false";(a.frameElement||a).style.cssText="width: 0; height: 0; border: 0; display: none";var c=document.getElementsByTagName("script"),c=c[c.length-1];c.parentNode.insertBefore(a,c);a=a.contentWindow.document;a.open().write("<body onload=\"var js = document.createElement('script');js.id = 'aksb-ifr';js.src = '"+b+"';document.body.appendChild(js);\">");a.close()})(("https:"===document.location.protocol?"https:":"http:")+"//ds-aksb-a.akamaihd.net/aksb.min.js");
+                    </script>
+                    </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:rx="http://www.renderx.com/XSL/Extensions" id="logo"><img src="../../../../webdesign/other/im/oralogo_small.gif" alt="Oracle Logo"><br><p><a href="../../../../8/docs/">Java SE</a> &gt; <a href="../../../index.html">Java SE Specifications</a> &gt; <a href="index.html">Java Language Specification</a></p>
+      </div>
+      <div class="navheader">
+         <table width="100%" summary="Navigation header">
+            <tr>
+               <th colspan="3" align="center">Chapter&nbsp;12.&nbsp;Execution</th>
+            </tr>
+            <tr>
+               <td width="20%" align="left"><a accesskey="p" href="jls-11.html">Prev</a>&nbsp;
+               </td>
+               <th width="60%" align="center">&nbsp;</th>
+               <td width="20%" align="right">&nbsp;<a accesskey="n" href="jls-13.html">Next</a></td>
+            </tr>
+         </table>
+         <hr>
+      </div>
+      <div lang="en" class="chapter" title="Chapter&nbsp;12.&nbsp;Execution">
+         <div class="titlepage">
+            <div>
+               <div>
+                  <h2 class="title"><a name="jls-12"></a>Chapter&nbsp;12.&nbsp;Execution
+                  </h2>
+               </div>
+            </div>
+         </div>
+         <div class="toc">
+            <p><b>Table of Contents</b></p>
+            <dl>
+               <dt><span class="section"><a href="jls-12.html#jls-12.1">12.1. Java Virtual Machine Startup</a></span></dt>
+               <dd>
+                  <dl>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.1.1">12.1.1. Load the Class <code class="literal">Test</code></a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.1.2">12.1.2. Link <code class="literal">Test</code>: Verify, Prepare, (Optionally) Resolve</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.1.3">12.1.3. Initialize Test: Execute Initializers</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.1.4">12.1.4. Invoke <code class="literal">Test.main</code></a></span></dt>
+                  </dl>
+               </dd>
+               <dt><span class="section"><a href="jls-12.html#jls-12.2">12.2. Loading of Classes and Interfaces</a></span></dt>
+               <dd>
+                  <dl>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.2.1">12.2.1. The Loading Process</a></span></dt>
+                  </dl>
+               </dd>
+               <dt><span class="section"><a href="jls-12.html#jls-12.3">12.3. Linking of Classes and Interfaces</a></span></dt>
+               <dd>
+                  <dl>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.3.1">12.3.1. Verification of the Binary Representation</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.3.2">12.3.2. Preparation of a Class or Interface Type</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.3.3">12.3.3. Resolution of Symbolic References</a></span></dt>
+                  </dl>
+               </dd>
+               <dt><span class="section"><a href="jls-12.html#jls-12.4">12.4. Initialization of Classes and Interfaces</a></span></dt>
+               <dd>
+                  <dl>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.4.1">12.4.1. When Initialization Occurs</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.4.2">12.4.2. Detailed Initialization Procedure</a></span></dt>
+                  </dl>
+               </dd>
+               <dt><span class="section"><a href="jls-12.html#jls-12.5">12.5. Creation of New Class Instances</a></span></dt>
+               <dt><span class="section"><a href="jls-12.html#jls-12.6">12.6. Finalization of Class Instances</a></span></dt>
+               <dd>
+                  <dl>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.6.1">12.6.1. Implementing Finalization</a></span></dt>
+                     <dt><span class="section"><a href="jls-12.html#jls-12.6.2">12.6.2. Interaction with the Memory Model</a></span></dt>
+                  </dl>
+               </dd>
+               <dt><span class="section"><a href="jls-12.html#jls-12.7">12.7. Unloading of Classes and Interfaces</a></span></dt>
+               <dt><span class="section"><a href="jls-12.html#jls-12.8">12.8. Program Exit</a></span></dt>
+            </dl>
+         </div>
+         <p class="norm"><a name="jls-12-100"></a>This chapter specifies
+            activities that occur during execution of a program. It is organized
+            around the life cycle of the Java Virtual Machine and of the classes, interfaces, and
+            objects that form a program.
+         </p>
+         <p class="norm"><a name="jls-12-110"></a>The Java Virtual Machine starts up by loading a
+            specified class and then invoking the method <code class="literal">main</code>
+            in this specified class. Section <a class="xref" href="jls-12.html#jls-12.1" title="12.1.&nbsp;Java Virtual Machine Startup">&sect;12.1</a> outlines
+            the loading, linking, and initialization steps involved in
+            executing <code class="literal">main</code>, as an introduction to the concepts
+            in this chapter. Further sections specify the details of loading
+            (<a class="xref" href="jls-12.html#jls-12.2" title="12.2.&nbsp;Loading of Classes and Interfaces">&sect;12.2</a>), linking (<a class="xref" href="jls-12.html#jls-12.3" title="12.3.&nbsp;Linking of Classes and Interfaces">&sect;12.3</a>),
+            and initialization (<a class="xref" href="jls-12.html#jls-12.4" title="12.4.&nbsp;Initialization of Classes and Interfaces">&sect;12.4</a>).
+         </p>
+         <p class="norm"><a name="jls-12-120"></a>The chapter continues with a
+            specification of the procedures for creation of new class instances
+            (<a class="xref" href="jls-12.html#jls-12.5" title="12.5.&nbsp;Creation of New Class Instances">&sect;12.5</a>); and finalization of class instances
+            (<a class="xref" href="jls-12.html#jls-12.6" title="12.6.&nbsp;Finalization of Class Instances">&sect;12.6</a>). It concludes by describing the unloading
+            of classes (<a class="xref" href="jls-12.html#jls-12.7" title="12.7.&nbsp;Unloading of Classes and Interfaces">&sect;12.7</a>) and the procedure followed
+            when a program exits (<a class="xref" href="jls-12.html#jls-12.8" title="12.8.&nbsp;Program Exit">&sect;12.8</a>).
+         </p>
+         <div class="section" title="12.1.&nbsp;Java Virtual Machine Startup">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.1"></a>12.1.&nbsp;Java Virtual Machine Startup
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.1-100"></a>The Java Virtual Machine
+               starts execution by invoking the method <code class="literal">main</code> of
+               some specified class, passing it a single argument, which is an array
+               of strings. In the examples in this specification, this first class is
+               typically called <code class="literal">Test</code>.
+            </p>
+            <p class="norm"><a name="jls-12.1-110"></a>The precise semantics of Java Virtual Machine
+               startup are given in Chapter 5 of <em class="citetitle">The Java Virtual Machine Specification, Java SE 8 Edition</em>. Here we present an overview
+               of the process from the viewpoint of the Java programming language.
+            </p>
+            <p class="norm"><a name="jls-12.1-120"></a>The manner in which the
+               initial class is specified to the Java Virtual Machine is beyond the scope of this
+               specification, but it is typical, in host environments that use
+               command lines, for the fully-qualified name of the class to be
+               specified as a command-line argument and for following command-line
+               arguments to be used as strings to be provided as the argument to the
+               method <code class="literal">main</code>.
+            </p>
+            <div class="informalexample">
+               <p class="note">For example, in a UNIX implementation, the command
+                  line:
+               </p><pre class="screen">
+java Test reboot Bob Dot Enzo
+</pre><p class="note">will typically start a Java Virtual Machine by invoking
+                  method <code class="literal">main</code> of class <code class="literal">Test</code> (a
+                  class in an unnamed package), passing it an array containing the four
+                  strings "<code class="literal">reboot</code>", "<code class="literal">Bob</code>",
+                  "<code class="literal">Dot</code>", and "<code class="literal">Enzo</code>".
+               </p>
+            </div>
+            <p class="norm"><a name="jls-12.1-130"></a>We now outline the steps the
+               Java Virtual Machine may take to execute <code class="literal">Test</code>, as an example of
+               the loading, linking, and initialization processes that are described
+               further in later sections.
+            </p>
+            <div class="section" title="12.1.1.&nbsp;Load the Class Test">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.1.1"></a>12.1.1.&nbsp;Load the Class <code class="literal">Test</code></h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.1.1-100"></a>The initial attempt to
+                  execute the method <code class="literal">main</code> of
+                  class <code class="literal">Test</code> discovers that the
+                  class <code class="literal">Test</code> is not loaded - that is, that the Java Virtual Machine
+                  does not currently contain a binary representation for this class. The
+                  Java Virtual Machine then uses a class loader to attempt to find such a binary
+                  representation. If this process fails, then an error is thrown. This
+                  loading process is described further in
+                  <a class="xref" href="jls-12.html#jls-12.2" title="12.2.&nbsp;Loading of Classes and Interfaces">&sect;12.2</a>.
+               </p>
+            </div>
+            <div class="section" title="12.1.2.&nbsp;Link Test: Verify, Prepare, (Optionally) Resolve">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.1.2"></a>12.1.2.&nbsp;Link <code class="literal">Test</code>: Verify, Prepare, (Optionally) Resolve
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.1.2-100"></a>After <code class="literal">Test</code> is loaded, it
+                  must be initialized before <code class="literal">main</code> can be
+                  invoked. And <code class="literal">Test</code>, like all (class or interface)
+                  types, must be linked before it is initialized. Linking involves
+                  verification, preparation, and (optionally) resolution. Linking is
+                  described further in <a class="xref" href="jls-12.html#jls-12.3" title="12.3.&nbsp;Linking of Classes and Interfaces">&sect;12.3</a>.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-110"></a>Verification checks that the
+                  loaded representation of <code class="literal">Test</code> is well-formed, with
+                  a proper symbol table. Verification also checks that the code that
+                  implements <code class="literal">Test</code> obeys the semantic requirements of
+                  the Java programming language and the Java Virtual Machine. If a problem is detected during
+                  verification, then an error is thrown. Verification is described
+                  further in <a class="xref" href="jls-12.html#jls-12.3.1" title="12.3.1.&nbsp;Verification of the Binary Representation">&sect;12.3.1</a>.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-120"></a>Preparation involves
+                  allocation of static storage and any data structures that are used
+                  internally by the implementation of the Java Virtual Machine, such as method
+                  tables. Preparation is described further in
+                  <a class="xref" href="jls-12.html#jls-12.3.2" title="12.3.2.&nbsp;Preparation of a Class or Interface Type">&sect;12.3.2</a>.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-130"></a>Resolution is the process of
+                  checking symbolic references from <code class="literal">Test</code> to other
+                  classes and interfaces, by loading the other classes and interfaces
+                  that are mentioned and checking that the references are
+                  correct.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-140"></a>The resolution step is
+                  optional at the time of initial linkage. An implementation may resolve
+                  symbolic references from a class or interface that is being linked
+                  very early, even to the point of resolving all symbolic references
+                  from the classes and interfaces that are further referenced,
+                  recursively. (This resolution may result in errors from these further
+                  loading and linking steps.) This implementation choice represents one
+                  extreme and is similar to the kind of "static" linkage that has been
+                  done for many years in simple implementations of the C language. (In
+                  these implementations, a compiled program is typically represented as
+                  an "<code class="literal">a.out</code>" file that contains a fully-linked
+                  version of the program, including completely resolved links to library
+                  routines used by the program. Copies of these library routines are
+                  included in the "<code class="literal">a.out</code>" file.)
+               </p>
+               <p class="norm"><a name="jls-12.1.2-150"></a>An implementation may
+                  instead choose to resolve a symbolic reference only when it is
+                  actively used; consistent use of this strategy for all symbolic
+                  references would represent the "laziest" form of resolution. In this
+                  case, if <code class="literal">Test</code> had several symbolic references to
+                  another class, then the references might be resolved one at a time, as
+                  they are used, or perhaps not at all, if these references were never
+                  used during execution of the program.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-160"></a>The only requirement on when
+                  resolution is performed is that any errors detected during resolution
+                  must be thrown at a point in the program where some action is taken by
+                  the program that might, directly or indirectly, require linkage to the
+                  class or interface involved in the error. Using the "static" example
+                  implementation choice described above, loading and linkage errors
+                  could occur before the program is executed if they involved a class or
+                  interface mentioned in the class <code class="literal">Test</code> or any of the
+                  further, recursively referenced, classes and interfaces. In a system
+                  that implemented the "laziest" resolution, these errors would be
+                  thrown only when an incorrect symbolic reference is actively
+                  used.
+               </p>
+               <p class="norm"><a name="jls-12.1.2-170"></a>The resolution process is
+                  described further in <a class="xref" href="jls-12.html#jls-12.3.3" title="12.3.3.&nbsp;Resolution of Symbolic References">&sect;12.3.3</a>.
+               </p>
+            </div>
+            <div class="section" title="12.1.3.&nbsp;Initialize Test: Execute Initializers">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.1.3"></a>12.1.3.&nbsp;Initialize Test: Execute Initializers
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.1.3-100"></a>In our continuing example,
+                  the Java Virtual Machine is still trying to execute the
+                  method <code class="literal">main</code> of class <code class="literal">Test</code>. This
+                  is permitted only if the class has been initialized
+                  (<a class="xref" href="jls-12.html#jls-12.4.1" title="12.4.1.&nbsp;When Initialization Occurs">&sect;12.4.1</a>).
+               </p>
+               <p class="norm"><a name="jls-12.1.3-110"></a>Initialization consists of
+                  execution of any class variable initializers and static initializers
+                  of the class <code class="literal">Test</code>, in textual order. But
+                  before <code class="literal">Test</code> can be initialized, its direct
+                  superclass must be initialized, as well as the direct superclass of
+                  its direct superclass, and so on, recursively. In the simplest
+                  case, <code class="literal">Test</code> has <code class="literal">Object</code> as its implicit direct
+                  superclass; if class <code class="literal">Object</code> has not yet been initialized, then it
+                  must be initialized before <code class="literal">Test</code> is
+                  initialized. Class <code class="literal">Object</code> has no superclass, so the recursion
+                  terminates here.
+               </p>
+               <p class="norm"><a name="jls-12.1.3-120"></a>If
+                  class <code class="literal">Test</code> has another
+                  class <code class="literal">Super</code> as its superclass,
+                  then <code class="literal">Super</code> must be initialized
+                  before <code class="literal">Test</code>. This requires loading, verifying, and
+                  preparing <code class="literal">Super</code> if this has not already been done
+                  and, depending on the implementation, may also involve resolving the
+                  symbolic references from <code class="literal">Super</code> and so on,
+                  recursively.
+               </p>
+               <p class="norm"><a name="jls-12.1.3-130"></a>Initialization may thus
+                  cause loading, linking, and initialization errors, including such
+                  errors involving other types.
+               </p>
+               <p class="norm"><a name="jls-12.1.3-140"></a>The initialization process
+                  is described further in <a class="xref" href="jls-12.html#jls-12.4" title="12.4.&nbsp;Initialization of Classes and Interfaces">&sect;12.4</a>.
+               </p>
+            </div>
+            <div class="section" title="12.1.4.&nbsp;Invoke Test.main">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.1.4"></a>12.1.4.&nbsp;Invoke <code class="literal">Test.main</code></h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.1.4-100"></a>Finally, after completion of
+                  the initialization for class <code class="literal">Test</code> (during which
+                  other consequential loading, linking, and initializing may have
+                  occurred), the method <code class="literal">main</code>
+                  of <code class="literal">Test</code> is invoked.
+               </p>
+               <p class="norm"><a name="jls-12.1.4-110"></a>The
+                  method <code class="literal">main</code> must be declared <code class="literal">public</code>, <code class="literal">static</code>,
+                  and <code class="literal">void</code>.  It must specify a
+                  formal parameter (<a class="xref" href="jls-8.html#jls-8.4.1" title="8.4.1.&nbsp;Formal Parameters">&sect;8.4.1</a>) whose declared type is
+                  array of <code class="literal">String</code>. Therefore, either of the following declarations is
+                  acceptable:
+               </p><pre class="programlisting">
+
+public static void main(String[] args)
+
+</pre><pre class="programlisting">
+
+public static void main(String... args)
+
+</pre></div>
+         </div>
+         <div class="section" title="12.2.&nbsp;Loading of Classes and Interfaces">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.2"></a>12.2.&nbsp;Loading of Classes and Interfaces
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm"><a name="jls-12.2-100"></a><span class="emphasis"><em>Loading</em></span>
+               refers to the process of finding the binary form of a class or
+               interface type with a particular name, perhaps by computing it on the
+               fly, but more typically by retrieving a binary representation
+               previously computed from source code by a Java compiler, and
+               constructing, from that binary form, a <code class="literal">Class</code> object to represent the
+               class or interface.
+            </p>
+            <p class="norm"><a name="jls-12.2-110"></a>The precise semantics of
+               loading are given in Chapter 5 of <em class="citetitle">The Java Virtual Machine Specification, Java SE 8 Edition</em>. Here we present an overview
+               of the process from the viewpoint of the Java programming language.
+            </p>
+            <p class="norm"><a name="jls-12.2-120"></a>The binary format of a class
+               or interface is normally the <code class="literal">class</code> file format described in <em class="citetitle">The Java Virtual Machine Specification, Java SE 8 Edition</em>
+               cited above, but other formats are possible, provided they meet the
+               requirements specified in <a class="xref" href="jls-13.html#jls-13.1" title="13.1.&nbsp;The Form of a Binary">&sect;13.1</a>. The
+               method <code class="literal">defineClass</code> of class <code class="literal">ClassLoader</code> may be
+               used to construct <code class="literal">Class</code> objects from binary representations in the
+               <code class="literal">class</code> file format.
+            </p>
+            <p class="norm"><a name="jls-12.2-200"></a>Well-behaved class loaders
+               maintain these properties:
+            </p>
+            <div class="norm">
+               <ul class="norm" type="disc">
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.2-200-A"></a>Given the same name, a
+                             good class loader should always return the same class
+                             object.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.2-200-B"></a>If a class
+                             loader <code class="varname">L1</code> delegates loading of a class <span class="type">C</span> to
+                             another loader <code class="varname">L2</code>, then for any type <span class="type">T</span> that
+                             occurs as the direct superclass or a direct superinterface of
+                             <span class="type">C</span>, or as the type of a field in <span class="type">C</span>, or as the type of a formal
+                             parameter of a method or constructor in <span class="type">C</span>, or as a return type
+                             of a method in <span class="type">C</span>, <code class="varname">L1</code>
+                             and <code class="varname">L2</code> should return the same <code class="literal">Class</code>
+                             object.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p class="norm"><a name="jls-12.2-210"></a>A malicious class loader could
+               violate these properties. However, it could not undermine the security
+               of the type system, because the Java Virtual Machine guards against this.
+            </p>
+            <p class="note">For further discussion of these issues, see <em class="citetitle">The Java Virtual Machine Specification, Java SE 8 Edition</em>
+               and the paper <em class="citetitle">Dynamic Class Loading in the Java Virtual
+                  Machine</em>, by Sheng Liang and Gilad Bracha,
+               in <em class="citetitle">Proceedings of OOPSLA '98</em>, published
+               as <em class="citetitle">ACM SIGPLAN Notices</em>, Volume 33, Number 10,
+               October 1998, pages 36-44. A basic principle of the design of the
+               Java programming language is that the run-time type system cannot be subverted by
+               code written in the Java programming language, not even by implementations of such
+               otherwise sensitive system classes as <code class="literal">ClassLoader</code>
+               and <code class="literal">SecurityManager</code>.
+            </p>
+            <div class="section" title="12.2.1.&nbsp;The Loading Process">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.2.1"></a>12.2.1.&nbsp;The Loading Process
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.2.1-100"></a>The loading process is
+                  implemented by the class <code class="literal">ClassLoader</code> and its subclasses.
+               </p>
+               <p class="norm"><a name="jls-12.2.1-110"></a>Different subclasses of
+                  <code class="literal">ClassLoader</code> may implement different loading policies. In particular,
+                  a class loader may cache binary representations of classes and
+                  interfaces, prefetch them based on expected usage, or load a group of
+                  related classes together. These activities may not be completely
+                  transparent to a running application if, for example, a newly compiled
+                  version of a class is not found because an older version is cached by
+                  a class loader. It is the responsibility of a class loader, however,
+                  to reflect loading errors only at points in the program where they
+                  could have arisen without prefetching or group loading.
+               </p>
+               <p class="norm"><a name="jls-12.2.1-120"></a>If an error occurs during
+                  class loading, then an instance of one of the following subclasses of
+                  class <code class="literal">LinkageError</code> will be thrown at any point in the program that (directly
+                  or indirectly) uses the type:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.2.1-120-A"></a><code class="literal">ClassCircularityError</code>: A class or
+                                interface could not be loaded because it would be its own
+                                superclass or superinterface (<a class="xref" href="jls-8.html#jls-8.1.4" title="8.1.4.&nbsp;Superclasses and Subclasses">&sect;8.1.4</a>,
+                                <a class="xref" href="jls-9.html#jls-9.1.3" title="9.1.3.&nbsp;Superinterfaces and Subinterfaces">&sect;9.1.3</a>,
+                                <a class="xref" href="jls-13.html#jls-13.4.4" title="13.4.4.&nbsp;Superclasses and Superinterfaces">&sect;13.4.4</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.2.1-120-B"></a><code class="literal">ClassFormatError</code>: The binary data
+                                that purports to specify a requested compiled class or interface
+                                is malformed.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.2.1-120-C"></a><code class="literal">NoClassDefFoundError</code>: No definition
+                                for a requested class or interface could be found by the relevant
+                                class loader.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm"><a name="jls-12.2.1-130"></a>Because loading involves the
+                  allocation of new data structures, it may fail with an <code class="literal">OutOfMemoryError</code>.
+               </p>
+            </div>
+         </div>
+         <div class="section" title="12.3.&nbsp;Linking of Classes and Interfaces">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.3"></a>12.3.&nbsp;Linking of Classes and Interfaces
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm"><a name="jls-12.3-100"></a><span class="emphasis"><em>Linking</em></span>
+               is the process of taking a binary form of a class or interface type
+               and combining it into the run-time state of the Java Virtual Machine, so that it can
+               be executed. A class or interface type is always loaded before it is
+               linked.
+            </p>
+            <p class="norm"><a name="jls-12.3-110"></a>Three different activities are
+               involved in linking: verification, preparation, and resolution of
+               symbolic references.
+            </p>
+            <p class="norm"><a name="jls-12.3-120"></a>The precise semantics of
+               linking are given in Chapter 5 of <em class="citetitle">The Java Virtual Machine Specification, Java SE 8 Edition</em>. Here we present an overview
+               of the process from the viewpoint of the Java programming language.
+            </p>
+            <p class="norm"><a name="jls-12.3-200"></a>This specification allows an
+               implementation flexibility as to when linking activities (and, because
+               of recursion, loading) take place, provided that the semantics of the
+               Java programming language are respected, that a class or interface is completely
+               verified and prepared before it is initialized, and that errors
+               detected during linkage are thrown at a point in the program where
+               some action is taken by the program that might require linkage to the
+               class or interface involved in the error.
+            </p>
+            <p class="norm"><a name="jls-12.3-210"></a>For example, an implementation
+               may choose to resolve each symbolic reference in a class or interface
+               individually, only when it is used (lazy or late resolution), or to
+               resolve them all at once while the class is being verified (static
+               resolution). This means that the resolution process may continue, in
+               some implementations, after a class or interface has been
+               initialized.
+            </p>
+            <p class="norm"><a name="jls-12.3-220"></a>Because linking involves the
+               allocation of new data structures, it may fail with an <code class="literal">OutOfMemoryError</code>.
+            </p>
+            <div class="section" title="12.3.1.&nbsp;Verification of the Binary Representation">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.3.1"></a>12.3.1.&nbsp;Verification of the Binary Representation
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.3.1-100"></a><span class="emphasis"><em>Verification</em></span> ensures that
+                  the binary representation of a class or interface is structurally
+                  correct. For example, it checks that every instruction has a valid
+                  operation code; that every branch instruction branches to the start of
+                  some other instruction, rather than into the middle of an instruction;
+                  that every method is provided with a structurally correct signature;
+                  and that every instruction obeys the type discipline of the Java Virtual Machine
+                  language.
+               </p>
+               <p class="norm"><a name="jls-12.3.1-110"></a>If an error occurs during
+                  verification, then an instance of the following subclass of class <code class="literal">LinkageError</code>
+                  will be thrown at the point in the program that caused the class to be
+                  verified:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.3.1-110-A"></a><code class="literal">VerifyError</code>: The binary
+                                definition for a class or interface failed to pass a set of
+                                required checks to verify that it obeys the semantics of the
+                                Java Virtual Machine language and that it cannot violate the integrity of the
+                                Java Virtual Machine. (See <a class="xref" href="jls-13.html#jls-13.4.2" title="13.4.2.&nbsp;final Classes">&sect;13.4.2</a>,
+                                <a class="xref" href="jls-13.html#jls-13.4.4" title="13.4.4.&nbsp;Superclasses and Superinterfaces">&sect;13.4.4</a>, <a class="xref" href="jls-13.html#jls-13.4.9" title="13.4.9.&nbsp;final Fields and static Constant Variables">&sect;13.4.9</a>, and
+                                <a class="xref" href="jls-13.html#jls-13.4.17" title="13.4.17.&nbsp;final Methods">&sect;13.4.17</a> for some examples.)
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" title="12.3.2.&nbsp;Preparation of a Class or Interface Type">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.3.2"></a>12.3.2.&nbsp;Preparation of a Class or Interface Type
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.3.2-100"></a><span class="emphasis"><em>Preparation</em></span> involves
+                  creating the <code class="literal">static</code> fields (class variables and constants) for a
+                  class or interface and initializing such fields to the default values
+                  (<a class="xref" href="jls-4.html#jls-4.12.5" title="4.12.5.&nbsp;Initial Values of Variables">&sect;4.12.5</a>). This does not require the execution of
+                  any source code; explicit initializers for static fields are executed
+                  as part of initialization (<a class="xref" href="jls-12.html#jls-12.4" title="12.4.&nbsp;Initialization of Classes and Interfaces">&sect;12.4</a>), not
+                  preparation.
+               </p>
+               <p class="note">Implementations of the Java Virtual Machine may precompute
+                  additional data structures at preparation time in order to make later
+                  operations on a class or interface more efficient. One particularly
+                  useful data structure is a "method table" or other data structure that
+                  allows any method to be invoked on instances of a class without
+                  requiring a search of superclasses at invocation time.
+               </p>
+            </div>
+            <div class="section" title="12.3.3.&nbsp;Resolution of Symbolic References">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.3.3"></a>12.3.3.&nbsp;Resolution of Symbolic References
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm"><a name="jls-12.3.3-100"></a>The binary representation of
+                  a class or interface references other classes and interfaces and their
+                  fields, methods, and constructors symbolically, using the binary names
+                  (<a class="xref" href="jls-13.html#jls-13.1" title="13.1.&nbsp;The Form of a Binary">&sect;13.1</a>) of the other classes and interfaces
+                  (<a class="xref" href="jls-13.html#jls-13.1" title="13.1.&nbsp;The Form of a Binary">&sect;13.1</a>). For fields and methods, these symbolic
+                  references include the name of the class or interface type of which
+                  the field or method is a member, as well as the name of the field or
+                  method itself, together with appropriate type information.
+               </p>
+               <p class="norm"><a name="jls-12.3.3-110"></a>Before a symbolic reference
+                  can be used it must undergo resolution, wherein a symbolic reference
+                  is checked to be correct and, typically, replaced with a direct
+                  reference that can be more efficiently processed if the reference is
+                  used repeatedly.
+               </p>
+               <p class="norm"><a name="jls-12.3.3-120"></a>If an error occurs during
+                  resolution, then an error will be thrown. Most typically, this will be
+                  an instance of one of the following subclasses of the class <code class="literal">IncompatibleClassChangeError</code>,
+                  but it may also be an instance of some other subclass of <code class="literal">IncompatibleClassChangeError</code> or
+                  even an instance of the class <code class="literal">IncompatibleClassChangeError</code> itself. This error may be thrown
+                  at any point in the program that uses a symbolic reference to the
+                  type, directly or indirectly:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.3.3-120-A"></a><code class="literal">IllegalAccessError</code>: A symbolic
+                                 reference has been encountered that specifies a use or
+                                 assignment of a field, or invocation of a method, or creation of
+                                 an instance of a class, to which the code containing the
+                                 reference does not have access because the field or method was
+                                 declared with <code class="literal">private</code>, <code class="literal">protected</code>, or package access (not
+                                 <code class="literal">public</code>), or because the class was not declared
+                                 <code class="literal">public</code>.
+                        </p>
+                        <p class="note">This can occur, for example, if a field that is
+                                 originally declared <code class="literal">public</code> is changed to be <code class="literal">private</code> after
+                                 another class that refers to the field has been compiled
+                                 (<a class="xref" href="jls-13.html#jls-13.4.7" title="13.4.7.&nbsp;Access to Members and Constructors">&sect;13.4.7</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.3.3-120-B"></a><code class="literal">InstantiationError</code>:
+                                 A symbolic reference has been encountered that is used in class
+                                 instance creation expression, but an instance cannot be created
+                                 because the reference turns out to refer to an interface or to
+                                 an abstract class.
+                        </p>
+                        <p class="note">This can occur, for example, if a class that is
+                                 originally not <code class="literal">abstract</code> is changed to be <code class="literal">abstract</code> after
+                                 another class that refers to the class in question has been
+                                 compiled (<a class="xref" href="jls-13.html#jls-13.4.1" title="13.4.1.&nbsp;abstract Classes">&sect;13.4.1</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.3.3-120-C"></a><code class="literal">NoSuchFieldError</code>: A symbolic
+                                 reference has been encountered that refers to a specific field
+                                 of a specific class or interface, but the class or interface
+                                 does not contain a field of that name.
+                        </p>
+                        <p class="note">This can occur, for example, if a field
+                                 declaration was deleted from a class after another class that
+                                 refers to the field was compiled
+                                 (<a class="xref" href="jls-13.html#jls-13.4.8" title="13.4.8.&nbsp;Field Declarations">&sect;13.4.8</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.3.3-120-D"></a><code class="literal">NoSuchMethodError</code>: A symbolic
+                                 reference has been encountered that refers to a specific method
+                                 of a specific class or interface, but the class or interface
+                                 does not contain a method of that signature.
+                        </p>
+                        <p class="note">This can occur, for example, if a method
+                                 declaration was deleted from a class after another class that
+                                 refers to the method was compiled
+                                 (<a class="xref" href="jls-13.html#jls-13.4.12" title="13.4.12.&nbsp;Method and Constructor Declarations">&sect;13.4.12</a>).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm"><a name="jls-12.3.3-130"></a>Additionally, an
+                  <code class="literal">UnsatisfiedLinkError</code>, a subclass of <code class="literal">LinkageError</code>, may be thrown if a class
+                  declares a <code class="literal">native</code> method for which no implementation can be
+                  found. The error will occur if the method is used, or earlier,
+                  depending on what kind of resolution strategy is being used by an
+                  implementation of the Java Virtual Machine (<a class="xref" href="jls-12.html#jls-12.3" title="12.3.&nbsp;Linking of Classes and Interfaces">&sect;12.3</a>).
+               </p>
+            </div>
+         </div>
+         <div class="section" title="12.4.&nbsp;Initialization of Classes and Interfaces">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.4"></a>12.4.&nbsp;Initialization of Classes and Interfaces
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm"><a name="jls-12.4-100"></a><span class="emphasis"><em>Initialization</em></span> 
+               of a class consists of executing its static initializers and the
+               initializers for <code class="literal">static</code> fields (class variables) declared in the
+               class.
+            </p>
+            <p class="norm"><a name="jls-12.4-110"></a><span class="emphasis"><em>Initialization</em></span> 
+               of an interface consists of executing the initializers for fields
+               (constants) declared in the interface.
+            </p>
+            <div class="section" title="12.4.1.&nbsp;When Initialization Occurs">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.4.1"></a>12.4.1.&nbsp;When Initialization Occurs
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.4.1-100"></a>
+                  A class or interface type <span class="type">T</span> will be initialized immediately before
+                  the first occurrence of any one of the following:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.1-100-A"></a>
+                                 <span class="type">T</span> is a class and an instance of <span class="type">T</span> is created.
+                               
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.1-100-B"></a>
+                                 A <code class="literal">static</code> method declared by <span class="type">T</span> is invoked.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.1-100-C"></a>
+                                 A <code class="literal">static</code> field declared by <span class="type">T</span> is assigned.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.1-100-D"></a>
+                                 A <code class="literal">static</code> field declared by <span class="type">T</span> is used and the field is not a
+                                 constant variable (<a class="xref" href="jls-4.html#jls-4.12.4" title="4.12.4.&nbsp;final Variables">&sect;4.12.4</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.1-100-E"></a>
+                                 <span class="type">T</span> is a top level class (<a class="xref" href="jls-7.html#jls-7.6" title="7.6.&nbsp;Top Level Type Declarations">&sect;7.6</a>) and an
+                                 <code class="literal">assert</code> statement (<a class="xref" href="jls-14.html#jls-14.10" title="14.10.&nbsp;The assert Statement">&sect;14.10</a>) lexically
+                                 nested within <span class="type">T</span> (<a class="xref" href="jls-8.html#jls-8.1.3" title="8.1.3.&nbsp;Inner Classes and Enclosing Instances">&sect;8.1.3</a>) is
+                                 executed.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm"><a name="jls-12.4.1-110"></a>
+                  When a class is initialized, its superclasses are initialized (if they
+                  have not been previously initialized),  as well as any superinterfaces
+                  (<a class="xref" href="jls-8.html#jls-8.1.5" title="8.1.5.&nbsp;Superinterfaces">&sect;8.1.5</a>) that declare any default methods
+                  (<a class="xref" href="jls-9.html#jls-9.4.3" title="9.4.3.&nbsp;Interface Method Body">&sect;9.4.3</a>) (if they have not been previously
+                  initialized). 
+                  Initialization of an interface does not, of itself, cause
+                  initialization of any of its superinterfaces.
+               </p>
+               <p class="norm"><a name="jls-12.4.1-120"></a>
+                  A reference to a <code class="literal">static</code> field (<a class="xref" href="jls-8.html#jls-8.3.1.1" title="8.3.1.1.&nbsp;static Fields">&sect;8.3.1.1</a>) causes
+                  initialization of only the class or interface that actually declares
+                  it, even though it might be referred to through the name of a
+                  subclass, a subinterface, or a class that implements an
+                  interface.
+               </p>
+               <p class="norm"><a name="jls-12.4.1-130"></a>
+                  Invocation of certain reflective methods in class <code class="literal">Class</code> and in
+                  package <code class="literal">java.lang.reflect</code> also causes class or interface
+                  initialization.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.4.1-200"></a>
+                  A class or interface will not be initialized under any other
+                  circumstance.
+               </p>
+               <p class="note">
+                  Note that a compiler may generate <span class="emphasis"><em>synthetic</em></span>
+                  default methods in an interface, that is, default methods that are
+                  neither explicitly nor implicitly declared (<a class="xref" href="jls-13.html#jls-13.1" title="13.1.&nbsp;The Form of a Binary">&sect;13.1</a>). 
+                  Such methods will trigger the interface's initialization despite the
+                  source code giving no indication that the interface should be
+                  initialized.
+               </p>
+               <p class="norm"><a name="jls-12.4.1-300"></a>The intent is that a class
+                  or interface type has a set of initializers that put it in a
+                  consistent state, and that this state is the first state that is
+                  observed by other classes. The static initializers and class variable
+                  initializers are executed in textual order, and may not refer to class
+                  variables declared in the class whose declarations appear textually
+                  after the use, even though these class variables are in scope
+                  (<a class="xref" href="jls-8.html#jls-8.3.3" title="8.3.3.&nbsp;Forward References During Field Initialization">&sect;8.3.3</a>). This restriction is designed to
+                  detect, at compile time, most circular or otherwise malformed
+                  initializations.
+               </p>
+               <p class="norm"><a name="jls-12.4.1-310"></a>The fact that initialization
+                  code is unrestricted allows examples to be constructed where the value
+                  of a class variable can be observed when it still has its initial
+                  default value, before its initializing expression is evaluated, but
+                  such examples are rare in practice. (Such examples can be also
+                  constructed for instance variable initialization
+                  (<a class="xref" href="jls-12.html#jls-12.5" title="12.5.&nbsp;Creation of New Class Instances">&sect;12.5</a>).) The full power of the Java programming language is
+                  available in these initializers; programmers must exercise some
+                  care. This power places an extra burden on code generators, but this
+                  burden would arise in any case because the Java programming language is concurrent
+                  (<a class="xref" href="jls-12.html#jls-12.4.2" title="12.4.2.&nbsp;Detailed Initialization Procedure">&sect;12.4.2</a>).
+               </p>
+               <div class="example"><a name="d5e18274"></a><p class="title"><b>Example&nbsp;12.4.1-1.&nbsp;Superclasses Are Initialized Before Subclasses</b></p>
+                  <div class="example-contents"><pre class="programlisting">
+class Super {
+    static { System.out.print("Super "); }
+}
+class One {
+    static { System.out.print("One "); }
+}
+class Two extends Super {
+    static { System.out.print("Two "); }
+}
+class Test {
+    public static void main(String[] args) {
+        One o = null;
+        Two t = new Two();
+        System.out.println((Object)o == (Object)t);
+    }
+}
+</pre><p class="note">This program produces the output:</p><pre class="screen">
+Super Two false
+</pre><p class="note">The class <code class="literal">One</code> is never
+                        initialized, because it not used actively and therefore is never
+                        linked to. The class <code class="literal">Two</code> is initialized only after
+                        its superclass <code class="literal">Super</code> has been initialized.
+                     </p>
+                  </div>
+               </div><br class="example-break"><div class="example"><a name="d5e18283"></a><p class="title"><b>Example&nbsp;12.4.1-2.&nbsp;Only The Class That Declares <code class="literal">static</code> Field Is Initialized</b></p>
+                  <div class="example-contents"><pre class="programlisting">
+class Super {
+    static int taxi = 1729;
+}
+class Sub extends Super {
+    static { System.out.print("Sub "); }
+}
+class Test {
+    public static void main(String[] args) {
+        System.out.println(Sub.taxi);
+    }
+}
+</pre><p class="note">This program prints only:</p><pre class="screen">
+1729
+</pre><p class="note">because the class <code class="literal">Sub</code> is never
+                        initialized; the reference to <code class="literal">Sub.taxi</code> is a
+                        reference to a field actually declared in
+                        class <code class="literal">Super</code> and does not trigger initialization of
+                        the class <code class="literal">Sub</code>.
+                     </p>
+                  </div>
+               </div><br class="example-break"><div class="example"><a name="d5e18294"></a><p class="title"><b>Example&nbsp;12.4.1-3.&nbsp;Interface Initialization Does Not Initialize Superinterfaces</b></p>
+                  <div class="example-contents"><pre class="programlisting">
+interface I {
+    int i = 1, ii = Test.out("ii", 2);
+}
+interface J extends I {
+    int j = Test.out("j", 3), jj = Test.out("jj", 4);
+}
+interface K extends J {
+    int k = Test.out("k", 5);
+}
+class Test {
+    public static void main(String[] args) {
+        System.out.println(J.i);
+        System.out.println(K.j);
+    }
+    static int out(String s, int i) {
+        System.out.println(s + "=" + i);
+        return i;
+    }
+}
+</pre><p class="note">This program produces the output:</p><pre class="screen">
+1
+j=3
+jj=4
+3
+</pre><p class="note">The reference to <code class="literal">J.i</code> is to a
+                        field that is a  constant variable
+                        (<a class="xref" href="jls-4.html#jls-4.12.4" title="4.12.4.&nbsp;final Variables">&sect;4.12.4</a>); therefore, it does not
+                        cause <code class="literal">I</code> to be initialized
+                        (<a class="xref" href="jls-13.html#jls-13.4.9" title="13.4.9.&nbsp;final Fields and static Constant Variables">&sect;13.4.9</a>).
+                     </p>
+                     <p class="note">The reference to <code class="literal">K.j</code> is a
+                        reference to a field actually declared in
+                        interface <code class="literal">J</code> that is not
+                        a  constant variable; this causes
+                        initialization of the fields of interface <code class="literal">J</code>, but
+                        not those of its superinterface <code class="literal">I</code>, nor those of
+                        interface <code class="literal">K</code>.
+                     </p>
+                     <p class="note">Despite the fact that the name <code class="literal">K</code>
+                        is used to refer to field <code class="literal">j</code> of
+                        interface <code class="literal">J</code>, interface <code class="literal">K</code> is not
+                        initialized.
+                     </p>
+                  </div>
+               </div><br class="example-break"></div>
+            <div class="section" title="12.4.2.&nbsp;Detailed Initialization Procedure">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.4.2"></a>12.4.2.&nbsp;Detailed Initialization Procedure
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.4.2-100"></a>Because
+                  the Java programming language is multithreaded, initialization of a class or
+                  interface requires careful synchronization, since some other thread
+                  may be trying to initialize the same class or interface at the same
+                  time. There is also the possibility that initialization of a class or
+                  interface may be requested recursively as part of the initialization
+                  of that class or interface; for example, a variable initializer in
+                  class <span class="type">A</span> might invoke a method of an unrelated
+                  class <span class="type">B</span>, which might in turn invoke a method of
+                  class <span class="type">A</span>. The implementation of the Java Virtual Machine is responsible
+                  for taking care of synchronization and recursive initialization by
+                  using the following procedure.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.4.2-200"></a>The
+                  procedure assumes that the <code class="literal">Class</code> object has already been verified
+                  and prepared, and that the <code class="literal">Class</code> object contains state that
+                  indicates one of four situations:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-200-A"></a>
+                                 This <code class="literal">Class</code> object is verified and prepared but not
+                                 initialized.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-200-B"></a>
+                                 This <code class="literal">Class</code> object is being initialized by some particular
+                                 thread <code class="varname">T</code>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-200-C"></a>
+                                 This <code class="literal">Class</code> object is fully initialized and ready for
+                                 use.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-200-D"></a>
+                                 This <code class="literal">Class</code> object is in an erroneous state, perhaps because
+                                 initialization was attempted and failed.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.4.2-300"></a>
+                  For each class or interface <span class="type">C</span>, there is a unique initialization lock
+                  <code class="varname">LC</code>. The mapping from <span class="type">C</span> to <code class="varname">LC</code> is left to the discretion of the
+                  Java Virtual Machine implementation. The procedure for initializing <span class="type">C</span> is then as
+                  follows:
+               </p>
+               <div class="orderedlist">
+                  <ol class="orderedlist" type="1">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-A"></a>
+                                 Synchronize on the initialization lock, <code class="varname">LC</code>, for <span class="type">C</span>. This
+                                 involves waiting until the current thread can acquire
+                                 <code class="varname">LC</code>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-B"></a>
+                                 If the <code class="literal">Class</code> object for <span class="type">C</span> indicates that initialization is
+                                 in progress for <span class="type">C</span> by some other thread, then release <code class="varname">LC</code> and
+                                 block the current thread until informed that the in-progress
+                                 initialization has completed, at which time repeat this
+                                 step.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-C"></a>
+                                 If the <code class="literal">Class</code> object for <span class="type">C</span> indicates that initialization is
+                                 in progress for <span class="type">C</span> by the current thread, then this must be a
+                                 recursive request for initialization. Release <code class="varname">LC</code> and complete
+                                 normally.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-D"></a>
+                                 If the <code class="literal">Class</code> object for <span class="type">C</span> indicates that <span class="type">C</span> has already
+                                 been initialized, then no further action is required. Release
+                                 <code class="varname">LC</code> and complete normally.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-E"></a>
+                                 If the <code class="literal">Class</code> object for <span class="type">C</span> is in an erroneous state, then
+                                 initialization is not possible. Release <code class="varname">LC</code> and throw a
+                                 <code class="literal">NoClassDefFoundError</code>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-F"></a>
+                                 Otherwise, record the fact that initialization of the <code class="literal">Class</code>
+                                 object for <span class="type">C</span> is in progress by the current thread, and release
+                                 <code class="varname">LC</code>.
+                        </p>
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-F.1"></a>
+                                 Then, initialize the 
+                                 <code class="literal">static</code> fields of <span class="type">C</span> which are constant variables
+                                 (<a class="xref" href="jls-4.html#jls-4.12.4" title="4.12.4.&nbsp;final Variables">&sect;4.12.4</a>, <a class="xref" href="jls-8.html#jls-8.3.2" title="8.3.2.&nbsp;Field Initialization">&sect;8.3.2</a>,
+                                 <a class="xref" href="jls-9.html#jls-9.3.1" title="9.3.1.&nbsp;Initialization of Fields in Interfaces">&sect;9.3.1</a>).
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-G"></a>
+                                 Next, if <span class="type">C</span> is a class rather than an interface, and its
+                                 superclass has not yet been initialized, then let <span class="type">SC</span> be its
+                                 superclass and let <span class="type">SI<sub>1</sub></span>,
+                                 ..., <span class="type">SI<sub>n</sub></span> be all
+                                 superinterfaces of <span class="type">C</span> that declare at least one default
+                                 method. The order of superinterfaces is given by a recursive
+                                 enumeration over the superinterface hierarchy of each interface
+                                 directly implemented by <span class="type">C</span> (in the left-to-right order of <span class="type">C</span>'s
+                                 <code class="literal">implements</code> clause).  For each
+                                 interface <span class="type">I</span> directly implemented by <span class="type">C</span>, the enumeration
+                                 recurs on <span class="type">I</span>'s superinterfaces (in the left-to-right order of
+                                 <span class="type">I</span>'s <code class="literal">extends</code> clause) before returning <span class="type">I</span>.
+                        </p>
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-G.1"></a>
+                                  For each <span class="type">S</span> in the list [ <span class="type">SC</span>, <span class="type">SI<sub>1</sub></span>,
+                                  ..., <span class="type">SI<sub>n</sub></span> ], recursively
+                                  perform this entire procedure for <span class="type">S</span>. If necessary, verify and
+                                  prepare <span class="type">S</span> first.
+                        </p>
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-G.2"></a>
+                                 If the initialization of <span class="type">S</span> completes abruptly because of a
+                                 thrown exception, then acquire <code class="varname">LC</code>, label the <code class="literal">Class</code> object
+                                 for <span class="type">C</span> as erroneous, notify all waiting threads, release <code class="varname">LC</code>,
+                                 and complete abruptly, throwing the same exception that resulted
+                                 from initializing <span class="type">S</span>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-H"></a>
+                                 Next, determine whether assertions are enabled
+                                 (<a class="xref" href="jls-14.html#jls-14.10" title="14.10.&nbsp;The assert Statement">&sect;14.10</a>) for <span class="type">C</span> by querying its defining
+                                 class loader.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-I"></a>
+                                 Next, execute either the class variable initializers and static
+                                 initializers of the class, or the field initializers of the
+                                 interface, in textual order, as though they were a single
+                                 block.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-J"></a>
+                                 If the execution of the initializers completes normally, then
+                                 acquire <code class="varname">LC</code>, label the <code class="literal">Class</code> object for <span class="type">C</span> as fully
+                                 initialized, notify all waiting threads, release <code class="varname">LC</code>, and
+                                 complete this procedure normally.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-K"></a>
+                                 Otherwise, the initializers must have completed abruptly by
+                                 throwing some exception <span class="type">E</span>. If the class of <span class="type">E</span> is not <code class="literal">Error</code>
+                                 or one of its subclasses, then create a new instance of the
+                                 class <code class="literal">ExceptionInInitializerError</code>, with <span class="type">E</span> as the argument,
+                                 and use this object in place of <span class="type">E</span> in the following step. If a
+                                 new instance of <code class="literal">ExceptionInInitializerError</code> cannot be created
+                                 because an <code class="literal">OutOfMemoryError</code> occurs, then instead use an <code class="literal">OutOfMemoryError</code> object in
+                                 place of <span class="type">E</span> in the following step.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.4.2-300-L"></a>
+                                 Acquire <code class="varname">LC</code>, label the <code class="literal">Class</code> object for <span class="type">C</span> as erroneous,
+                                 notify all waiting threads, release <code class="varname">LC</code>, and complete this
+                                 procedure abruptly with reason <span class="type">E</span> or its replacement as
+                                 determined in the previous step.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p class="note">An implementation
+                  may optimize this procedure by eliding the lock acquisition in step 1
+                  (and release in step 4/5) when it can determine that the
+                  initialization of the class has already completed, provided that, in
+                  terms of the memory model, all happens-before orderings that would
+                  exist if the lock were acquired, still exist when the optimization is
+                  performed.
+               </p>
+               <p class="note">Code generators need to preserve the points of
+                  possible initialization of a class or interface, inserting an
+                  invocation of the initialization procedure just described. If this
+                  initialization procedure completes normally and the <code class="literal">Class</code> object is
+                  fully initialized and ready for use, then the invocation of the
+                  initialization procedure is no longer necessary and it may be
+                  eliminated from the code - for example, by patching it out or
+                  otherwise regenerating the code.
+               </p>
+               <p class="note">Compile-time analysis may, in some cases, be able to
+                  eliminate many of the checks that a type has been initialized from the
+                  generated code, if an initialization order for a group of related
+                  types can be determined. Such analysis must, however, fully account
+                  for concurrency and for the fact that initialization code is
+                  unrestricted.
+               </p>
+            </div>
+         </div>
+         <div class="section" title="12.5.&nbsp;Creation of New Class Instances">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.5"></a>12.5.&nbsp;Creation of New Class Instances
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.5-100"></a>A new
+               class instance is explicitly created when evaluation of a class
+               instance creation expression (<a class="xref" href="jls-15.html#jls-15.9" title="15.9.&nbsp;Class Instance Creation Expressions">&sect;15.9</a>) causes a
+               class to be instantiated.
+            </p>
+            <p class="norm"><a name="jls-12.5-110"></a>A new class instance may be
+               implicitly created in the following situations:
+            </p>
+            <div class="norm">
+               <ul class="norm" type="disc">
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.5-110-A"></a>
+                              Loading of a class or interface that contains a <code class="literal">String</code> literal
+                              (<a class="xref" href="jls-3.html#jls-3.10.5" title="3.10.5.&nbsp;String Literals">&sect;3.10.5</a>) may create a new <code class="literal">String</code> object
+                              to represent that literal. (This might not occur if the same
+                              <code class="literal">String</code> has previously been interned
+                              (<a class="xref" href="jls-3.html#jls-3.10.5" title="3.10.5.&nbsp;String Literals">&sect;3.10.5</a>).)
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.5-110-B"></a>
+                              Execution of an operation that causes boxing conversion
+                              (<a class="xref" href="jls-5.html#jls-5.1.7" title="5.1.7.&nbsp;Boxing Conversion">&sect;5.1.7</a>). Boxing conversion may create a
+                              new object of a wrapper class associated with one of the
+                              primitive types.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.5-110-C"></a>
+                              Execution of a string concatenation operator <code class="literal">+</code>
+                              (<a class="xref" href="jls-15.html#jls-15.18.1" title="15.18.1.&nbsp;String Concatenation Operator +">&sect;15.18.1</a>) that is not part of a constant
+                              expression (<a class="xref" href="jls-15.html#jls-15.28" title="15.28.&nbsp;Constant Expressions">&sect;15.28</a>)  always
+                              creates a new <code class="literal">String</code> object to represent the result. String
+                              concatenation operators may also create temporary wrapper
+                              objects for a value of a primitive type.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm"><a name="jls-12.5-110-D"></a>
+                              Evaluation of a method reference expression
+                              (<a class="xref" href="jls-15.html#jls-15.13.3" title="15.13.3.&nbsp;Run-Time Evaluation of Method References">&sect;15.13.3</a>) or a lambda expression
+                              (<a class="xref" href="jls-15.html#jls-15.27.4" title="15.27.4.&nbsp;Run-Time Evaluation of Lambda Expressions">&sect;15.27.4</a>) may require that a new instance
+                              of a class that implements a functional interface type be
+                              created.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.5-120"></a>Each of
+               these situations identifies a particular constructor
+               (<a class="xref" href="jls-8.html#jls-8.8" title="8.8.&nbsp;Constructor Declarations">&sect;8.8</a>) to be called with specified arguments
+               (possibly none) as part of the class instance creation process.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.5-200"></a>Whenever a
+               new class instance is created, memory space is allocated for it with
+               room for all the instance variables declared in the class type and all
+               the instance variables declared in each superclass of the class type,
+               including all the instance variables that may be hidden
+               (<a class="xref" href="jls-8.html#jls-8.3" title="8.3.&nbsp;Field Declarations">&sect;8.3</a>).
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.5-210"></a>If there
+               is not sufficient space available to allocate memory for the object,
+               then creation of the class instance completes abruptly with an
+               <code class="literal">OutOfMemoryError</code>. Otherwise, all the instance variables in the new object,
+               including those declared in superclasses, are initialized to their
+               default values (<a class="xref" href="jls-4.html#jls-4.12.5" title="4.12.5.&nbsp;Initial Values of Variables">&sect;4.12.5</a>).
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.5-220"></a>Just
+               before a reference to the newly created object is returned as the
+               result, the indicated constructor is processed to initialize the new
+               object using the following procedure:
+            </p>
+            <div class="orderedlist">
+               <ol class="orderedlist" type="1">
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.5-220-A"></a>Assign the arguments for the constructor
+                              to newly created parameter variables for this constructor
+                              invocation.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.5-220-B"></a>If
+                              this constructor begins with an explicit constructor invocation
+                              (<a class="xref" href="jls-8.html#jls-8.8.7.1" title="8.8.7.1.&nbsp;Explicit Constructor Invocations">&sect;8.8.7.1</a>) of another constructor in the
+                              same class (using <code class="literal">this</code>), then evaluate the arguments and
+                              process that constructor invocation recursively using these same
+                              five steps. If that constructor invocation completes abruptly,
+                              then this procedure completes abruptly for the same reason;
+                              otherwise, continue with step 5.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.5-220-C"></a>This
+                              constructor does not begin with an explicit constructor
+                              invocation of another constructor in the same class (using
+                              <code class="literal">this</code>). If this constructor is for a class other than <code class="literal">Object</code>,
+                              then this constructor will begin with an explicit or implicit
+                              invocation of a superclass constructor (using <code class="literal">super</code>). Evaluate
+                              the arguments and process that superclass constructor invocation
+                              recursively using these same five steps. If that constructor
+                              invocation completes abruptly, then this procedure completes
+                              abruptly for the same reason. Otherwise, continue with step
+                              4.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.5-220-D"></a>Execute the instance initializers and
+                              instance variable initializers for this class, assigning the
+                              values of instance variable initializers to the corresponding
+                              instance variables, in the left-to-right order in which they
+                              appear textually in the source code for the class. If execution
+                              of any of these initializers results in an exception, then no
+                              further initializers are processed and this procedure completes
+                              abruptly with that same exception. Otherwise, continue with step
+                              5.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.5-220-E"></a>Execute the rest of the body of this
+                              constructor. If that execution completes abruptly, then this
+                              procedure completes abruptly for the same reason. Otherwise,
+                              this procedure completes normally.
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.5-300"></a>Unlike
+               C++, the Java programming language does not specify altered rules for method dispatch
+               during the creation of a new class instance. If methods are invoked
+               that are overridden in subclasses in the object being initialized,
+               then these overriding methods are used, even before the new object is
+               completely initialized.
+            </p>
+            <div class="example"><a name="d5e18505"></a><p class="title"><b>Example&nbsp;12.5-1.&nbsp;Evaluation of Instance Creation</b></p>
+               <div class="example-contents"><pre class="programlisting">
+class Point {
+    int x, y;
+    Point() { x = 1; y = 1; }
+}
+class ColoredPoint extends Point {
+    int color = 0xFF00FF;
+}
+class Test {
+    public static void main(String[] args) {
+        ColoredPoint cp = new ColoredPoint();
+        System.out.println(cp.color);
+    }
+}
+</pre><p class="note">Here, a new instance
+                     of <code class="literal">ColoredPoint</code> is created. First, space is
+                     allocated for the new <code class="literal">ColoredPoint</code>, to hold the
+                     fields <code class="literal">x</code>, <code class="literal">y</code>,
+                     and <code class="literal">color</code>. All these fields are then initialized to
+                     their default values (in this case, <code class="literal">0</code> for each field). Next,
+                     the <code class="literal">ColoredPoint</code> constructor with no arguments is
+                     first invoked. Since <code class="literal">ColoredPoint</code> declares no
+                     constructors, a default constructor of the following form is
+                     implicitly declared:
+                  </p><pre class="screen">
+ColoredPoint() { super(); }
+</pre><p class="note">This constructor then invokes
+                     the <code class="literal">Point</code> constructor with no
+                     arguments. The <code class="literal">Point</code> constructor does not begin
+                     with an invocation of a constructor, so the Java compiler provides an
+                     implicit invocation of its superclass constructor of no arguments, as
+                     though it had been written:
+                  </p><pre class="screen">
+Point() { super(); x = 1; y = 1; }
+</pre><p class="note">Therefore, the constructor for <code class="literal">Object</code> which takes
+                     no arguments is invoked.
+                  </p>
+                  <p class="note">The class <code class="literal">Object</code> has no superclass, so the
+                     recursion terminates here. Next, any instance initializers and
+                     instance variable initializers of <code class="literal">Object</code> are invoked. Next, the body
+                     of the constructor of <code class="literal">Object</code> that takes no arguments is executed. No
+                     such constructor is declared in <code class="literal">Object</code>, so the Java compiler
+                     supplies a default one, which in this special case is:
+                  </p><pre class="screen">
+Object() { }
+</pre><p class="note">This constructor executes without effect and
+                     returns.
+                  </p>
+                  <p class="note">Next, all initializers for the instance variables of
+                     class <code class="literal">Point</code> are executed. As it happens, the
+                     declarations of <code class="literal">x</code> and <code class="literal">y</code> do not
+                     provide any initialization expressions, so no action is required for
+                     this step of the example. Then the body of
+                     the <code class="literal">Point</code> constructor is executed,
+                     setting <code class="literal">x</code> to <code class="literal">1</code> and <code class="literal">y</code> to
+                     <code class="literal">1</code>.
+                  </p>
+                  <p class="note">Next, the initializers for the instance variables of
+                     class <code class="literal">ColoredPoint</code> are executed. This step assigns
+                     the value <code class="literal">0xFF00FF</code>
+                     to <code class="literal">color</code>. Finally, the rest of the body of
+                     the <code class="literal">ColoredPoint</code> constructor is executed (the part
+                     after the invocation of <code class="literal">super</code>); there happen to be
+                     no statements in the rest of the body, so no further action is
+                     required and initialization is complete.
+                  </p>
+               </div>
+            </div><br class="example-break"><div class="example"><a name="d5e18546"></a><p class="title"><b>Example&nbsp;12.5-2.&nbsp;Dynamic Dispatch During Instance Creation</b></p>
+               <div class="example-contents"><pre class="programlisting">
+class Super {
+    Super() { printThree(); }
+    void printThree() { System.out.println("three"); }
+}
+class Test extends Super {
+    int three = (int)Math.PI;  // That is, 3
+    void printThree() { System.out.println(three); }
+
+    public static void main(String[] args) {
+        Test t = new Test();
+        t.printThree();
+    }
+}
+</pre><p class="note">This program produces the output:</p><pre class="screen">
+0
+3
+</pre><p class="note">This shows that the invocation
+                     of <code class="literal">printThree</code> in the constructor for
+                     class <code class="literal">Super</code> does not invoke the definition
+                     of <code class="literal">printThree</code> in class <code class="literal">Super</code>,
+                     but rather invokes the overriding definition
+                     of <code class="literal">printThree</code> in
+                     class <code class="literal">Test</code>. This method therefore runs before the
+                     field initializers of <code class="literal">Test</code> have been executed,
+                     which is why the first value output is <code class="literal">0</code>, the default value to
+                     which the field <code class="literal">three</code> of <code class="literal">Test</code> is
+                     initialized. The later invocation of <code class="literal">printThree</code> in
+                     method <code class="literal">main</code> invokes the same definition
+                     of <code class="literal">printThree</code>, but by that point the initializer
+                     for instance variable <code class="literal">three</code> has been executed, and
+                     so the value <code class="literal">3</code> is printed.
+                  </p>
+               </div>
+            </div><br class="example-break"></div>
+         <div class="section" title="12.6.&nbsp;Finalization of Class Instances">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.6"></a>12.6.&nbsp;Finalization of Class Instances
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.6-100"></a>The class
+               <code class="literal">Object</code> has a <code class="literal">protected</code> method called <code class="literal">finalize</code>;
+               this method can be overridden by other classes. The particular
+               definition of <code class="literal">finalize</code> that can be invoked for an
+               object is called the <span class="emphasis"><em>finalizer</em></span> of that
+               object. Before the storage for an object is reclaimed by the garbage
+               collector, the Java Virtual Machine will invoke the finalizer of that object.
+            </p>
+            <p class="norm"><a name="jls-12.6-110"></a>Finalizers provide a chance to
+               free up resources that cannot be freed automatically by an automatic
+               storage manager. In such situations, simply reclaiming the memory used
+               by an object would not guarantee that the resources it held would be
+               reclaimed.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-200"></a>The
+               Java programming language does not specify how soon a finalizer will be invoked,
+               except to say that it will happen before the storage for the object is
+               reused.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-210"></a>The
+               Java programming language does not specify which thread will invoke the finalizer for
+               any given object.
+            </p>
+            <p class="note">It is important to note that many finalizer threads
+               may be active (this is sometimes needed on large shared memory
+               multiprocessors), and that if a large connected data structure becomes
+               garbage, all of the <code class="literal">finalize</code> methods for every
+               object in that data structure could be invoked at the same time, each
+               finalizer invocation running in a different thread.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-220"></a>The
+               Java programming language imposes no ordering on <code class="literal">finalize</code> method
+               calls. Finalizers may be called in any order, or even
+               concurrently.
+            </p>
+            <p class="note">As an example, if a circularly linked group of
+               unfinalized objects becomes unreachable (or finalizer-reachable), then
+               all the objects may become finalizable together. Eventually, the
+               finalizers for these objects may be invoked, in any order, or even
+               concurrently using multiple threads. If the automatic storage manager
+               later finds that the objects are unreachable, then their storage can
+               be reclaimed.
+            </p>
+            <p class="note">It is straightforward to implement a class that will
+               cause a set of finalizer-like methods to be invoked in a specified
+               order for a set of objects when all the objects become
+               unreachable. Defining such a class is left as an exercise for the
+               reader.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-300"></a>It is
+               guaranteed that the thread that invokes the finalizer will not be
+               holding any user-visible synchronization locks when the finalizer is
+               invoked.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-310"></a>If an
+               uncaught exception is thrown during the finalization, the exception is
+               ignored and finalization of that object terminates.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-320"></a>The
+               completion of an object's constructor happens-before
+               (<a class="xref" href="jls-17.html#jls-17.4.5" title="17.4.5.&nbsp;Happens-before Order">&sect;17.4.5</a>) the execution of
+               its <code class="literal">finalize</code> method (in the formal sense of
+               happens-before).
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-400"></a>The <code class="literal">finalize</code> method declared
+               in class <code class="literal">Object</code> takes no action. The fact that class <code class="literal">Object</code>
+               declares a <code class="literal">finalize</code> method means that
+               the <code class="literal">finalize</code> method for any class can always invoke
+               the <code class="literal">finalize</code> method for its superclass. This should
+               always be done, unless it is the programmer's intent to nullify the
+               actions of the finalizer in the superclass. (Unlike constructors,
+               finalizers do not automatically invoke the finalizer for the
+               superclass; such an invocation must be coded explicitly.)
+            </p>
+            <p class="note">For efficiency, an implementation may keep track of
+               classes that do not override the <code class="literal">finalize</code> method of
+               class <code class="literal">Object</code>, or override it in a trivial way.
+            </p>
+            <div class="informalexample">
+               <p class="note">For example:</p><pre class="programlisting">
+
+protected void finalize() throws Throwable {
+    super.finalize();
+}
+
+</pre></div>
+            <p class="note">We encourage implementations to treat such objects
+               as having a finalizer that is not overridden, and to finalize them
+               more efficiently, as described in <a class="xref" href="jls-12.html#jls-12.6.1" title="12.6.1.&nbsp;Implementing Finalization">&sect;12.6.1</a>.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.6-500"></a>A
+               finalizer may be invoked explicitly, just like any other
+               method.
+            </p>
+            <p class="norm"><a name="jls-12.6-510"></a>The package <code class="literal">java.lang.ref</code>
+               describes weak references, which interact with garbage collection and
+               finalization. As with any API that has special interactions with the
+               Java programming language, implementors must be cognizant of any requirements imposed
+               by the <code class="literal">java.lang.ref</code> API. This specification does not discuss weak
+               references in any way. Readers are referred to the API documentation
+               for details.
+            </p>
+            <div class="section" title="12.6.1.&nbsp;Implementing Finalization">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.6.1"></a>12.6.1.&nbsp;Implementing Finalization
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.6.1-100"></a>Every
+                  object can be characterized by two attributes: it may
+                  be <span class="emphasis"><em>reachable</em></span>, <span class="emphasis"><em>finalizer-reachable</em></span>,
+                  or <span class="emphasis"><em>unreachable</em></span>, and it may also
+                  be <span class="emphasis"><em>unfinalized</em></span>, <span class="emphasis"><em>finalizable</em></span>,
+                  or <span class="emphasis"><em>finalized</em></span>.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-200"></a>A <span class="emphasis"><em>reachable</em></span> object is any
+                  object that can be accessed in any potential continuing computation
+                  from any live thread.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-210"></a>A <span class="emphasis"><em>finalizer-reachable</em></span>
+                  object can be reached from some finalizable object through some chain
+                  of references, but not from any live thread.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-220"></a>An <span class="emphasis"><em>unreachable</em></span> object
+                  cannot be reached by either means.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-300"></a>An <span class="emphasis"><em>unfinalized</em></span> object has
+                  never had its finalizer automatically invoked.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-310"></a>A <span class="emphasis"><em>finalized</em></span> object has
+                  had its finalizer automatically invoked.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-320"></a>A <span class="emphasis"><em>finalizable</em></span> object has
+                  never had its finalizer automatically invoked, but the Java Virtual Machine may
+                  eventually automatically invoke its finalizer.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.1-330"></a>An
+                  object <code class="varname">o</code> is not finalizable until its constructor
+                  has invoked the constructor for <code class="literal">Object</code> on <code class="varname">o</code> and
+                  that invocation has completed successfully (that is, without throwing
+                  an exception). Every pre-finalization write to a field of an object
+                  must be visible to the finalization of that object. Furthermore, none
+                  of the pre-finalization reads of fields of that object may see writes
+                  that occur after finalization of that object is initiated.
+               </p>
+               <p class="norm"><a name="jls-12.6.1-400"></a>Optimizing transformations
+                  of a program can be designed that reduce the number of objects that
+                  are reachable to be less than those which would naively be considered
+                  reachable. For example, a Java compiler or code generator may choose
+                  to set a variable or parameter that will no longer be used to <code class="literal">null</code>
+                  to cause the storage for such an object to be potentially reclaimable
+                  sooner.
+               </p>
+               <p class="norm"><a name="jls-12.6.1-410"></a>Another example of this
+                  occurs if the values in an object's fields are stored in
+                  registers. The program may then access the registers instead of the
+                  object, and never access the object again. This would imply that the
+                  object is garbage. Note that this sort of optimization is only allowed
+                  if references are on the stack, not stored in the heap.
+               </p>
+               <div class="informalexample">
+                  <p class="note">For example, consider the <span class="emphasis"><em>Finalizer
+                           Guardian</em></span> pattern:
+                  </p><pre class="programlisting">
+
+class Foo {
+    private final Object finalizerGuardian = new Object() {
+        protected void finalize() throws Throwable {
+            /* finalize outer Foo object */
+        }
+    }
+} 
+
+</pre><p class="note">The finalizer guardian
+                     forces <code class="literal">super.finalize</code> to be called if a subclass
+                     overrides <code class="literal">finalize</code> and does not explicitly
+                     call <code class="literal">super.finalize</code>.
+                  </p>
+                  <p class="note">If these optimizations are allowed for references
+                     that are stored on the heap, then a Java compiler can detect that
+                     the <code class="literal">finalizerGuardian</code> field is never read, null it
+                     out, collect the object immediately, and call the finalizer
+                     early. This runs counter to the intent: the programmer probably wanted
+                     to call the <code class="literal">Foo</code> finalizer when
+                     the <code class="literal">Foo</code> instance became unreachable. This sort of
+                     transformation is therefore not legal: the inner class object should
+                     be reachable for as long as the outer class object is
+                     reachable.
+                  </p>
+                  <p class="note">Transformations of this sort may result in
+                     invocations of the <code class="literal">finalize</code> method occurring
+                     earlier than might be otherwise expected. In order to allow the user
+                     to prevent this, we enforce the notion that synchronization may keep
+                     the object alive. <span class="emphasis"><em>If an object's finalizer can result in
+                           synchronization on that object, then that object must be alive and
+                           considered reachable whenever a lock is held on it.</em></span></p>
+                  <p class="note">Note that this does not prevent synchronization
+                     elimination: synchronization only keeps an object alive if a finalizer
+                     might synchronize on it. Since the finalizer occurs in another thread,
+                     in many cases the synchronization could not be removed anyway.
+                  </p>
+               </div>
+            </div>
+            <div class="section" title="12.6.2.&nbsp;Interaction with the Memory Model">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h3 class="title"><a name="jls-12.6.2"></a>12.6.2.&nbsp;Interaction with the Memory Model
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.6.2-100"></a>It must
+                  be possible for the memory model (<a class="xref" href="jls-17.html#jls-17.4" title="17.4.&nbsp;Memory Model">&sect;17.4</a>) to
+                  decide when it can commit actions that take place in a finalizer. This
+                  section describes the interaction of finalization with the memory
+                  model.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.2-110"></a>Each
+                  execution has a number of <span class="emphasis"><em>reachability decision
+                        points</em></span>, labeled <span class="emphasis"><em>di</em></span>. Each action
+                  either <span class="emphasis"><em>comes-before di</em></span> or <span class="emphasis"><em>comes-after
+                        di</em></span>. Other than as explicitly mentioned, the comes-before
+                  ordering described in this section is unrelated to all other orderings
+                  in the memory model.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.2-120"></a>If <span class="emphasis"><em>r</em></span> is a read that sees
+                  a write <span class="emphasis"><em>w</em></span> and <span class="emphasis"><em>r</em></span>
+                  comes-before <span class="emphasis"><em>di</em></span>, then <span class="emphasis"><em>w</em></span> must
+                  come-before <span class="emphasis"><em>di</em></span>.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.2-130"></a>If <span class="emphasis"><em>x</em></span>
+                  and <span class="emphasis"><em>y</em></span> are synchronization actions on the same
+                  variable or monitor such that <span class="emphasis"><em>so(x, y)</em></span>
+                  (<a class="xref" href="jls-17.html#jls-17.4.4" title="17.4.4.&nbsp;Synchronization Order">&sect;17.4.4</a>) and <span class="emphasis"><em>y</em></span>
+                  comes-before <span class="emphasis"><em>di</em></span>, then <span class="emphasis"><em>x</em></span> must
+                  come-before <span class="emphasis"><em>di</em></span>.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.2-200"></a>At each
+                  reachability decision point, some set of objects are marked as
+                  unreachable, and some subset of those objects are marked as
+                  finalizable. These reachability decision points are also the points at
+                  which references are checked, enqueued, and cleared according to the
+                  rules provided in the API documentation for the package
+                  <code class="literal">java.lang.ref</code>.
+               </p>
+               <p class="norm-dynamic"><a name="jls-12.6.2-210"></a>The only
+                  objects that are considered definitely reachable at a
+                  point <span class="emphasis"><em>di</em></span> are those that can be shown to be
+                  reachable by the application of these rules:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-210-A"></a>An
+                                 object <code class="varname">B</code> is definitely reachable
+                                 at <span class="emphasis"><em>di</em></span> from <code class="literal">static</code> fields if there exists
+                                 a write <span class="emphasis"><em>w1</em></span> to a <code class="literal">static</code>
+                                 field <code class="varname">v</code> of a class <span class="type">C</span> such that the value
+                                 written by <span class="emphasis"><em>w1</em></span> is a reference
+                                 to <code class="varname">B</code>, the class <span class="type">C</span> is loaded by a reachable
+                                 classloader, and there does not exist a
+                                 write <span class="emphasis"><em>w2</em></span> to <code class="varname">v</code> such
+                                 that <span class="emphasis"><em>hb(w2, w1)</em></span> is not true and
+                                 both <span class="emphasis"><em>w1</em></span> and <span class="emphasis"><em>w2</em></span>
+                                 come-before <span class="emphasis"><em>di</em></span>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-210-B"></a>An
+                                 object <code class="varname">B</code> is definitely reachable
+                                 from <code class="varname">A</code> at <span class="emphasis"><em>di</em></span> if there is
+                                 a write <span class="emphasis"><em>w1</em></span> to an
+                                 element <code class="varname">v</code> of <code class="varname">A</code> such that
+                                 the value written by <span class="emphasis"><em>w1</em></span> is a reference
+                                 to <code class="varname">B</code> and there does not exist a
+                                 write <span class="emphasis"><em>w2</em></span> to <code class="varname">v</code> such
+                                 that <span class="emphasis"><em>hb(w2, w1)</em></span> is not true and
+                                 both <span class="emphasis"><em>w1</em></span> and <span class="emphasis"><em>w2</em></span>
+                                 come-before <span class="emphasis"><em>di</em></span>.
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-210-C"></a>If
+                                 an object <code class="varname">C</code> is definitely reachable from an
+                                 object <code class="varname">B</code>, and object <code class="varname">B</code> is
+                                 definitely reachable from an object <code class="varname">A</code>,
+                                 then <code class="varname">C</code> is definitely reachable
+                                 from <code class="varname">A</code>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.6.2-220"></a>If an
+                  object <code class="varname">X</code> is marked as unreachable
+                  at <span class="emphasis"><em>di</em></span>, then:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-220-A"></a><code class="varname">X</code> must not be
+                                definitely reachable at <span class="emphasis"><em>di</em></span> from <code class="literal">static</code>
+                                fields; and
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-220-B"></a>All <span class="emphasis"><em>active uses</em></span>
+                                of <code class="varname">X</code> in thread <code class="varname">t</code> that
+                                come-after <span class="emphasis"><em>di</em></span> must occur in the finalizer
+                                invocation for <code class="varname">X</code> or as a result of
+                                thread <code class="varname">t</code> performing a read that
+                                comes-after <span class="emphasis"><em>di</em></span> of a reference
+                                to <code class="varname">X</code>; and
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-220-C"></a>All reads that
+                                come-after <span class="emphasis"><em>di</em></span> that see a reference
+                                to <code class="varname">X</code> must see writes to elements of objects
+                                that were unreachable at <span class="emphasis"><em>di</em></span>, or see writes
+                                that came-after <span class="emphasis"><em>di</em></span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm"><a name="jls-12.6.2-230"></a>An
+                  action <span class="emphasis"><em>a</em></span> is an active use of <code class="varname">X</code>
+                  if and only if at least one of the following is true:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.6.2-230-A"></a><span class="emphasis"><em>a</em></span>
+                                reads or writes an element of <code class="varname">X</code></p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.6.2-230-B"></a><span class="emphasis"><em>a</em></span>
+                                locks or unlocks <code class="varname">X</code> and there is a lock action
+                                on <code class="varname">X</code> that happens-after the invocation of the
+                                finalizer for <code class="varname">X</code></p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.6.2-230-C"></a><span class="emphasis"><em>a</em></span>
+                                writes a reference to <code class="varname">X</code></p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm"><a name="jls-12.6.2-230-D"></a><span class="emphasis"><em>a</em></span>
+                                is an active use of an object <code class="varname">Y</code>,
+                                and <code class="varname">X</code> is definitely reachable
+                                from <code class="varname">Y</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p class="norm-dynamic"><a name="jls-12.6.2-240"></a>If an
+                  object <code class="varname">X</code> is marked as finalizable
+                  at <span class="emphasis"><em>di</em></span>, then:
+               </p>
+               <div class="norm">
+                  <ul class="norm" type="disc">
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-240-A"></a><code class="varname">X</code> must be marked as
+                                unreachable at <span class="emphasis"><em>di</em></span>; and
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-240-B"></a><span class="emphasis"><em>di</em></span> must be the
+                                only place where <code class="varname">X</code> is marked as finalizable;
+                                and
+                        </p>
+                     </li>
+                     <li class="listitem">
+                        <p class="norm-dynamic"><a name="jls-12.6.2-240-C"></a>actions that happen-after the finalizer
+                                invocation must come-after <span class="emphasis"><em>di</em></span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="section" title="12.7.&nbsp;Unloading of Classes and Interfaces">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.7"></a>12.7.&nbsp;Unloading of Classes and Interfaces
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.7-100"></a>An
+               implementation of the Java programming language may <span class="emphasis"><em>unload</em></span>
+               classes.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.7-110"></a>A class or
+               interface may be unloaded if and only if its defining class loader may
+               be reclaimed by the garbage collector as discussed in
+               <a class="xref" href="jls-12.html#jls-12.6" title="12.6.&nbsp;Finalization of Class Instances">&sect;12.6</a>.
+            </p>
+            <p class="norm-dynamic"><a name="jls-12.7-120"></a>Classes
+               and interfaces loaded by the bootstrap loader may not be
+               unloaded.
+            </p>
+            <p class="note">Class unloading is an optimization that helps reduce
+               memory use. Obviously, the semantics of a program should not depend on
+               whether and how a system chooses to implement an optimization such as
+               class unloading. To do otherwise would compromise the portability of
+               programs. Consequently, whether a class or interface has been unloaded
+               or not should be transparent to a program.
+            </p>
+            <p class="note">However, if a class or interface <span class="type">C</span> was
+               unloaded while its defining loader was potentially reachable,
+               then <span class="type">C</span> might be reloaded. One could never ensure that
+               this would not happen. Even if the class was not referenced by any
+               other currently loaded class, it might be referenced by some class or
+               interface, <span class="type">D</span>, that had not yet been
+               loaded. When <span class="type">D</span> is loaded by <span class="type">C</span>'s defining
+               loader, its execution might cause reloading of <span class="type">C</span>.
+            </p>
+            <p class="note">Reloading may not be transparent if, for example,
+               the class has <code class="literal">static</code> variables (whose state would be lost), static
+               initializers (which may have side effects), or <code class="literal">native</code> methods (which
+               may retain static state). Furthermore, the hash value of the <code class="literal">Class</code>
+               object is dependent on its identity. Therefore it is, in general,
+               impossible to reload a class or interface in a completely transparent
+               manner.
+            </p>
+            <p class="note">Since we can never guarantee that unloading a class
+               or interface whose loader is potentially reachable will not cause
+               reloading, and reloading is never transparent, but unloading must be
+               transparent, it follows that one must not unload a class or interface
+               while its loader is potentially reachable. A similar line of reasoning
+               can be used to deduce that classes and interfaces loaded by the
+               bootstrap loader can never be unloaded.
+            </p>
+            <p class="note">One must also argue why it is safe to unload a
+               class <span class="type">C</span> if its defining class loader can be reclaimed. If
+               the defining loader can be reclaimed, then there can never be any live
+               references to it (this includes references that are not live, but
+               might be resurrected by finalizers). This, in turn, can only be true
+               if there are can never be any live references to any of the classes
+               defined by that loader, including <span class="type">C</span>, either from their
+               instances or from code.
+            </p>
+            <p class="note">Class unloading is an optimization that is only
+               significant for applications that load large numbers of classes and
+               that stop using most of those classes after some time. A prime example
+               of such an application is a web browser, but there are others. A
+               characteristic of such applications is that they manage classes
+               through explicit use of class loaders. As a result, the policy
+               outlined above works well for them.
+            </p>
+            <p class="note">Strictly speaking, it is not essential that the
+               issue of class unloading be discussed by this specification, as class
+               unloading is merely an optimization. However, the issue is very
+               subtle, and so it is mentioned here by way of clarification.
+            </p>
+         </div>
+         <div class="section" title="12.8.&nbsp;Program Exit">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title" style="clear: both"><a name="jls-12.8"></a>12.8.&nbsp;Program Exit
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p class="norm-dynamic"><a name="jls-12.8-100"></a>A program
+               terminates all its activity and <span class="emphasis"><em>exits</em></span> when one of
+               two things happens:
+            </p>
+            <div class="norm">
+               <ul class="norm" type="disc">
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.8-100-A"></a>All
+                              the threads that are not daemon threads terminate.
+                     </p>
+                  </li>
+                  <li class="listitem">
+                     <p class="norm-dynamic"><a name="jls-12.8-100-B"></a>Some
+                              thread invokes the <code class="literal">exit</code> method of
+                              class <code class="literal">Runtime</code> or
+                              class <code class="literal">System</code>, and the <code class="literal">exit</code>
+                              operation is not forbidden by the security manager.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="navfooter">
+         <hr>
+         <table width="100%" summary="Navigation footer">
+            <tr>
+               <td width="40%" align="left"><a accesskey="p" href="jls-11.html">Prev</a>&nbsp;
+               </td>
+               <td width="20%" align="center">&nbsp;</td>
+               <td width="40%" align="right">&nbsp;<a accesskey="n" href="jls-13.html">Next</a></td>
+            </tr>
+            <tr>
+               <td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;Exceptions&nbsp;</td>
+               <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+               <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;13.&nbsp;Binary Compatibility</td>
+            </tr>
+         </table>
+      </div>
+      <div xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:rx="http://www.renderx.com/XSL/Extensions" class="navfooter">
+         <hr><a href="jls-0-front.html">
+                Legal Notice
+              </a></div>
+   </body>
+</html>

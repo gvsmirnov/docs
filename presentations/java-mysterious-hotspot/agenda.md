@@ -7,7 +7,30 @@
  - Ask someone who knows (https://twitter.com/shipilev/status/522481181003354112)
  - DIY!
 
-* Give a real example: the `_last_ditch_collection` and `_no_gc`
+* Case study 1: Runtime.getRuntime().maxMemory()
+ - Show a sample application where maxMemory() != Xmx
+ - Look inside the sources, find the explanation
+ - Check the numbers
+ - Check G1 sources
+ - Run with G1
+
+* Outtakes:
+ - Hotspot folder layout
+ - Use `grep`, Luke!
+ - Use NetBeans, Luke
+
+* Case study 2: default methods trigger interface initialization:
+ - Show the simple case without default methods
+ - Say that the spec says nothing of the kind
+ - Then add a static method
+ - Then add a default method
+ - Find the issue at https://bugs.openjdk.java.net/browse/JDK-8043188
+ - Show the difference in specs
+
+* Case study 3: https://bugs.openjdk.java.net/browse/JDK-8058847
+ - TODO
+
+* Case study 4: `_last_ditch_collection` and `_no_gc`
  - Show a piece of GC logs that have weird stuff in them
  - Investigate `_last_ditch_collection`
  - Reproduce `_last_ditch_collection`
@@ -18,9 +41,6 @@
  - http://bugs.java.com/view_bug.do?bug_id=7015169
 
 * Outtakes:
- - Hotspot folder layout
- - Use `grep`, Luke!
- - Use NetBeans, Luke
  - Things may be already fixed. So use `hg grep`
  - How to determine the proper jdk build for a changeset
  - Always try to confirm your theories experimentally
@@ -36,3 +56,4 @@
 * Further Material
  - The book by Marcus
  - JavaOne talk on Hotspot internals
+ - http://blog.jamesdbloom.com/JVMInternals.html
