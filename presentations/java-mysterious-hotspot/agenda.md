@@ -21,14 +21,10 @@
 
 * Case study 2: default methods trigger interface initialization:
  - Show the simple case without default methods
- - Say that the spec says nothing of the kind
- - Then add a static method
+ - Show the old spec
  - Then add a default method
  - Find the issue at https://bugs.openjdk.java.net/browse/JDK-8043188
  - Show the difference in specs
-
-* Case study 3: https://bugs.openjdk.java.net/browse/JDK-8058847
- - TODO
 
 * Case study 4: `_last_ditch_collection` and `_no_gc`
  - Show a piece of GC logs that have weird stuff in them
@@ -38,13 +34,17 @@
  - Find the relevant changeset
  - Get the relevan VM build
  - Reproduce `_no_gc` (jstat -gccause -t `jps | grep NoGc | cut -d' ' -f1` 100)
- - http://bugs.java.com/view_bug.do?bug_id=7015169
+ - https://bugs.openjdk.java.net/browse/JDK-7015169
 
 * Outtakes:
  - Things may be already fixed. So use `hg grep`
  - How to determine the proper jdk build for a changeset
  - Always try to confirm your theories experimentally
  - Send your findings
+ 
+ 
+* Case study 3: https://bugs.openjdk.java.net/browse/JDK-8058847
+ - TODO
 
 * Another real example: non-zero-filled arrays
  - Show a piece of code
