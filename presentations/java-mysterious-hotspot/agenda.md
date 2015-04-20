@@ -9,6 +9,7 @@
 
 * Case study 1: Runtime.getRuntime().maxMemory()
  - Show a sample application where maxMemory() != Xmx
+ - Java_java_lang_Runtime_maxMemory
  - Look inside the sources, find the explanation
  - Check the numbers
  - Check G1 sources
@@ -44,7 +45,9 @@
  
  
 * Case study 3: https://bugs.openjdk.java.net/browse/JDK-8058847
- - TODO
+ - Show the code
+ - Show the segfault
+ - Show it was fixed in 8u40
 
 * Another real example: non-zero-filled arrays
  - Show a piece of code

@@ -160,9 +160,8 @@ Max memory: <span class="text-danger" data-jmpress="fade">455 MB</span></span>
 </div>
 
 <div class="step step-slide spoiler fill-bg" data-y="900" data-x="1300">
-    <!-- TODO: ADD Nikem -->
-    <div class="text-center text-v-center">
-        <h1 class="text-giant">Где моя память, чувак?</h1>
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/where-is-my-memory.jpeg"/>
     </div>
 </div>
 
@@ -295,7 +294,7 @@ GarbageCollector
     <div class="text-v-center text-center">
         <h1 class="text-giant">
             <a href="https://bugs.openjdk.java.net/browse/JDK-8043578">🐛 JDK-8043578</a>:<br/>
-            JLS §12.4.1 updated
+            JLS §12.4.1 исправлен
         </h1>
     </div>
 </div>
@@ -323,7 +322,7 @@ $ jstat -gccause [...]
 
 <!-- OUTTAKES -->
 
-<div class="step step-slide" data-x="5200" data-y="4500">
+<div class="step step-slide" data-x="1300" data-y="3600">
     <h1>Баги Могли Уже Исправить</h1>
 
 <pre class="prettyprint console" data-jmpress="fade">
@@ -339,13 +338,13 @@ summary:     <span class="text-info text-highlighted">7015169</span>: GC Cause n
 
 </div>
 
-<div class="step step-slide spoiler" data-x="5200" data-y="4500">
+<div class="step step-slide spoiler" data-x="2600" data-y="3600">
     <div class="text-center">
         <img class="graph scale-to-fit-h" src="img/jira.png"/>
     </div>
 </div>
 
-<div class="step step-slide" data-x="6500" data-y="4500">
+<div class="step step-slide" data-x="3900" data-y="3600">
     <h1>Как найти нужную сборку Hotspot</h1>
 
 <pre class="prettyprint console" data-jmpress="fade">
@@ -362,7 +361,7 @@ tag:         <span class="text-info text-highlighted">jdk7-b127</span>
 
 </div>
 
-<div class="step step-slide" data-x="7800" data-y="4500">
+<div class="step step-slide" data-x="5200" data-y="3600">
     <h1>Сборки, Апдейты, Версии</h1>
 
 <pre class="prettyprint console" data-jmpress="fade">
@@ -377,7 +376,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
     </div>
 </div>
 
-<div class="step step-slide" data-x="9100" data-y="4500">
+<div class="step step-slide" data-x="6500" data-y="3600">
     <h1>Проверяйте Свои Гипотезы</h1>
     <ul>
         <li data-jmpress="fade">Изолированные эксперименты</li>
@@ -404,26 +403,80 @@ Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
     </ul>
 </div>
 
-<div class="step step-slide" data-x="10400" data-y="4500">
-    <h1>Сообщество &mdash; Ваш Друг</h1>
-    <ul>
-        <li data-jmpress="fade">
-            Возможно, что-то есть в списках рассылки
-            <ul>
-                <li data-jmpress="fade">
-                    <a href="http://mail.openjdk.java.net/pipermail/hotspot-dev/">http://mail.openjdk.java.net/pipermail/hotspot-dev/</a>
-                </li>
-                <li data-jmpress="fade">
-                    <a href="http://mail.openjdk.java.net/mailman/listinfo">http://mail.openjdk.java.net/mailman/listinfo</a>
-                </li>
-            </ul>
-        </li>
-        <li data-jmpress="fade">Не бойтесь задавать хорошие вопросы</li>
-        <li data-jmpress="fade">Ваш вклад может помочь другим людям</li>
-    </ul>
+<!-- OUTTAKES END -->
+
+<div class="step step-slide" data-y="4300">
+<pre class="prettyprint lang-java">
+public class HarmlessClass {
+
+    private static final int[] VALUES = new int[256];
+
+    public static void main(String[] args) {
+        byte[] bytes = new byte[] {-1};
+        while (true) {
+            for (Byte b : bytes) {
+                VALUES[b & 0xff]++;
+            }
+        }
+    }
+}
+</pre>
 </div>
 
-<div class="step step-slide" data-x="11700" data-y="4500">
+<div class="step step-slide" data-x="1300" data-y="4300">
+<pre class="prettyprint console"><span class="text-small nocode">#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  <span class="text-danger">SIGSEGV (0xb) at pc=0x000000010fe862ef, pid=51953, tid=4867</span>
+#
+# JRE version: Java(TM) SE Runtime Environment (<span class="text-info">8.0_31-b13</span>) (build 1.8.0_31-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.31-b07 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# J 95% C2 HarmlessClass.main([Ljava/lang/String;)V (57 bytes) @ 0x000000010fe862ef [0x000000010fe86260+0x8f]
+#
+# Failed to write core dump. Core dumps have been disabled.
+# To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# An error report file with more information is saved as:
+# /Users/gvsmirnov/sources/docs/hs_err_pid51953.log
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#</span>
+</pre>
+</div>
+
+<div class="step step-slide spoiler fill-bg" data-x="1300" data-y="4300">
+    <div class="text-v-center text-center">
+        <h1 class="text-giant">
+            <a href="https://bugs.openjdk.java.net/browse/JDK-8058847">🐛 JDK-8058847</a>:<br/>
+            Исправлено в <code>8u40</code>
+        </h1>
+    </div>
+</div>
+
+<!-- LAST REMARKS -->
+
+<div class="step step-slide" data-y="7200">
+        <h1>Сообщество &mdash; Ваш Друг</h1>
+        <ul>
+            <li data-jmpress="fade">
+                Возможно, что-то есть в списках рассылки
+                <ul>
+                    <li data-jmpress="fade">
+                        <a href="http://mail.openjdk.java.net/pipermail/hotspot-dev/">http://mail.openjdk.java.net/pipermail/hotspot-dev/</a>
+                    </li>
+                    <li data-jmpress="fade">
+                        <a href="http://mail.openjdk.java.net/mailman/listinfo">http://mail.openjdk.java.net/mailman/listinfo</a>
+                    </li>
+                </ul>
+            </li>
+            <li data-jmpress="fade">Не бойтесь задавать хорошие вопросы</li>
+            <li data-jmpress="fade">Ваш вклад может помочь другим людям</li>
+        </ul>
+</div>
+
+<div class="step step-slide" data-x="1300" data-y="7200">
     <h1>Дополнительные Материалы</h1>
     <ul>
         <li data-jmpress="fade">
@@ -432,12 +485,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
         <li data-jmpress="fade">
             "Oracle JRockit: The Definitive Guide" by Marcus & Marcus
         </li>
+        <li data-jmpress="fade">
+            <a href="http://blog.jamesdbloom.com/JVMInternals.html">
+                http://blog.jamesdbloom.com/JVMInternals.html
+            </a>
+        </li>
     </ul>
 </div>
-
-<!-- OUTTAKES END -->
-
-<!-- LAST REMARKS -->
 
 <div class="step step-slide qr" data-x="1300" data-y="-800">
     <div class="text-center">
