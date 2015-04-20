@@ -234,22 +234,40 @@ jdk9/common/nb_native/nbproject/
 <!-- DEFAULT METHODS -->
 <div class="step step-slide" data-y="2700">
 <pre class="prettyprint lang-java">
-public static UUID register (Class&lt;?&gt; clazz) {
-    System.out.println(clazz.getSimpleName());
-    return UUID.randomUUID();
+public static long register (Class&lt;?&gt; clazz) {
+    System.out.println("Initialized: " + clazz.getSimpleName());
+    return System.currentTimeMillis();
 }
 </pre>
 <pre class="prettyprint lang-java" data-jmpress="fade">
 public interface MemoryManager {
-    UUID id = register(MemoryManager.class);
+    long initializedAt = register(MemoryManager.class);
 
-    static String getId() { return id.toString(); }
+    static long getInitTime() { return initializedAt; }
 }</pre>
 <pre class="prettyprint lang-java" data-jmpress="fade">
 public interface GarbageCollector extends MemoryManager {
-    UUID id = register(GarbageCollector.class);
-}</pre>
+    long initializedAt = register(GarbageCollector.class);
+}
+</pre>
 </div>
+
+<div class="step step-slide spoiler fill-bg" data-y="2700">
+<pre class="prettyprint lang-java">
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(GarbageCollector.initializedAt);
+    }
+}</pre>
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ java Main
+<span  data-jmpress="fade">
+Initialized: GarbageCollector
+1429533210331
+</span></span>
+</pre>
+</div>
+
 
 <div class="step step-slide spoiler fill-bg" data-y="2700">
     <div class="text-v-center text-center">
@@ -259,34 +277,21 @@ public interface GarbageCollector extends MemoryManager {
     </div>
 </div>
 
-<div class="step step-slide spoiler fill-bg" data-y="2700">
-<pre class="prettyprint lang-java">
-public class Main {
-    public static void main(String[] args) {
-        System.out.println(GarbageCollector.id);
-    }
-}</pre>
-<pre class="prettyprint console" data-jmpress="fade">
-<span class="nocode">$ java Main
-<span  data-jmpress="fade">
-GarbageCollector
-bd1a61f8-f5d8-4af6-ae16-64ce5f039fde</span></span>
-</pre>
-</div>
 
-<div class="step step-slide" data-y="2700" data-x="1300">
+    <div class="step step-slide" data-y="2700" data-x="1300">
 <pre class="prettyprint lang-java">
    public interface MemoryManager {
-       UUID id = register(MemoryManager.class);<span class="nocode text-danger">
--      static  String getId() { return id.toString(); }</span><span class="nocode text-success">
-+      default String getId() { return id.toString(); }</span>
+       long initializedAt = register(MemoryManager.class);
+    <span class="nocode text-danger">
+-      static  long getInitTime() { return initializedAt; }</span><span class="nocode text-success">
++      default long getInitTime() { return initializedAt; }</span>
    }</pre>
 <pre class="prettyprint console" data-jmpress="fade">
 <span class="nocode">$ java Main
 <span data-jmpress="fade">
-<span class="text-warning">MemoryManager</span>
-GarbageCollector
-70bce58b-2f7f-4e59-b233-c7d113a0a349</span></span>
+<span class="text-warning">Initialized: MemoryManager</span>
+Initialized: GarbageCollector
+1429533210331</span></span>
 </pre>
 </div>
 
@@ -294,7 +299,7 @@ GarbageCollector
     <div class="text-v-center text-center">
         <h1 class="text-giant">
             <a href="https://bugs.openjdk.java.net/browse/JDK-8043578">🐛 JDK-8043578</a>:<br/>
-            JLS §12.4.1 исправлен
+            закрыт ошибочно
         </h1>
     </div>
 </div>
@@ -372,8 +377,10 @@ Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
 </span></pre>
 
     <div class="well well-lg" data-jmpress="fade">
-        <p>У Hotspot своя версия и свои сборки. Лучше смотреть на теги.</p>
+        <p>У Hotspot своя версия и свои сборки. Лучше смотреть на теги.
+        </p>
     </div>
+    <p data-jmpress="fade"><span class="almost-invisible">И сиськи.</span></p>
 </div>
 
 <div class="step step-slide" data-x="6500" data-y="3600">

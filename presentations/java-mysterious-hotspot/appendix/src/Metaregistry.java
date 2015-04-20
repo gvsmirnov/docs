@@ -1,13 +1,11 @@
-import java.util.UUID;
-
 public class MetaRegistry {
-    public static UUID register (Class<?> clazz) {
-        System.out.println(clazz.getSimpleName());
-        return UUID.randomUUID();
+    public static long register (Class<?> clazz) {
+        System.out.println("Initialized: " + clazz.getSimpleName());
+        return System.currentTimeMillis();
     }
 
     public static void main(String[] args) {
-        System.out.println(GarbageCollector.id);
-        System.out.println(GarbageCollector2.id);
+        System.out.println(GarbageCollector .initializedAt);
+        System.out.println(GarbageCollector2.initializedAt);
     }
 }
