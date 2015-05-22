@@ -49,13 +49,6 @@
  - Show the segfault
  - Show it was fixed in 8u40
 
-* Another real example: non-zero-filled arrays
- - Show a piece of code
- - Vote on whether the assertion may fail
- - Investigate how it may happen
- - (TODO)
- - http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7196857
-
 * Further Material
  - The book by Marcus
  - JavaOne talk on Hotspot internals
