@@ -8,6 +8,7 @@ public class VolatileExample {
 
     private volatile boolean finished;
     private int value = 0;
+
     void executedOnCpu0() {
         value = 10;
         finished = true;
