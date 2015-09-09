@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Java Concurrency Under The Hood</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/whhg.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand javazone">
+                <svg width="200px" height="25px" viewBox="0 0 200 98" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering: geometricPrecision; height: 35px;">
+                    <g id="logo" transform="translate(11.240099, 0.000000), scale(1.5)" sketch:type="MSShapeGroup">
+                        <path d="M2.29480672,60.8641405 C0.253885737,61.3401106 -0.558527547,60.2434021 0.479881979,58.4149074 L25.8020338,13.8285542 L74.9563392,0.069029781 C76.9754474,-0.496272927 78.6122517,0.754207735 78.6122517,2.86041052 L78.6122517,39.2474028 C78.6122517,41.3543118 76.9594303,43.4478032 74.9168408,43.9241263 L2.29480672,60.8641405 L2.29480672,60.8641405 Z" id="logo-four" fill="#FF8635"></path>
+                        <path d="M3.45596164,6.71354343 C1.45859604,6.07974058 0.442930153,7.16214874 1.18714765,9.1304685 L17.7094786,52.8298508 L40.6053145,66.1767855 L71.2586803,62.4230484 L72.1306662,62.3162376 C74.2111909,62.0614806 74.9283444,60.4520804 73.7336975,58.7235111 L47.4361158,20.670094 L3.45596164,6.71354343 L3.45596164,6.71354343 Z" id="logo-three" fill="#FF4D46"></path>
+                        <path d="M14.0410966,43.4851221 L19.2274364,57.036092 L19.2274364,57.036092 L32.0987899,65.0162852 C33.8855266,66.1240485 37.0197755,66.8186423 39.1014419,66.5674025 C39.1014419,66.5674025 70.458438,62.7888622 71.9763958,62.5331836 C73.4943536,62.2775049 74.0003337,61.7661475 74.2533237,60.9991115 L24.5402799,32.6187784 L14.0410966,43.4851221 L14.0410966,43.4851221 Z" id="logo-two" fill="#A30032"></path>
+                        <path d="M77.5422294,0.459021562 C71.5652365,5.35483961 0.632483886,60.3295569 0.126503802,60.3295569 C-0.252990042,59.566875 0.505980084,58.2957383 0.505980084,58.2957383 L25.7859639,13.8283776 L74.8858076,0.077680572 C74.8858076,0.077680572 76.4037654,-0.430774081 77.5422294,0.459021562 L77.5422294,0.459021562 Z" id="logo-one" fill="#FEB000"></path>
+                    </g>
+                    <g transform="translate(150.000000, 30.000000), scale(2)" id="javazone-text" fill="#ffffff" sketch:type="MSShapeGroup" style="opacity: 1; height: 0px;">
+                        <path d="M8.0583329,0.375368804 C8.0583329,-0.371582415 7.97907061,-0.451612903 7.16002694,-0.451612903 L4.5707921,-0.451612903 C3.75174843,-0.451612903 3.61964461,-0.371582415 3.61964461,0.375368804 L3.61964461,10.9927469 C3.61964461,12.2732347 3.61964461,12.6200334 3.35543698,12.8868017 C3.11765011,13.1268932 2.66849712,13.1268932 2.19292338,13.1268932 L0.924726726,13.1268932 C0.237786873,13.1268932 3.38618023e-15,13.2869542 3.38618023e-15,14.087259 L3.38618023e-15,15.9012834 C3.38618023e-15,16.6215578 0.237786873,16.8082956 0.871885199,16.8082956 L2.58923483,16.8082956 C4.38584676,16.8082956 5.7333057,16.7282651 6.73729472,16.0079908 C7.87338756,15.2076859 8.0583329,13.9005212 8.0583329,11.126131 L8.0583329,0.375368804 Z M18.5209553,15.7145456 L18.6794799,16.1947286 C18.8380045,16.6749115 19.0493706,16.8082956 19.6570481,16.8082956 L20.898824,16.8082956 C21.5857639,16.8082956 21.79713,16.594881 21.79713,16.0613444 L21.79713,8.13832612 C21.79713,6.56439319 21.4800808,5.52399685 20.793141,4.80372246 C19.9476765,3.9233871 18.5737968,3.49655783 16.4601357,3.49655783 C14.6635238,3.49655783 13.0518572,3.76332612 11.9421852,4.08344807 C11.4137699,4.24350905 11.3080868,4.43024685 11.3080868,4.77704563 C11.3080868,4.88375295 11.3345076,5.12384441 11.3609284,5.31058222 L11.5722945,6.72445417 C11.6515568,7.17796027 11.8100813,7.3913749 12.4706004,7.23131393 C13.5010102,6.96454563 14.6106823,6.77780783 15.535409,6.77780783 C16.4072942,6.77780783 16.8036057,6.85783832 17.1206548,7.07125295 C17.4905455,7.33802124 17.5698078,7.71149685 17.5698078,8.24503344 L17.5698078,8.80524685 C17.1734963,8.75189319 16.4072942,8.69853954 15.7203543,8.69853954 L15.535409,8.69853954 C11.9950267,8.69853954 10.3305186,9.65890539 10.3305186,12.6467103 L10.3305186,12.9401554 C10.3305186,15.6345151 11.9686059,17.0483871 14.6106823,17.0483871 L15.0069937,17.0483871 C16.6715018,17.0483871 17.9396985,16.5148505 18.4681138,15.7145456 L18.5209553,15.7145456 Z M17.5698078,12.2999115 C17.5698078,13.0201859 17.4905455,13.3403078 17.1999171,13.6070761 C16.9621302,13.8204908 16.5658188,14.0072286 15.9581412,14.0072286 L15.7731959,14.0072286 C14.8484691,14.0072286 14.2936331,13.7671371 14.2936331,12.7800944 L14.2936331,12.6733871 C14.2936331,11.6863444 14.7956276,11.4729298 16.0109827,11.4729298 L16.3016111,11.4729298 C16.6715018,11.4729298 17.2791794,11.4996066 17.5698078,11.5529603 L17.5698078,12.2999115 Z M34.894835,4.51027734 C35.0533596,3.95006393 34.8155727,3.73664929 34.2078951,3.73664929 L31.6979226,3.73664929 C31.1166658,3.73664929 30.9581412,3.87003344 30.8260374,4.45692368 C30.2183598,7.12460661 29.2672124,10.5925944 28.7387971,12.219881 L28.633114,12.219881 C28.1046988,10.6459481 27.074289,7.09792978 26.3609284,4.35021637 C26.2288245,3.81667978 26.0438792,3.73664929 25.4626224,3.73664929 L23.0054914,3.73664929 C22.3978138,3.73664929 22.1336062,3.95006393 22.26571,4.51027734 C23.1375952,8.21835661 25.0398902,13.473692 26.2288245,16.2480822 C26.4137699,16.6749115 26.6779775,16.8082956 27.2063928,16.8082956 L30.086256,16.8082956 C30.6410921,16.8082956 30.8524582,16.6215578 31.0109827,16.274759 C32.1999171,13.473692 33.9436875,8.05829563 34.894835,4.51027734 L34.894835,4.51027734 Z M42.6407812,15.7145456 L42.7993058,16.1947286 C42.9578304,16.6749115 43.1691965,16.8082956 43.7768741,16.8082956 L45.01865,16.8082956 C45.7055898,16.8082956 45.9169559,16.594881 45.9169559,16.0613444 L45.9169559,8.13832612 C45.9169559,6.56439319 45.5999068,5.52399685 44.9129669,4.80372246 C44.0675025,3.9233871 42.6936228,3.49655783 40.5799617,3.49655783 C38.7833497,3.49655783 37.1716832,3.76332612 36.0620111,4.08344807 C35.5335958,4.24350905 35.4279128,4.43024685 35.4279128,4.77704563 C35.4279128,4.88375295 35.4543335,5.12384441 35.4807543,5.31058222 L35.6921204,6.72445417 C35.7713827,7.17796027 35.9299073,7.3913749 36.5904264,7.23131393 C37.6208361,6.96454563 38.7305082,6.77780783 39.6552349,6.77780783 C40.5271201,6.77780783 40.9234316,6.85783832 41.2404808,7.07125295 C41.6103714,7.33802124 41.6896337,7.71149685 41.6896337,8.24503344 L41.6896337,8.80524685 C41.2933223,8.75189319 40.5271201,8.69853954 39.8401803,8.69853954 L39.6552349,8.69853954 C36.1148526,8.69853954 34.4503445,9.65890539 34.4503445,12.6467103 L34.4503445,12.9401554 C34.4503445,15.6345151 36.0884318,17.0483871 38.7305082,17.0483871 L39.1268197,17.0483871 C40.7913278,17.0483871 42.0595244,16.5148505 42.5879397,15.7145456 L42.6407812,15.7145456 Z M41.6896337,12.2999115 C41.6896337,13.0201859 41.6103714,13.3403078 41.319743,13.6070761 C41.0819562,13.8204908 40.6856447,14.0072286 40.0779672,14.0072286 L39.8930218,14.0072286 C38.9682951,14.0072286 38.413459,13.7671371 38.413459,12.7800944 L38.413459,12.6733871 C38.413459,11.6863444 38.9154536,11.4729298 40.1308087,11.4729298 L40.4214371,11.4729298 C40.7913278,11.4729298 41.3990053,11.4996066 41.6896337,11.5529603 L41.6896337,12.2999115 Z M53.1298244,13.1802469 L59.5764907,2.80296027 C59.9992229,2.10936271 60.104906,1.78924076 60.104906,1.22902734 L60.104906,0.322015146 C60.104906,-0.318228757 59.8935399,-0.451612903 59.2594415,-0.451612903 L49.0081853,-0.451612903 C48.2948246,-0.451612903 48.0834585,-0.291551928 48.0834585,0.402045633 L48.0834585,2.34945417 C48.0834585,2.98969807 48.2948246,3.17643588 49.0081853,3.17643588 L54.4772833,3.17643588 L48.1891416,13.7137834 C47.8456717,14.2739969 47.7664094,14.5140883 47.7664094,15.1009786 L47.7664094,15.9012834 C47.7664094,16.594881 47.9513547,16.8082956 48.7703984,16.8082956 L59.2594415,16.8082956 C59.9728022,16.8082956 60.1841683,16.6749115 60.1841683,15.9546371 L60.1841683,14.0339054 C60.1841683,13.3669847 59.9728022,13.1802469 59.2594415,13.1802469 L53.1298244,13.1802469 Z M64.3446615,9.23207612 C64.3446615,8.05829563 64.4239237,7.60478954 64.8202352,7.2046371 C65.0580221,6.96454563 65.401492,6.83116149 65.9299073,6.83116149 L66.0355903,6.83116149 C66.5640056,6.83116149 66.9074755,6.96454563 67.1452624,7.2046371 C67.5415738,7.60478954 67.6208361,8.05829563 67.6208361,9.23207612 L67.6208361,11.3128688 C67.6208361,12.4866493 67.5415738,12.9401554 67.1452624,13.3403078 C66.9074755,13.5803993 66.5640056,13.7137834 66.0355903,13.7137834 L65.9299073,13.7137834 C65.401492,13.7137834 65.0580221,13.5803993 64.8202352,13.3403078 C64.4239237,12.9401554 64.3446615,12.4866493 64.3446615,11.3128688 L64.3446615,9.23207612 Z M71.8745791,9.3921371 C71.8745791,6.67110051 71.319743,5.41728954 70.210071,4.53695417 C69.4438688,3.9233871 68.0171476,3.49655783 66.1412734,3.49655783 L65.8242242,3.49655783 C63.94835,3.49655783 62.5216288,3.9233871 61.7554266,4.53695417 C60.6457545,5.41728954 60.0909185,6.69777734 60.0909185,9.41881393 L60.0909185,11.126131 C60.0909185,13.8471676 60.6457545,15.1276554 61.7554266,16.0079908 C62.5216288,16.6215578 63.94835,17.0483871 65.8242242,17.0483871 L66.1412734,17.0483871 C68.0171476,17.0483871 69.4438688,16.6215578 70.210071,16.0079908 C71.319743,15.1276554 71.8745791,13.8471676 71.8745791,11.126131 L71.8745791,9.3921371 Z M81.1218463,3.49655783 C79.5630213,3.49655783 78.3476662,3.95006393 77.5022017,4.85707612 L77.4229394,4.85707612 L77.2644149,4.35021637 C77.1058903,3.84335661 76.8945242,3.73664929 76.2868466,3.73664929 L75.0450707,3.73664929 C74.3581309,3.73664929 74.1467648,3.95006393 74.1467648,4.48360051 L74.1467648,16.0346676 C74.1467648,16.5415273 74.3317101,16.8082956 75.0450707,16.8082956 L77.475781,16.8082956 C78.1891416,16.8082956 78.3740869,16.5415273 78.3740869,16.0346676 L78.3740869,8.4851249 C78.3740869,7.844881 78.4533492,7.49808222 78.6647153,7.25799076 C78.8760814,7.01789929 79.2988137,6.91119197 79.8272289,6.91119197 L79.9857535,6.91119197 C80.5141688,6.91119197 80.936901,7.01789929 81.1482671,7.25799076 C81.3596332,7.49808222 81.4388955,7.87155783 81.4388955,8.4851249 L81.4388955,16.0346676 C81.4388955,16.5415273 81.6238409,16.8082956 82.3372015,16.8082956 L84.7679117,16.8082956 C85.4812723,16.8082956 85.6662177,16.5415273 85.6662177,16.0346676 L85.6662177,8.11164929 C85.6662177,6.32430173 85.4020101,5.33725905 84.6886494,4.59030783 C84.0017096,3.87003344 82.8920375,3.49655783 81.3332125,3.49655783 L81.1218463,3.49655783 Z M94.464332,13.6070761 C92.6148785,13.6070761 92.007201,13.2069237 92.007201,11.9531127 L92.007201,11.7396981 L98.3481842,11.7396981 C98.8765995,11.7396981 99.1143864,11.5529603 99.1143864,10.9927469 L99.1143864,9.60555173 C99.1143864,7.31134441 98.7709164,5.87079563 97.8461897,4.83039929 C97.1328291,4.03009441 95.7589494,3.49655783 93.8566544,3.49655783 L93.4867637,3.49655783 C91.5844687,3.49655783 90.210589,3.9233871 89.3387038,4.69701515 C88.4403979,5.49732002 87.753458,6.9378688 87.753458,9.60555173 L87.753458,11.0994542 C87.753458,13.2602773 88.0176656,14.6207956 89.0744962,15.6878688 C89.9728022,16.594881 91.5844687,17.0483871 93.6717091,17.0483871 L94.1737036,17.0483871 C95.468321,17.0483871 97.1064083,16.7816188 98.1632389,16.4081432 C98.7180749,16.2214054 98.8501787,16.0346676 98.8501787,15.6878688 C98.8501787,15.501131 98.7973372,15.2343627 98.7444957,14.9675944 L98.5331296,13.633753 C98.480288,13.3669847 98.2953427,13.1802469 98.0575558,13.1802469 C97.8726105,13.1802469 97.6876651,13.2336005 97.5555613,13.2602773 C96.8950422,13.4203383 95.6004248,13.6070761 94.7549604,13.6070761 L94.464332,13.6070761 Z M92.007201,8.96530783 L92.007201,8.2983871 C92.007201,7.60478954 92.1393048,7.15128344 92.4035124,6.85783832 C92.6412993,6.59107002 93.0376107,6.48436271 93.5131845,6.48436271 L93.7509714,6.48436271 C94.3322282,6.48436271 94.7285396,6.61774685 94.9663265,6.96454563 C95.1512718,7.25799076 95.2305341,7.65814319 95.2305341,8.19167978 L95.2305341,8.61850905 C95.2305341,8.85860051 95.1512718,8.96530783 94.913485,8.96530783 L92.007201,8.96530783 Z"></path>
+                    </g>
+                </svg>
+            </a>
+
+            <p class="navbar-text">
+                Java Concurrency Under The Hood <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+            </p>
+
+
+        </div>
+        <div class="navbar-right">
+            <a class="navbar-brand">
+                Slide <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+            </a>
+            <img class="navbar-brand" src="img/cc0.png">
+        </div>
+    </div>
+</nav>
+
+
+<div id="laser"></div>
+
+
+<div id="impress">
+
+    <div class="step step-title" data-y="-900">
+        <div class="jumbotron text-center">
+            <h1>
+                Java Concurrency<br/>
+                Under The Hood
+            </h1>
+
+            <div class="row">
+                <p>#volatile #membar #dragons #openjdk</p>
+                <p>#jmm #store #load #internals</p>
+                <p>#cachecoherency #omg</p>
+                <p>#javazone</p>
+            </div>
+
+            <footer>
+                <h2>Gleb Smirnov, Plumbr</h2>
+                <h3>me<span class="text-info text-underlined">@gvsmirnov</span>.ru</h3>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- LEAKY ABSTRACTIONS -->
+
+    <div class="step step-slide">
+        <h1>Leaky Abstractions</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Each abstraction level obscures <span class="text-muted"> implementation details</span>
+            </li>
+            <li data-jmpress="fade">
+                Things that happen on <b>lower levels</b>
+                affect <b>high-level</b> behavior
+            </li>
+            <li data-jmpress="fade">
+                Some phenomena <b>cannot be explained</b> using high-level terms
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide spoiler fill-bg">
+        <div class="text-center">
+            <img class="graph scale-to-fit-h" src="img/go-deeper.jpg"/>
+        </div>
+    </div>
+
+    <!-- LEAKY ABSTRACTIONS END -->
+
+    <!-- POP QUIZ -->
+
+    <div class="step step-slide" data-x="1300">
+
+        <div class="row">
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+            </div>
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    Can the assertion fail?
+                </h1>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    What if it's ran on x86?
+                </h1>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- POP QUIZ ENDS -->
+
+    <!-- JMM -->
+
+    <div class="step step-slide" data-y="900">
+        <h1>The Theoretical Approach</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                According to JMM, it can fail without <code>volatile</code>
+            </li>
+            <li class="list-unstyled" data-jmpress="fade">
+                <span class="text-muted">(but doesn't have to)</span>
+            </li>
+            <li data-jmpress="fade">
+                JMM only contains high-level abstractions
+            </li>
+            <li data-jmpress="fade">
+                Doesn't say a word on x86 or any other architecture
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="900" data-x="1300">
+        <div class="text-center">
+            <h1>Thus Spoke JMM</h1>
+        </div>
+        <div class="text-center well">
+            <div data-jmpress="disappear">
+                <p>A write to a <code>volatile</code> variable</p>
+                <p><i><b>happens-before</b></i></p>
+                <p>All subsequent reads of that variable</p>
+            </div>
+
+            <div data-jmpress="appear after 1 ms">
+                <p>A write to a <code>volatile</code> variable</p>
+                <p>
+                    <i><b>synchronizes-with</b></i></p>
+                <p>All subsequent reads of that variable</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide spoiler" data-y="900" data-x="2600">
+        <div class="text-center">
+            <img class="graph" src="img/jls.png"/>
+        </div>
+    </div>
+
+    <div class="step step-slide spoiler" data-y="900" data-x="2600">
+        <div class="text-center">
+            <img class="graph" src="img/wat.jpg"/>
+        </div>
+        <br/>
+        <blockquote>
+            <p>
+                Man... I don't know what you just said, but you're special, man.<br/>
+                You reached out, and you touched a brother's heart.
+            </p>
+        </blockquote>
+    </div>
+
+    <!-- JMM ENDS -->
+
+    <!-- JCSTRESS -->
+
+    <div class="step step-slide" data-y="1800">
+        <h1>The Empirical Approach</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Running the test once is not conclusive
+            </li>
+            <li data-jmpress="fade">
+                Could run it lots of times <span data-jmpress="fade">... a real lot!</span>
+            </li>
+            <li data-jmpress="fade">
+                If it still doesn't fail, then it <b>probably</b> shouldn't
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="1300">
+        <h1>Thou Shalt Not Reinvent The Wheel</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                The community has got it all covered
+            </li>
+            <li data-jmpress="fade">
+                <code>jcstress</code> was created precisely for such research
+            </li>
+            <li data-jmpress="fade">
+                Moreover, it contains just the test we need
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="2600">
+        <div class="jumbotron text-center text-v-center">
+            <h1>
+                <span class="text-bigger"><code>jcstress</code> demo</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="3900">
+        <h1 class="text-center">Test Results (x86)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-x86-c2.png"/>
+            </div>
+            <div class="col-md-4 right-tit" data-jmpress="fade">
+                <img class="img-responsive" src="img/right-tit-x86-c2.png"/>
+            </div>
+            <div class="col-md-2" data-jmpress="fade">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="5200">
+        <h1 class="text-center">Test Results (ARM)</h1>
+        <!-- TODO: https://gist.github.com/shipilev/9595796 -->
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-arm.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit-arm.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="6500">
+        <h1 class="text-center">Test Results (x86, C1)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 0, x: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-x86-c1.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit-x86-c1.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">y: 1, x: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JCSTRESS ENDS -->
+
+    <!-- DIAGRAMS -->
+
+
+    <div class="step nested-steps" id="leaks" data-y="2700">
+        <h1 class="text-center">Where Did The Abstractions Leak To?</h1>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+<pre class="prettyprint lang-java">
+    void executedOnCpu0() {
+        value = 10;
+        finished = true;
+    }
+</pre>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="250">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" id="duke" data-y="450" data-z="2">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
+                    <img src="img/duke-java.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="700">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="950">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/platforms.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1280">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1400">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/arm-amd-intel.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler" data-y="1400" data-z="200" id="cloud">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img class="graph scale-to-fit-h" src="img/cloud.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler step-slide" data-y="1400" data-z="-200" data-scale="0.2">
+            <h1>Nobody Wants To Be The Slow One</h1>
+            <ul>
+                <li data-jmpress="fade">Each layer may apply some <b>optimizations</b></li>
+                <li data-jmpress="fade">Some optimizations may change the <b>observed behaviour</b></li>
+                <li data-jmpress="fade">Sometimes, it is perfectly acceptable</li>
+                <li data-jmpress="fade">Some other times, it is not</li>
+                <li data-jmpress="fade">The hardware engineers <b>cannot know this in advance</b></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DIAGRAMS END -->
+
+    <!-- CACHES EXAMPLE -->
+
+    <div class="step step-slide" data-y="4500" data-x="1300">
+        <h1>
+            For Instance: Cache Coherency
+        </h1>
+        <ul>
+            <li data-jmpress="fade">
+                Accessing RAM is an <b>expensive operation</b>
+            </li>
+
+            <li data-jmpress="fade">
+                A CPU has <b>copies</b> of frequently used data at hand
+            </li>
+
+            <li data-jmpress="fade">
+                If there is more than one CPU, things can go awry
+            </li>
+        </ul>
+    </div>
+
+    <div class="step nested-steps" data-y="4500" data-x="2600">
+
+        <div class="visit-me">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><code>finished</code></td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr class="active">
+                            <td><code>value</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1600">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="active">
+                            <td><code>finished</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td><code>0</code></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="600" data-scale="2.3">
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+                </div>
+
+                <div class="col-md-2" data-jmpress="fade">
+                    <h1 class="text-center">
+                        <span class="glyphicon glyphicon-transfer"></span>
+                    </h1>
+                </div>
+
+                <div class="col-md-5">
+                    <ul class="list-unstyled">
+                        <li data-jmpress="fade">&mdash; Invalidate this!</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">&mdash; Done!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1200" data-scale="2.3">
+
+            <div class="row">
+                <hr/>
+
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+                </div>
+
+                <div class="col-md-7">
+                    <ul>
+                        <li data-jmpress="fade">Had to wait for a long time</li>
+                        <li data-jmpress="fade">The CPU was stalled</li>
+                        <li data-jmpress="fade">Optimization time!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1600" data-scale="2.3">
+            <div class="row">
+                <hr/>
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value = 10;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(executed asynchronously)</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished = true;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(likewise)</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="step spoiler" data-x="800" data-y="800" data-scale="3.5" data-z="1000">
+            <h1 class="text-center">
+                <img src="img/explosion1.png"/>
+            </h1>
+        </div>
+
+    </div>
+    <!-- CACHES EXAMPLE END -->
+
+    <!-- HIGH-LEVEL BARRIERS -->
+
+    <div class="step step-slide" data-y="5400" data-x="1300">
+        <h1>Why We Need A Memory Model</h1>
+        <ul>
+            <li data-jmpress="fade">
+                Software engineers know how their code is supposed to work
+            </li>
+            <li data-jmpress="fade">
+                This must be relayed to the execution environment
+            </li>
+            <li class="list-unstyled" data-jmpress="fade">
+                <blockquote>
+                    <p>Memory Model is a trade-off between:</p>
+                    <ul>
+                        <li data-jmpress="fade">How messed up writing code in a given <em>language</em> is</li>
+                        <li data-jmpress="fade">How messed up a <em>fast and correct language implementation</em> is</li>
+                        <li data-jmpress="fade">How messed up <em>the hardware</em> is</li>
+                    </ul>
+                    <p><footer data-jmpress="fade">Aleksey Shipilёv</footer></p>
+                </blockquote>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="6300" data-x="1300">
+        <h1 class="text-center">Memory Barriers</h1>
+
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    value = 10;
+    <span class="nocode text-success" data-jmpress="appear">magicUnicorn();</span>
+    finished = true;
+}
+</pre>
+            </div>
+
+            <div class="col-md-2" data-jmpress="fade">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    finished = true;
+    <span class="nocode text-success">magicUnicorn();</span>
+    value = 10;
+}
+</pre>
+            </div>
+        </div>
+        <h2 class="text-center" data-jmpress="fade">
+            <em>(As seen by another thread)</em>
+        </h2>
+
+        <div class="step spoiler visit-me">
+            <div class="text-center">
+                <span class="text-danger text-really-giant glyphicon glyphicon-remove"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="1300">
+        <h1 class="text-center">The Two Types Of Memory Operations</h1>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">Write</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">Read</code>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">Store</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">Load</code>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">ST</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">LD</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="2600">
+        <h1>They Should Not Be Treated Equally</h1>
+        <ul>
+            <li data-jmpress="fade">Restricting <b>all</b> the reorderings is slow</li>
+            <li data-jmpress="fade">
+                Sometimes it's fine to reorder
+                a <code>Store</code> and a <code>Load</code>
+            </li>
+            <li data-jmpress="fade" class="list-unstyled">
+                but not a <code>Store</code> and another <code>Store</code>
+            </li>
+            <li data-jmpress="fade">Need more fine-grained control</li>
+            <li data-jmpress="fade">Let's introduce memory barriers of type <code>XY</code></li>
+            <li class="list-unstyled" data-jmpress="fade">(<code>X</code> and <code>Y</code> take the values <code>Store</code> and <code>Load</code>)</li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="3900">
+        <h1>For X, Y in [Store, Load]:</h1>
+
+        <div class="text-center well" data-jmpress="fade">
+            <p>
+                All <code>X</code> operations <em>preceding</em> an <code>XY</code> barrier
+            </p>
+            <p data-jmpress="fade">
+                <b>must complete before</b>
+            </p>
+            <p data-jmpress="fade">
+                Any <code>Y</code> operation <em>succeeding</em> that barrier starts
+            </p>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="5200">
+        <div class="text-center">
+            <h1><code>X = Store</code> <code>Y = Store</code></h1>
+
+            <img src="img/membar-prohibitions.png" />
+
+            <div class="step spoiler visit-me">
+                <span class="text-danger text-really-giant glyphicon glyphicon-remove"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="6500">
+        <div class="text-center">
+            <h1><code>X = Store</code> <code>Y = Store</code></h1>
+
+            <img src="img/membar-allowances.png" />
+
+            <div class="step spoiler visit-me">
+                <span class="text-success text-really-giant glyphicon glyphicon-ok"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="7800">
+        <h1>Acquire And Release Semantice</h1>
+        <blockquote>
+            <p>
+                The source of a <em>synchronizes-with</em> edge is called a <strong>release</strong>,
+                and the destination is called an <strong>acquire</strong>
+            </p>
+        </blockquote>
+
+        <div data-jmpress="fade">
+            <div class="row">
+                <div class="col-md-4">
+                    <code class="text-mid">vstore(a.f, 1)</code>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-6" data-jmpress="fade">
+                    <code class="text-mid">\---(sync-with)---></code>
+                </div>
+                <div class="col-md-4">
+                    <code class="text-mid">vread(a.f, 1)</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIGH-LEVEL BARRIERS END -->
+
+    <!-- JVM STUFF -->
+
+    <div class="step" data-y="3150"></div>
+
+    <div class="step visit-me spoiler nested-steps" data-y="3150" data-z="-200" data-scale="0.2">
+        <h1 class="text-center">
+            <img src="img/openjdk-diagram.png"/>
+        </h1>
+
+        <div class="step visit-me" data-x="600">
+            <div class="row text-center annotation">(source)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="900">
+            <h1 class="text-center"><span class="well"><code>javac</code></span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="1200">
+            <div class="row text-center annotation">(bytecode)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1450">
+            <h1 class="text-center"><span class="well">Frontend</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="1700">
+            <div class="row text-center annotation">(HIR)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="2050">
+            <h1 class="text-center"><span class="well dashed-border-stack">JIT Optimizer</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="2400">
+            <div class="row text-center annotation">(LIR)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="2650">
+            <h1 class="text-center"><span class="well">Backend</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="2900">
+            <div class="row text-center annotation">(native code)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="3050">
+            <h1 class="text-center"><span class="well">...</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="3200">
+            <div class="row text-center annotation">(???)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="3420">
+            <h1 class="text-center"><span class="well">PROFIT!</span></h1>
+        </div>
+    </div>
+
+    <div class="step" data-y="3150"></div>
+
+    <!-- JVM STUFF ENDS -->
+
+
+    <!-- LIVE DEMO STUFF -->
+
+    <div class="step spoiler very-spoiler" id="mad-scientist" data-z="1" data-x="600" data-y="3700" data-scale="3">
+        <div class="text-center">
+            <img class="graph" src="img/mad-scientist-flipped.png"/>
+            <h1><span class="well">LIVE DEMO TIME!</span></h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="1300" data-y="3600">
+        <h1>
+            Useful References
+        </h1>
+
+        <ul>
+            <li>
+                Papers:
+                <ul>
+                    <li>Memory Barriers: A Hardware View For Software Hackers</li>
+                </ul>
+            </li>
+            <li>
+                Blogs:
+                <ul>
+                    <li><a href="http://shipilev.net/">http://shipilev.net/</a></li>
+                    <li><a href="http://mechanical-sympathy.blogspot.com/">http://mechanical-sympathy.blogspot.com/</a></li>
+                    <li><a href="http://psy-lob-saw.blogspot.com/">http://psy-lob-saw.blogspot.com/</a></li>
+                    <li><a href="http://gvsmirnov.ru/blog">http://gvsmirnov.ru/blog/</a></li>
+                </ul>
+            </li>
+            <li>
+                People are the best source: <a href="https://twitter.com/gvsmirnov/lists/java">https://twitter.com/gvsmirnov/lists/java</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- LIVE DEMO STUFF ENDS -->
+
+    <!-- LAST REMARKS -->
+
+    <div class="step step-slide qr" data-x="2600" data-y="3600">
+        <div class="text-center">
+            <img class="graph" src="img/qr-vjug-2015.png"/>
+
+            <h2>
+                <a href="http://gvsmirnov.ru/docs/presentations/java-concurrency-hands-on/vjug-aug-2015.html">
+                    http://goo.gl/QBGsD3
+                </a>
+            </h2>
+        </div>
+    </div>
+
+    <!-- LAST REMARKS END -->
+</body>
+
+<script src="js/custom.js"></script>
+
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+
+            $('#impress').jmpress({
+                "mouse": { clickSelects: false },
+                "beforeChange": function(element, eventData) {
+                    element = $(element);
+                    if(element.hasClass("visit-me")) {
+                        element.addClass('visited');
+                    }
+
+                    updateCurrentSlide(element);
+                }
+            });
+
+            window.prettyPrint && prettyPrint()
+            $('body').mousemove(function(e){
+                $('#laser').css('left', e.clientX).css('top', e.clientY);
+            });
+        });
+    }(window.jQuery)
+</script>
+
+</html>
