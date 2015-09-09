@@ -4,7 +4,7 @@
  *
  * A jQuery plugin to build a website on the infinite canvas.
  *
- * Copyright 114 Kyle Robinson Young @shama & Tobias Koppers @sokra
+ * Copyright 115 Kyle Robinson Young @shama & Tobias Koppers @sokra
  * Licensed MIT
  * http://www.opensource.org/licenses/mit-license.php
  *
@@ -26,7 +26,7 @@
 	 */
 	var pfx = (function () {
 		var style = document.createElement('dummy').style,
-			prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+			prefixes = ['Webkit', 'Moz', 'O', 'ms', 'Khtml', ''],
 			memory = {};
 		return function ( prop ) {
 			if ( typeof memory[ prop ] === "undefined" ) {
@@ -53,6 +53,9 @@
 		}
 		var index = 1 + name.substr(1).search(/[A-Z]/);
 		var prefix = name.substr(0, index).toLowerCase();
+		if(prefix === '') {
+			return name.toLowerCase();
+		}
 		var postfix = name.substr(index).toLowerCase();
 		return "-" + prefix + "-" + postfix;
 	}
@@ -2365,7 +2368,7 @@
 			});
 		}
 		$.each(eventData.current.animationCleanupWaiting, function(idx, item) {
-			//cleanupAnimation(item);
+			cleanupAnimation(item);
 		});
 		eventData.current.animationCleanupWaiting = [];
 		var substepsData = $(step).data("substepsData");
