@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Расчленяем Многопоточность</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/whhg.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand devclub">
+                    <img class="devclub-logo" src="img/devclub.png">
+                </a>
+
+                <p class="navbar-text">
+                    Расчленяем Многопоточность <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+                </p>
+
+
+            </div>
+            <div class="navbar-right">
+                <a class="navbar-brand">
+                    Слайд <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div id="laser"></div>
+
+
+    <div id="impress">
+
+    <div class="step step-title" data-y="-900">
+        <div class="jumbotron text-center">
+            <h1>Расчленяем Многопоточность</h1>
+
+            <div class="row">
+                <p>#volatile #membar #dragons #openjdk</p>
+                <p>#jmm #store #load #internals</p>
+                <p>#cachecoherency #omg</p>
+            </div>
+
+            <footer>
+                <h2>#devclub</h2>
+                <h2>Gleb Smirnov, Plumbr</h2>
+                <h3>me<span class="text-info text-underlined">@gvsmirnov</span>.ru</h3>
+            </footer>
+
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="-900" data-x="1300">
+        <h1>Moore's Law</h1>
+
+        <blockquote>
+            <!-- http://www.intel.com/content/www/us/en/history/museum-gordon-moore-law.html -->
+            <p>
+                The number of transistors incorporated in a chip
+                will approximately double every 24 months
+            </p>
+            <footer>Gordon Earle Moore, 1964</footer>
+        </blockquote>
+
+        <blockquote>
+            <p><em>
+                (Число транзисторов, размещённых на микрочипе, будет удваиваться
+                каждые 24 месяца)
+            </em></p>
+        </blockquote>
+    </div>
+
+    <div class="step step-slide" data-y="-900" data-x="2600">
+        <div class="text-center">
+            <img height="500px" src="img/moores-law.jpg"/>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="-900" data-x="3900">
+        <div class="text-center">
+            <!-- http://queue.acm.org/detail.cfm?id=2181798 -->
+            <img height="500px" src="img/horowitz_fig7.png"/>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="-900" data-x="5200">
+        <h1>Что случилось?</h1>
+        <ul>
+            <li data-jmpress="fade">
+                Транзисторы меньше &rArr; больше сопротивление &rArr; ниже частота
+            </li>
+            <li data-jmpress="fade">
+                Меньше потребление энергии &rArr; меньше частота
+            </li>
+            <li data-jmpress="fade">
+                Но мы хотим, чтобы производительность росла!
+            </li>
+            <li data-jmpress="fade">
+                И транзисторов-то ещё много!
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide spoiler" data-y="-900"  data-x="5200">
+        <div class="jumbotron text-center">
+            <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Multicore!</span></h1>
+        </div>
+    </div>
+
+
+    <div class="step step-slide">
+
+        <div class="row">
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu0() {
+    value = 10;
+    finished = true;
+}
+</pre>
+            </div>
+            <div class="col-md-6">
+<pre class="prettyprint lang-java">
+void executedOnCpu1() {
+    while(!finished);
+    assert value == 10;
+}
+</pre>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    Может ли упасть?
+                </h1>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-12 text-center">
+                <h1>
+                    А на x86?
+                </h1>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="step step-slide" data-x="1300">
+        <h1>Подход Эмпирический</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Один запуск не даст надёжных результатов
+            </li>
+            <li data-jmpress="fade">
+                Можно запустить много раз <span data-jmpress="fade">... очень много раз!</span>
+            </li>
+            <li data-jmpress="fade">
+                Если так и не упадёт, то, <b>вероятно</b>, и не должно
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-x="2600">
+        <h1>Не Сотвори Себе Велосипеда</h1>
+
+        <h2><code>org.openjdk.jcstress.tests.fences.UnfencedAcquireReleaseTest</code></h2>
+
+        <div class="row">
+            <div class="col-md-6">
+<pre class="prettyprint lang-java" data-jmpress="fade">
+int value = 0, finished = 0;
+</pre>
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Actor
+void actor1() {
+    value = 1;
+    <span data-jmpress="fade">value = 2;</span>
+    <span data-jmpress="fade">finished = 1;</span>
+    <span data-jmpress="fade">value = 3;</span>
+}
+</pre>
+            </div>
+            <div class="col-md-6">
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Actor
+void actor2(IntResult2 r) {
+    int f = finished;
+    int v = value;
+    <span data-jmpress="fade">if(f == 1) {
+        assert v != 0;
+    }</span>
+    <span data-jmpress="fade">r.r1 = f;
+    r.r2 = v;</span>
+}
+</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="3900">
+        <h1 class="text-center">Результаты Теста (x86)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-x86-c2.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit-x86-c2.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="5200">
+        <h1 class="text-center">Результаты Теста (ARM)</h1>
+        <!-- TODO: https://gist.github.com/shipilev/9595796 -->
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-arm.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit-arm.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="6500">
+        <h1 class="text-center">Результаты Теста (x86, C1)</h1>
+
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 3</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 0, v: 0</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 left-tit">
+                <img align="right" class="img-responsive" src="img/left-tit-x86-c1.png"/>
+            </div>
+            <div class="col-md-4 right-tit">
+                <img class="img-responsive" src="img/right-tit-x86-c1.png"/>
+            </div>
+            <div class="col-md-2">
+                <ul class="legend list-unstyled">
+                    <li class="legend-smaller-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 0</span>
+                    </li>
+                    <li class="legend-bigger-part">
+                        <span class="box"></span>
+                        <span class="text-mono">f: 1, v: 3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEAKY ABSTRACTIONS -->
+
+    <div class="step step-slide" data-y="900">
+        <h1>Текущие Абстракции</h1>
+
+        <ul>
+            <li data-jmpress="fade">
+                Каждый слой абстракции прячет детали реализации
+            </li>
+            <li data-jmpress="fade">
+                Происходящее на <b>нижних уровнях</b>
+                влияет на <b>высокоуровневое</b> поведение
+            </li>
+            <li data-jmpress="fade">
+                Некоторое поведение <b>нельзя объяснить</b> в рамках абстракции
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide spoiler fill-bg" data-y="900">
+        <div class="text-center">
+            <img height="500px" src="img/go-deeper.jpg"/>
+        </div>
+    </div>
+
+    <!-- DIAGRAMS -->
+
+
+    <div class="step nested-steps" id="leaks" data-y="900" data-x="1300">
+        <h1 class="text-center">Куда Протекли Абстракции?</h1>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+<pre class="prettyprint lang-java">
+    void executedOnCpu0() {
+        value = 10;
+        finished = true;
+    }
+</pre>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="250">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" id="duke" data-y="450" data-z="2">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
+                    <img src="img/duke-java.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="700">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="950">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/platforms.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1280">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-giant">
+                        &darr;
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-y="1400">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="img/arm-amd-intel.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler" data-y="1400" data-z="200" id="cloud">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img class="graph scale-to-fit-h" src="img/cloud.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me spoiler step-slide" data-y="1400" data-z="-200" data-scale="0.2">
+            <h1>Никто Не Хочет Быть Тормозом</h1>
+            <ul>
+                <li data-jmpress="fade">На каждом слое могут применяться <b>оптимизации</b></li>
+                <li data-jmpress="fade">Есть оптимизации, меняющие <b>наблюдаемое поведение</b></li>
+                <li data-jmpress="fade">
+                    Иногда это вполне допустимо
+                    <span data-jmpress="fade">(<b>но иногда &mdash; нет</b>)</span>
+                </li>
+                <li data-jmpress="fade">Разработчики среды <b>не знают этого заранее</b></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DIAGRAMS END -->
+
+    <!-- CACHES EXAMPLE -->
+
+    <div class="step step-slide" data-x="1300" data-y="1800">
+        <h1>
+            Когерентность Кешей, Например
+        </h1>
+        <ul class="list-unstyled spider">
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Доступ к основной памяти &mdash; <b>дорогая операция</b>
+            </li>
+
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Ядра хранят <b>копии</b> популярных значений поблизости
+            </li>
+
+            <li data-jmpress="fade">
+                <i class="icon-spider"></i>
+                Если ядер более одного, <b>начинается дикий угар</b>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step nested-steps" data-y="1800" data-x="2600">
+
+        <div class="visit-me">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><code>finished</code></td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr class="active">
+                            <td><code>value</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1600">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-responsive" src="img/cpu.png"/>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-big-text table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Cached Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="active">
+                            <td><code>finished</code></td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td><code>0</code></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="600" data-scale="2.3">
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value &larr; 10;
+</pre>
+                </div>
+
+                <div class="col-md-2" data-jmpress="fade">
+                    <h1 class="text-center">
+                        <span class="glyphicon glyphicon-transfer"></span>
+                    </h1>
+                </div>
+
+                <div class="col-md-5">
+                    <ul class="list-unstyled">
+                        <li data-jmpress="fade">&mdash; Удали из кеша!</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">...</li>
+                        <li data-jmpress="fade">&mdash; Я удалил!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1100" data-scale="2.3">
+
+            <div class="row">
+                <hr/>
+
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished &larr; true;
+</pre>
+                </div>
+
+                <div class="col-md-7">
+                    <ul>
+                        <li data-jmpress="fade">Пришлось ждать очень долго</li>
+                        <li data-jmpress="fade">Процессор простаивал</li>
+                        <li data-jmpress="fade">Вы &mdash; самое слабое звено!</li>
+                        <li data-jmpress="fade">Время <b>оптимизировать</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="800" data-y="1600" data-scale="2.3">
+            <div class="row">
+                <hr/>
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+value &larr; 10;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(исполняется асинхронно)</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+finished &larr; true;
+</pre>
+                </div>
+
+                <div class="col-md-1" data-jmpress="fade">
+                    <h1 class="text-center text-v-top">
+                        &rarr;
+                    </h1>
+                </div>
+
+                <div class="col-md-6" data-jmpress="fade">
+                    <h2 class="text-v-top">(тоже)</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="step spoiler" data-x="800" data-y="800" data-scale="3.5" data-z="1000">
+            <h1 class="text-center">
+                <img src="img/explosion1.png"/>
+            </h1>
+        </div>
+
+    </div>
+    <!-- CACHES EXAMPLE END -->
+
+    <!-- HIGH-LEVEL BARRIERS -->
+
+    <div class="step step-slide" data-y="5400" data-x="1300">
+        <h1>Модель Памяти &mdash; Нужна</h1>
+        <ul>
+            <li data-jmpress="fade">
+                Разработчики софта знают, как должна вести себя программа
+            </li>
+            <li data-jmpress="fade">
+                Нужно передать это знание среде исполнения
+            </li>
+            <li class="list-unstyled" data-jmpress="fade">
+                <blockquote>
+                    <p>Модель памяти = trade-off между:</p>
+                    <ul>
+                        <li data-jmpress="fade">Долбанутостью программирования <em>на языке</em></li>
+                        <li data-jmpress="fade">Долбанутостью <em>быстрой и корректной реализации языка</em></li>
+                        <li data-jmpress="fade">Долбанутостью <em>хардвара</em></li>
+                    </ul>
+                    <p><footer data-jmpress="fade">Алексей Шипилёв</footer></p>
+                </blockquote>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="6300" data-x="1300">
+        <h1 class="text-center">Барьер Памяти</h1>
+
+        <div class="row">
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    value = 10;
+    <span class="nocode text-success" data-jmpress="appear">magicUnicorn();</span>
+    finished = true;
+}
+</pre>
+            </div>
+
+            <div class="col-md-2" data-jmpress="fade">
+                <h1 class="text-center text-giant text-danger">&nrarr;</h1>
+            </div>
+
+            <div class="col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void foo() {
+    finished = true;
+    <span class="nocode text-success">magicUnicorn();</span>
+    value = 10;
+}
+</pre>
+            </div>
+        </div>
+        <h2 class="text-center" data-jmpress="fade">
+            <em>(С точки зрения другого потока)</em>
+        </h2>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="1300">
+        <h1 class="text-center">Есть Два Типа Операций с Памятью</h1>
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">Запись</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">Чтение</code>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">Store</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">Load</code>
+            </div>
+        </div>
+
+        <div class="row" data-jmpress="fade">
+            <div class="col-md-offset-1 col-md-5 text-center">
+                <code class="text-bigger">ST</code>
+            </div>
+            <div class="col-md-5 text-center">
+                <code class="text-bigger">LD</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="2600">
+        <h1>Не Всех Под Одну Гребёнку</h1>
+        <ul>
+            <li data-jmpress="fade">Запрещать переставлять всё со всем &mdash; медленно</li>
+            <li data-jmpress="fade">
+                Иногда допустимо переставить
+                <code>ST</code> и <code>LD</code>, но не <code>ST</code> и <code>ST</code>
+            </li>
+            <li data-jmpress="fade">Нужен более тонкий контроль</li>
+            <li data-jmpress="fade">Введём барьеры памяти типа <code>XY</code></li>
+            <li class="list-unstyled" data-jmpress="fade">(<code>X</code> и <code>Y</code> принимают значения <code>Store</code> и <code>Load</code>)</li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="3900">
+        <h1>For X, Y in [Store, Load]:</h1>
+
+        <div class="text-center well" data-jmpress="fade">
+            <p>
+                Все операции типа <code>X</code> перед барьером типа <code>XY</code>
+            </p>
+            <p data-jmpress="fade">
+                <b>завершатся до того, как</b>
+            </p>
+            <p data-jmpress="fade">
+                Начнётся любая операция типа <code>Y</code> после этого барьера
+            </p>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="5200">
+        <h1>Так Делать Нельзя</h1>
+
+        <img src="img/membar-prohibitions.png" />
+
+        <div class="step spoiler visit-me">
+            <span class="text-danger text-really-giant glyphicon glyphicon-remove"
+                  style="margin-left: 330px;"></span>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="6500">
+        <h1>Зато Можно Так</h1>
+
+        <img src="img/membar-allowances.png" />
+
+        <div class="step spoiler visit-me">
+            <span class="text-success text-really-giant glyphicon glyphicon-ok"
+                  style="margin-left: 330px;"></span>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="7200" data-x="7800">
+        <h1>Семантика Acquire и Release</h1>
+        <blockquote>
+            <p>
+                The source of a <em>synchronizes-with</em> edge is called a <strong>release</strong>,
+                and the destination is called an <strong>acquire</strong>
+            </p>
+        </blockquote>
+        <blockquote data-jmpress="fade">
+            <p>
+                Источником <em>синхронизирует-с</em> краю называется <strong>релиз</strong>,
+                и назначения называется <strong>приобретают</strong>
+            </p>
+        </blockquote>
+
+        <div data-jmpress="fade">
+            <div class="row">
+                <div class="col-md-4">
+                    <code class="text-mid">vstore(a.f, 1)</code>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-6" data-jmpress="fade">
+                    <code class="text-mid">\---(sync-with)---></code>
+                </div>
+                <div class="col-md-4">
+                    <code class="text-mid">vread(a.f, 1)</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- TODO: add a troll face -->
+    </div>
+
+    <!-- HIGH-LEVEL BARRIERS END -->
+
+    <!-- JVM STUFF -->
+
+    <div class="step" data-y="3150"></div>
+
+    <div class="step visit-me spoiler nested-steps" data-y="3150" data-z="-200" data-scale="0.2">
+        <h1 class="text-center">
+            <img src="img/scheme.jpeg"/>
+        </h1>
+
+        <div class="step visit-me" data-x="600">
+            <div class="row text-center annotation">(исходник)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="900">
+            <h1 class="text-center text-giant"><code class="well">javac</code></h1>
+        </div>
+
+        <div class="step visit-me" data-x="1200">
+            <div class="row text-center annotation">(байт-код)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1450">
+            <h1 class="text-center"><span class="well">Frontend</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="1700">
+            <div class="row text-center annotation">(HIR)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="2050">
+            <h1 class="text-center"><span class="well dashed-border">JIT-Оптимизатор</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="2400">
+            <div class="row text-center annotation">(LIR)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="2650">
+            <h1 class="text-center"><span class="well">Backend</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="2900">
+            <div class="row text-center annotation">(нативный код)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="3050">
+            <h1 class="text-center"><span class="well">...</span></h1>
+        </div>
+
+        <div class="step visit-me" data-x="3200">
+            <div class="row text-center annotation">(???)</div>
+            <div class="row">
+                <h1 class="text-center text-giant">&rarr;</h1>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="3420">
+            <h1 class="text-center"><span class="well">PROFIT!</span></h1>
+        </div>
+    </div>
+
+    <div class="step" data-y="3150"></div>
+
+    <!-- JVM STUFF ENDS -->
+
+
+    <!-- LIVE DEMO STUFF -->
+
+    <div class="step spoiler very-spoiler" id="mad-scientist" data-z="1" data-x="600" data-y="3700" data-scale="3">
+        <div class="text-center">
+            <img class="graph" src="img/mad-scientist-flipped.png"/>
+            <h1><span class="well">LIVE DEMO TIME!</span></h1>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-x="1300" data-y="3600">
+        <h1>
+            Полезные Материалы
+        </h1>
+
+        <ul>
+            <li>
+                Работы:
+                <ul>
+                    <li>Memory Barriers: A Hardware View For Software Hackers</li>
+                </ul>
+            </li>
+            <li>
+                Блоги:
+                <ul>
+                    <li><a href="http://shipilev.net/">http://shipilev.net/</a></li>
+                    <li><a href="http://mechanical-sympathy.blogspot.com/">http://mechanical-sympathy.blogspot.com/</a></li>
+                    <li><a href="http://psy-lob-saw.blogspot.com/">http://psy-lob-saw.blogspot.com/</a></li>
+                    <li><a href="http://cheremin.blogspot.com/">http://cheremin.blogspot.com/</a></li>
+                    <li><a href="http://gvsmirnov.ru/blog">http://gvsmirnov.ru/blog/</a></li>
+                </ul>
+            </li>
+            <li>
+                Люди &dash; наше всё: <a href="https://twitter.com/gvsmirnov/lists/java">https://twitter.com/gvsmirnov/lists/java</a></li>
+            </li>
+        </ul>
+    </div>
+
+    <div class="step" data-x="2600" data-y="3600" id="overview" data-scale="7"></div>
+
+    </div>
+</body>
+
+<script src="js/custom.js"></script>
+
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+
+            $('#impress').jmpress({
+                "mouse": { clickSelects: false },
+                "beforeChange": function(element, eventData) {
+                    element = $(element);
+                    if(element.hasClass("visit-me")) {
+                        element.addClass('visited');
+                    }
+
+                    updateCurrentSlide(element);
+                }
+            });
+
+            window.prettyPrint && prettyPrint()
+            $('body').mousemove(function(e){
+                $('#laser').css('left', e.clientX).css('top', e.clientY);
+            });
+        });
+    }(window.jQuery)
+</script>
+
+</html>
