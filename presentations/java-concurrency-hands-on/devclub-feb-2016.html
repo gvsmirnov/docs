@@ -111,14 +111,15 @@
                 Но мы хотим, чтобы производительность росла!
             </li>
             <li data-jmpress="fade">
-                И транзисторов-то ещё много!
+                И транзисторов-то всё больше!
             </li>
         </ul>
     </div>
 
     <div class="step step-slide spoiler" data-y="-900"  data-x="5200">
         <div class="jumbotron text-center">
-            <h1 class="margin-a-lot"><span class="text-success text-giant">Yay Multicore!</span></h1>
+            <h1><span class="text-success text-giant">GO<br/>Multicore!</span></h1>
+            <h2>Code Smart. Live Happy.</h2>
         </div>
     </div>
 
@@ -449,7 +450,7 @@ void actor2(IntResult2 r) {
 
     <!-- CACHES EXAMPLE -->
 
-    <div class="step step-slide" data-x="1300" data-y="1800">
+    <div class="step step-slide" data-x="2600" data-y="1800">
         <h1>
             Когерентность Кешей, Например
         </h1>
@@ -471,7 +472,7 @@ void actor2(IntResult2 r) {
         </ul>
     </div>
 
-    <div class="step nested-steps" data-y="1800" data-x="2600">
+    <div class="step nested-steps" data-x="3900" data-y="1800">
 
         <div class="visit-me">
             <div class="row">
@@ -624,7 +625,234 @@ finished &larr; true;
     </div>
     <!-- CACHES EXAMPLE END -->
 
+        <!-- TODO:
+            * Give examples of how stuff can get fucked up because of hardware
+            * Show how differently all the hardware does its optimizations
+            * Introduce the oh-so-cross-platform java
+            * Introduce basics of JMM
+            * Walk through the JVM to show how they link back to hardware
+        -->
+
     <!-- HIGH-LEVEL BARRIERS -->
+
+    <div class="step step-slide" data-y="2700">
+        <h1>Memory ordering in some architectures</h1>
+        <table class="table table-bordered table-wiki">
+            <tbody><tr>
+                <th>Type</th>
+                <th>Alpha</th>
+                <th>ARMv7</th>
+                <th>PA-RISC</th>
+                <th>POWER</th>
+                <th>SPARC RMO</th>
+                <th>SPARC PSO</th>
+                <th>SPARC TSO</th>
+                <th>x86</th>
+                <th>x86 oostore</th>
+                <th>AMD64</th>
+                <th>IA-64</th>
+                <th>zSeries</th>
+            </tr>
+            <tr>
+                <td><strong>Loads</strong> reordered after <strong>loads</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Loads</strong> reordered after <strong>stores</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Stores</strong> reordered after <strong>stores</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Stores</strong> reordered after <strong>loads</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+            </tr>
+            <tr>
+                <td><strong>Atomic</strong> reordered with <strong>loads</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Atomic</strong> reordered with <strong>stores</strong></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Dependent loads reordered</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Incoherent instruction cache pipeline</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+                <td></td>
+                <td class="danger text-center">Y</td>
+                <td class="danger text-center">Y</td>
+            </tr>
+            </tbody></table>
+        <h2>
+            (via <a href="https://en.wikipedia.org/wiki/Memory_ordering">
+                https://en.wikipedia.org/wiki/Memory_ordering
+            </a>)
+        </h2>
+
+        <div id="jetpack" data-jmpress="drive-up">
+            <img src="img/nothing-to-do-here.png" data-jmpress="fly-away"/>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="2700" data-x="1300">
+        <h1 class="text-center">Барьер Памяти</h1>
+
+        <div class="row">
+            <div class="col-md-5">
+<pre class="prettyprint lang-java">
+void foo() {
+    value = 10;<span class="nocode text-success" data-jmpress="appear">
+    magicUnicorn();</span>
+    finished = true;
+}
+</pre>
+            </div>
+
+            <div data-jmpress="disappear">
+                <div class="col-md-2">
+                    <h1 class="text-center text-giant text-danger">&rarr;</h1>
+                </div>
+
+                <div class="col-md-5">
+<pre class="prettyprint lang-java">
+void foo() {
+    finished = true;
+    value = 10;
+}
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="2700" data-x="2600">
+        <h1>For X, Y in [Store, Load]:</h1>
+
+        <div class="text-center well" data-jmpress="fade">
+            <p>
+                Все операции типа <code>X</code> <em>перед</em> барьером типа <code>XY</code>
+            </p>
+            <p data-jmpress="fade">
+                <b>завершатся до того, как</b>
+            </p>
+            <p data-jmpress="fade">
+                Начнётся любая операция типа <code>Y</code> <em>после</em> этого барьера
+            </p>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="2700" data-x="3900">
+        <h1>Так Делать Нельзя</h1>
+
+        <img src="img/membar-prohibitions.png" />
+
+        <div class="step spoiler visit-me">
+        <span class="text-danger text-really-giant glyphicon glyphicon-remove"
+              style="margin-left: 330px;"></span>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="2700" data-x="5200">
+        <h1>Зато Можно Так</h1>
+
+        <img src="img/membar-allowances.png" />
+
+        <div class="step spoiler visit-me">
+        <span class="text-success text-really-giant glyphicon glyphicon-ok"
+              style="margin-left: 330px;"></span>
+        </div>
+    </div>
 
     <div class="step step-slide" data-y="5400" data-x="1300">
         <h1>Модель Памяти &mdash; Нужна</h1>
@@ -635,134 +863,21 @@ finished &larr; true;
             <li data-jmpress="fade">
                 Нужно передать это знание среде исполнения
             </li>
-            <li class="list-unstyled" data-jmpress="fade">
-                <blockquote>
-                    <p>Модель памяти = trade-off между:</p>
-                    <ul>
-                        <li data-jmpress="fade">Долбанутостью программирования <em>на языке</em></li>
-                        <li data-jmpress="fade">Долбанутостью <em>быстрой и корректной реализации языка</em></li>
-                        <li data-jmpress="fade">Долбанутостью <em>хардвара</em></li>
-                    </ul>
-                    <p><footer data-jmpress="fade">Алексей Шипилёв</footer></p>
-                </blockquote>
-            </li>
+
         </ul>
     </div>
 
-    <div class="step step-slide" data-y="6300" data-x="1300">
-        <h1 class="text-center">Барьер Памяти</h1>
-
-        <div class="row">
-            <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-void foo() {
-    value = 10;
-    <span class="nocode text-success" data-jmpress="appear">magicUnicorn();</span>
-    finished = true;
-}
-</pre>
-            </div>
-
-            <div class="col-md-2" data-jmpress="fade">
-                <h1 class="text-center text-giant text-danger">&nrarr;</h1>
-            </div>
-
-            <div class="col-md-5" data-jmpress="fade">
-<pre class="prettyprint lang-java">
-void foo() {
-    finished = true;
-    <span class="nocode text-success">magicUnicorn();</span>
-    value = 10;
-}
-</pre>
-            </div>
-        </div>
-        <h2 class="text-center" data-jmpress="fade">
-            <em>(С точки зрения другого потока)</em>
-        </h2>
-    </div>
-
-    <div class="step step-slide" data-y="7200" data-x="1300">
-        <h1 class="text-center">Есть Два Типа Операций с Памятью</h1>
-        <div class="row" data-jmpress="fade">
-            <div class="col-md-offset-1 col-md-5 text-center">
-                <code class="text-bigger">Запись</code>
-            </div>
-            <div class="col-md-5 text-center">
-                <code class="text-bigger">Чтение</code>
-            </div>
-        </div>
-
-        <div class="row" data-jmpress="fade">
-            <div class="col-md-offset-1 col-md-5 text-center">
-                <code class="text-bigger">Store</code>
-            </div>
-            <div class="col-md-5 text-center">
-                <code class="text-bigger">Load</code>
-            </div>
-        </div>
-
-        <div class="row" data-jmpress="fade">
-            <div class="col-md-offset-1 col-md-5 text-center">
-                <code class="text-bigger">ST</code>
-            </div>
-            <div class="col-md-5 text-center">
-                <code class="text-bigger">LD</code>
-            </div>
-        </div>
-    </div>
-
-    <div class="step step-slide" data-y="7200" data-x="2600">
-        <h1>Не Всех Под Одну Гребёнку</h1>
-        <ul>
-            <li data-jmpress="fade">Запрещать переставлять всё со всем &mdash; медленно</li>
-            <li data-jmpress="fade">
-                Иногда допустимо переставить
-                <code>ST</code> и <code>LD</code>, но не <code>ST</code> и <code>ST</code>
-            </li>
-            <li data-jmpress="fade">Нужен более тонкий контроль</li>
-            <li data-jmpress="fade">Введём барьеры памяти типа <code>XY</code></li>
-            <li class="list-unstyled" data-jmpress="fade">(<code>X</code> и <code>Y</code> принимают значения <code>Store</code> и <code>Load</code>)</li>
-        </ul>
-    </div>
-
-    <div class="step step-slide" data-y="7200" data-x="3900">
-        <h1>For X, Y in [Store, Load]:</h1>
-
-        <div class="text-center well" data-jmpress="fade">
-            <p>
-                Все операции типа <code>X</code> перед барьером типа <code>XY</code>
-            </p>
-            <p data-jmpress="fade">
-                <b>завершатся до того, как</b>
-            </p>
-            <p data-jmpress="fade">
-                Начнётся любая операция типа <code>Y</code> после этого барьера
-            </p>
-        </div>
-    </div>
-
-    <div class="step step-slide" data-y="7200" data-x="5200">
-        <h1>Так Делать Нельзя</h1>
-
-        <img src="img/membar-prohibitions.png" />
-
-        <div class="step spoiler visit-me">
-            <span class="text-danger text-really-giant glyphicon glyphicon-remove"
-                  style="margin-left: 330px;"></span>
-        </div>
-    </div>
-
-    <div class="step step-slide" data-y="7200" data-x="6500">
-        <h1>Зато Можно Так</h1>
-
-        <img src="img/membar-allowances.png" />
-
-        <div class="step spoiler visit-me">
-            <span class="text-success text-really-giant glyphicon glyphicon-ok"
-                  style="margin-left: 330px;"></span>
-        </div>
-    </div>
+    <!--<li class="list-unstyled" data-jmpress="fade">-->
+        <!--<blockquote>-->
+            <!--<p>Модель памяти = trade-off между:</p>-->
+            <!--<ul>-->
+                <!--<li data-jmpress="fade">Долбанутостью программирования <em>на языке</em></li>-->
+                <!--<li data-jmpress="fade">Долбанутостью <em>быстрой и корректной реализации языка</em></li>-->
+                <!--<li data-jmpress="fade">Долбанутостью <em>хардвара</em></li>-->
+            <!--</ul>-->
+            <!--<p><footer data-jmpress="fade">Алексей Шипилёв</footer></p>-->
+        <!--</blockquote>-->
+    <!--</li>-->
 
     <div class="step step-slide" data-y="7200" data-x="7800">
         <h1>Семантика Acquire и Release</h1>
