@@ -353,8 +353,6 @@ void actor2(IntResult2 r) {
         </div>
     </div>
 
-    <!-- DIAGRAMS -->
-
 
     <div class="step nested-steps" id="leaks" data-y="900" data-x="1300">
         <h1 class="text-center">Куда Протекли Абстракции?</h1>
@@ -379,7 +377,7 @@ void actor2(IntResult2 r) {
             </div>
         </div>
 
-        <div class="step " id="duke" data-y="450" data-z="2">
+        <div class="step visit-me" id="duke" data-y="450" data-z="2">
             <div class="row">
                 <div class="col-md-12 text-center">
                     <!-- http://www.redehost.com.br/hospedagem-de-site/hospedagem-java -->
@@ -445,8 +443,6 @@ void actor2(IntResult2 r) {
             </ul>
         </div>
     </div>
-
-    <!-- DIAGRAMS END -->
 
     <!-- CACHES EXAMPLE -->
 
@@ -623,169 +619,158 @@ finished &larr; true;
         </div>
 
     </div>
-    <!-- CACHES EXAMPLE END -->
 
-        <!-- TODO:
-            * Give examples of how stuff can get fucked up because of hardware
-            * Show how differently all the hardware does its optimizations
-            * Introduce the oh-so-cross-platform java
-            * Introduce basics of JMM
-            * Walk through the JVM to show how they link back to hardware
-        -->
-
-    <!-- HIGH-LEVEL BARRIERS -->
-
-    <div class="step step-slide" data-y="5400">
-        <h1>Memory ordering in some architectures</h1>
-        <table class="table table-bordered table-wiki">
-            <tbody><tr>
-                <th>Type</th>
-                <th>Alpha</th>
-                <th>ARMv7</th>
-                <th>PA-RISC</th>
-                <th>POWER</th>
-                <th>SPARC RMO</th>
-                <th>SPARC PSO</th>
-                <th>SPARC TSO</th>
-                <th>x86</th>
-                <th>x86 oostore</th>
-                <th>AMD64</th>
-                <th>IA-64</th>
-                <th>zSeries</th>
-            </tr>
-            <tr>
-                <td><strong>Loads</strong> reordered after <strong>loads</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><strong>Loads</strong> reordered after <strong>stores</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><strong>Stores</strong> reordered after <strong>stores</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><strong>Stores</strong> reordered after <strong>loads</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-            </tr>
-            <tr>
-                <td><strong>Atomic</strong> reordered with <strong>loads</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><strong>Atomic</strong> reordered with <strong>stores</strong></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Dependent loads reordered</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Incoherent instruction cache pipeline</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-                <td></td>
-                <td class="danger text-center">Y</td>
-                <td class="danger text-center">Y</td>
-            </tr>
-            </tbody></table>
-        <h2>
-            (via <a href="https://en.wikipedia.org/wiki/Memory_ordering">
+    <div class="step step-slide" data-y="900" data-x="2600">
+            <h1>Memory ordering in some architectures</h1>
+            <table class="table table-bordered table-wiki">
+                <tbody><tr>
+                    <th>Type</th>
+                    <th>Alpha</th>
+                    <th>ARMv7</th>
+                    <th>PA-RISC</th>
+                    <th>POWER</th>
+                    <th>SPARC RMO</th>
+                    <th>SPARC PSO</th>
+                    <th>SPARC TSO</th>
+                    <th>x86</th>
+                    <th>x86 oostore</th>
+                    <th>AMD64</th>
+                    <th>IA-64</th>
+                    <th>zSeries</th>
+                </tr>
+                <tr>
+                    <td><strong>Loads</strong> reordered after <strong>loads</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Loads</strong> reordered after <strong>stores</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Stores</strong> reordered after <strong>stores</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Stores</strong> reordered after <strong>loads</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                </tr>
+                <tr>
+                    <td><strong>Atomic</strong> reordered with <strong>loads</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Atomic</strong> reordered with <strong>stores</strong></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Dependent loads reordered</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Incoherent instruction cache pipeline</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                    <td></td>
+                    <td class="danger text-center">Y</td>
+                    <td class="danger text-center">Y</td>
+                </tr>
+                </tbody></table>
+            <h2>
+                (via <a href="https://en.wikipedia.org/wiki/Memory_ordering">
                 https://en.wikipedia.org/wiki/Memory_ordering
             </a>)
-        </h2>
+            </h2>
 
-        <div id="jetpack" data-jmpress="drive-up">
-            <img src="img/nothing-to-do-here.png" data-jmpress="fly-away"/>
+            <div id="jetpack" data-jmpress="drive-up">
+                <img src="img/nothing-to-do-here.png" data-jmpress="fly-away"/>
+            </div>
         </div>
-    </div>
 
-    <div class="step step-slide" data-y="5400" data-x="1300">
+    <div class="step step-slide" data-y="900" data-x="3900">
         <h1 class="text-center">Барьер Памяти</h1>
 
         <div class="row">
@@ -816,7 +801,7 @@ void foo() {
         </div>
     </div>
 
-    <div class="step step-slide" data-y="5400" data-x="2600">
+    <div class="step step-slide" data-y="900" data-x="5200">
         <h1>For X, Y in [Store, Load]:</h1>
 
         <div class="text-center well" data-jmpress="fade">
@@ -832,25 +817,23 @@ void foo() {
         </div>
     </div>
 
-    <div class="step step-slide" data-y="5400" data-x="3900">
+    <div class="step step-slide" data-y="900" data-x="6500">
         <h1>Так Делать Нельзя</h1>
 
         <img src="img/membar-prohibitions.png" />
 
         <div class="step spoiler visit-me">
-        <span class="text-danger text-really-giant glyphicon glyphicon-remove"
-              style="margin-left: 330px;"></span>
+            <span class="text-danger text-really-giant glyphicon glyphicon-remove" style="margin-left: 330px;"></span>
         </div>
     </div>
 
-    <div class="step step-slide" data-y="5400" data-x="5200">
+    <div class="step step-slide" data-y="900" data-x="7800">
         <h1>Зато Можно Так</h1>
 
         <img src="img/membar-allowances.png" />
 
         <div class="step spoiler visit-me">
-        <span class="text-success text-really-giant glyphicon glyphicon-ok"
-              style="margin-left: 330px;"></span>
+            <span class="text-success text-really-giant glyphicon glyphicon-ok" style="margin-left: 330px;"></span>
         </div>
     </div>
 
@@ -963,45 +946,64 @@ void foo() {
         </div>
     </div>
 
-        <div class="step step-slide" data-y="6500" data-x="7800">
-            <div class="text-center">
-                <h1>
-                    <span class="well well-sm">
-                        <b class="text-success">volatile store</b>
-                        <i>hb</i>
-                        <b class="text-danger">volatile load</b></span>
-                </h1>
-            </div>
+    <div class="step step-slide" data-y="6500" data-x="7800">
+        <div class="text-center">
+            <h1>
+                <span class="well well-sm">
+                    <b class="text-success">volatile store</b>
+                    <i>hb</i>
+                    <b class="text-danger">volatile load</b></span>
+            </h1>
+        </div>
 
-            <div data-jmpress="fade">
-                <div class="row">
-                    <div class="col-md-12">
+        <div data-jmpress="fade">
+            <div class="row">
+                <div class="col-md-12">
 <pre class="prettyprint lang-java">
 private<span data-jmpress="appear"> <span class="dashed-border">volatile</span></span> boolean finished = false;
 private int value = 0;
 </pre>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
 <pre class="prettyprint lang-java">
 void executedOnCpu0() {
   value = 10
   finished = true; <span data-jmpress="appear">// release</span>
 }
 </pre>
-                    </div>
-                    <div class="col-md-6">
+                </div>
+                <div class="col-md-6">
 <pre class="prettyprint lang-java">
 void executedOnCpu1() {
   while(!finished); <span data-jmpress="appear">// acquire</span>
   assert value == 10;
 }
 </pre>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="step step-slide" data-y="6500" data-x="9100">
+        <div class="text-center">
+            <img class="graph" src="img/jls.png"/>
+        </div>
+    </div>
+
+    <div class="step step-slide" data-y="6500" data-x="10400">
+        <div class="text-center">
+            <img class="graph" src="img/wat.jpg"/>
+        </div>
+        <br/>
+        <blockquote>
+            <p>
+                Чувак, я ничего не понял из того, что ты сейчас сказал.<br/>
+                Но ты заговорил и достучался моего до сердца.
+            </p>
+        </blockquote>
+    </div>
 
     <!-- HIGH-LEVEL BARRIERS END -->
 
@@ -1081,8 +1083,6 @@ void executedOnCpu1() {
         </div>
     </div>
 
-
-
     <!-- LIVE DEMO STUFF -->
 
     <div class="step" data-y="1350" data-x="1300"></div>
@@ -1091,6 +1091,98 @@ void executedOnCpu1() {
         <div class="text-center">
             <img class="graph" src="img/mad-scientist-flipped.png"/>
             <h1><span class="well">LIVE DEMO TIME!</span></h1>
+        </div>
+    </div>
+
+    <div class="step visit-me spoiler nested-steps" data-y="1350" data-x="1300" data-z="-200" data-scale="0.2">
+
+        <div class="step visit-me" data-x="1090" data-y="300">
+            <div class="row">
+                <div class="col-md-4">
+<pre class="prettyprint lang-java">
+void executedOnCpu0
+   0: aload_0
+   1: bipush      10
+   3: <span class="dashed-border">putfield</span>   #2
+   6: aload_0
+   7: iconst_1
+   8: <span class="dashed-border">putfield</span>   #3
+  11: return
+</pre>
+                </div>
+                <div class="col-md-4" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void executedOnCpu1
+   0: aload_0
+   1: <span class="dashed-border">getfield</span>   #3
+   4: ifne        10
+   7: goto         0
+  16: aload_0
+  17: <span class="dashed-border">getfield</span>   #2
+   // ...
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="1385" data-y="300">
+            <div class="row">
+                <div class="col-md-offset-5 col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void executedOnCpu0:
+    StoreField(value)
+    StoreField(finished)
+</pre>
+<pre class="prettyprint lang-java" data-jmpress="fade">
+void executedOnCpu1:
+    LoadField(finished)
+    LoadField(value)
+</pre>
+                </div>
+            </div>
+        </div>
+        <div class="step visit-me" data-x="1885" data-y="300">
+            <div class="row">
+                <div class="col-md-offset-5 col-md-5" data-jmpress="fade">
+<pre class="prettyprint lang-java">
+void executedOnCpu0:
+    lir_move(value)
+    lir_membar_release
+    lir_move(finished)
+    lir_membar
+</pre>
+<pre class="prettyprint lang-java" data-jmpress="fade">
+void executedOnCpu1:
+    lir_move(finished)
+    lir_membar_acquire
+    lir_move(value)
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="2585" data-y="300">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-9" data-jmpress="fade">
+<pre class="prettyprint lang-asm">
+  # {method} 'executedOnCpu0' '()V'
+  ...
+  0x00007f6d1d07405c: movl   $0xa,0xc(%rsi)
+  0x00007f6d1d074063: movb   $0x1,0x10(%rsi)
+  <span class="dashed-border">0x00007f6d1d074067: lock addl $0x0,(%rsp)</span>
+</pre>
+<pre class="prettyprint lang-asm" data-jmpress="fade">
+  # {method} 'executedOnCpu1' '()V'
+  ...
+  0x00007f6d1d061126: movzbl 0x10(%rbx),%r11d
+  0x00007f6d1d06112b: test   %r11d,%r11d
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step visit-me" data-x="3420">
+            <h1 class="text-center"><span class="well">PROFIT!</span></h1>
         </div>
     </div>
 
@@ -1122,7 +1214,7 @@ void executedOnCpu1() {
         </ul>
     </div>
 
-    <div class="step" data-x="2600" data-y="3600" id="overview" data-scale="7"></div>
+    <div class="step" data-x="3000" data-y="1200" id="overview" data-scale="7"></div>
 
     </div>
 </body>
