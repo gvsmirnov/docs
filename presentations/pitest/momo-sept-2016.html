@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Mutation Analysis Or What Code Coverage Doesn't Tell Us</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/highcharts.js"></script>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Mobile Monday, 12.09.2016
+                </a>
+
+                <p class="navbar-text">
+                    Mutation Analysis: What Code Coverage Doesn't Tell Us
+                    <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+                </p>
+
+
+            </div>
+            <div class="navbar-right">
+                <a class="navbar-brand">
+                    Step <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="laser"></div>
+
+    <div id="impress">
+
+        <div class="step step-title" data-y="-800">
+            <div class="jumbotron text-center">
+                <h1>
+                    Mutation Analysis:<br/>
+                </h1>
+
+                <h2>
+                    What Code Coverage
+                    Doesn't Tell Us
+                </h2>
+
+                <footer>
+                    <h2><span class="text-info">@gvsmirnov @JavaPlumbr</span></h2>
+                    <h2>Gleb Smirnov</h2>
+                    <h3>gleb@plumbr.eu</h3>
+                </footer>
+
+            </div>
+        </div>
+
+        <!-- CODE COVERAGE SUCKS -->
+
+        <div class="step step-slide">
+            <h1>Sometimes, The Tests Suck</h1>
+
+<pre class="prettyprint lang-java" data-jmpress="fade">
+public class SampleSmallClassTest {
+
+    @Test
+    public void testStuff() {
+        // The boss says we should write tests.
+        // Doesn't seem that hard...
+
+        assertTrue(true);
+    }
+
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-x="1300">
+            <h1>So We Use Code Coverage</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testStuff jacocoTestReport
+</pre>
+            <div class="well well-lg" data-jmpress="fade">
+
+            <table class="table table-big-text">
+                <thead>
+                <tr>
+                    <td>Element</td>
+                    <td>Missed Instructions</td>
+                    <td>Coverage</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>doSomeMath(int, int)</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+                        </div>
+                    </td>
+                    <td>0%</td>
+                </tr>
+                </tbody>
+            </table>
+
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-x="1300">
+            <h1>&nbsp;</h1>
+            <div class="row well">
+                <div class="col-md-4">
+                    <img class="img-responsive img-rounded" src="img/PHP_CEO.JPG"/>
+                </div>
+                <div class="col-md-8">
+                    <h1><strong>@PHP_CEO</strong></h1>
+                    <h2>
+                        <strong>
+                            YOU GET THAT CODE COVERAGE TO 100%...<br/>
+                            OR YOU'RE FIRED !! !!!!
+                        </strong>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-x="2600">
+            <h1>It Makes Us Write Better Tests</h1>
+
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Test
+public void testStuffWithCoverage() {
+    // Need to get that coverage thing high...
+
+    for(int a = -5; a <= 5; a ++) {
+        for (int b = -5; b <= 5; b++) {
+            SampleSmallClass.doSomeMath(a, b);
+        }
+    }
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-x="3900">
+            <h1>Which Give Better Metrics</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testStuffWithCoverage jacocoTestReport
+</pre>
+
+            <div class="well well-lg" data-jmpress="fade">
+
+                <table class="table table-big-text">
+                    <thead>
+                    <tr>
+                        <td>Element</td>
+                        <td>Missed Instructions</td>
+                        <td>Coverage</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>doSomeMath(int, int)</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>100%</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="step step-slide spoiler" data-x="3900">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-giant">
+                    But Still Suck
+                </span></h1>
+            </div>
+        </div>
+
+        <!-- CODE COVERAGE SUCKS END -->
+
+        <!-- MUTATION ANALYSIS IN A NUTSHELL -->
+
+        <div class="step step-slide" data-y="800">
+            <h1>We Can Do Better Than That</h1>
+            <ol>
+                <li data-jmpress="fade">Run the tests</li>
+                <li data-jmpress="fade">Mess with the code</li>
+                <li data-jmpress="fade">Run the tests again</li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    If tests start failing, then the change is
+                    <span class="covered">covered</span>
+                </li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    If no test start failing, the change is
+                    <span class="not-covered">not covered</span>
+                </li>
+            </ol>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="1300">
+            <!-- TODO: represent as a timeline -->
+            <h1>The Idea Is Not New At All</h1>
+            <ul class="list-unstyled">
+                <li data-jmpress="fade">
+                    1971: Richard Lipton suggests <strong>Mutation Analysis</strong>
+                </li>
+                <li data-jmpress="fade">
+                    1979: Timothy Budd implements the first FORTRAN framework
+                </li>
+                <li data-jmpress="fade">
+                    &nbsp;&CenterDot;&CenterDot;&CenterDot;
+                </li>
+                <li data-jmpress="fade">
+                    2000: Jester &dash; the JUnit test tester
+                </li>
+                <li data-jmpress="fade">
+                    &nbsp;&CenterDot;&CenterDot;&CenterDot;
+                </li>
+                <li data-jmpress="fade">
+                    &nbsp;&CenterDot;&CenterDot;&CenterDot;
+                </li>
+            </ul>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="800" data-x="1300">
+            <div class="text-center jumbotron text-v-center">
+                <img class="graph" src="img/tumbleweed.gif"/>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="2600">
+            <h1>We Need Automated Tools</h1>
+            <ul>
+                <li data-jmpress="fade">Shouldn't take forever to run</li>
+                <li data-jmpress="fade">Should be easy to integrate with existing code</li>
+                <li data-jmpress="fade">Should support latest versions of stuff</li>
+                <li data-jmpress="fade">Shouldn't be abandoned</li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="3900">
+            <h1>A Fancy Table</h1>
+            <table class="table table-big-text text-center">
+                <thead>
+                    <tr>
+                        <th>Tool</th>
+                        <th data-jmpress="fade">Java</th>
+                        <th data-jmpress="fade">Ant</th>
+                        <th data-jmpress="fade">Maven</th>
+                        <th data-jmpress="fade">Gradle</th>
+                        <th data-jmpress="fade">CI</th>
+                        <th data-jmpress="fade">TestNG</th>
+                        <th data-jmpress="fade" id="mocks">Mocks*</th>
+                        <th data-jmpress="fade">Last Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr data-jmpress="fade">
+                        <td style="text-align: left">Simple Jester</td> <!-- Tool -->
+                        <td class="danger">5-6</td> <!-- Java -->
+                        <td class="danger">N</td> <!-- Ant -->
+                        <td class="danger">N</td> <!-- Maven -->
+                        <td class="danger">N</td> <!-- Gradle -->
+                        <td class="danger">N</td> <!-- CI -->
+                        <td class="danger">N</td> <!-- TestNG -->
+                        <td>?</td> <!-- *Mock* -->
+                        <td class="danger">2009</td> <!-- Last Update -->
+                    </tr>
+
+                    <tr data-jmpress="fade">
+                        <td style="text-align: left">javaLanche</td> <!-- Tool -->
+                        <td class="danger">5-6</td> <!-- Java -->
+                        <td class="danger">N</td> <!-- Ant -->
+                        <td class="danger">N</td> <!-- Maven -->
+                        <td class="danger">N</td> <!-- Gradle -->
+                        <td class="danger">N</td> <!-- CI -->
+                        <td class="danger">N</td> <!-- TestNG -->
+                        <td>?</td> <!-- *Mock* -->
+                        <td class="danger">2011</td> <!-- Last Update -->
+                    </tr>
+
+                    <tr data-jmpress="fade">
+                        <td style="text-align: left">Jumble</td> <!-- Tool -->
+                        <td class="danger">4-6</td> <!-- Java -->
+                        <td class="success">Y</td> <!-- Ant -->
+                        <td class="danger">N</td> <!-- Maven -->
+                        <td class="danger">N</td> <!-- Gradle -->
+                        <td class="danger">N</td> <!-- CI -->
+                        <td class="success">Y</td> <!-- TestNG -->
+                        <td class="info">3/6</td> <!-- *Mock* -->
+                        <td class="warning">2013</td> <!-- Last Update -->
+                    </tr>
+
+                    <tr data-jmpress="fade">
+                        <td style="text-align: left">Pitest</td> <!-- Tool -->
+                        <td class="success">5-8</td> <!-- Java -->
+                        <td class="success">Y</td> <!-- Ant -->
+                        <td class="success">Y</td> <!-- Maven -->
+                        <td class="success">Y</td> <!-- Gradle -->
+                        <td class="success">Y</td> <!-- CI -->
+                        <td class="success">Y</td> <!-- TestNG -->
+                        <td class="success">6/6</td> <!-- *Mock* -->
+                        <td class="success">Yesterday</td> <!-- Last Update -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <footer data-jmpress="fade after 1 #mocks">
+                <p class="text-bigger text-muted">
+                    <br/>
+                    * Powermock, JMock, JMock2, Mockito, JMockit, EasyMock
+                </p>
+            </footer>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="800" data-x="3900">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-giant text-success">
+                    Yay Pitest!
+                </span></h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="5200">
+            <h1>Let's Check It Out!</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testStuffWithCoverage pitest
+</pre>
+            <div class="well well-lg" data-jmpress="fade">
+
+                <table class="table table-big-text">
+                    <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Line Coverage</td>
+                        <td>Mutation Coverage</td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td>100%</td>
+                        <td>0%</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td>SampleSmallClass.java</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="6500">
+            <h1>Some Very Advanced Business Logic</h1>
+<pre class="prettyprint lang-java">
+public static int doSomeMath(int a, int b) {
+    long result = b;
+
+    result += a;
+    result -= b;
+    result -= a;
+
+    return (int) result;
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="7800">
+            <h1>Pit Has Messed With Your Code (1)</h1>
+<pre class="prettyprint lang-java">
+public static int doSomeMath(int a, int b) {
+    long result = b;
+
+    result <span class="attention-here">-=</span> a;
+    result -= b;
+    result -= a;
+
+    return (int) result;
+}
+</pre>
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced long addition with subtraction → SURVIVED
+                </p>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="9100">
+            <h1>Pit Has Messed With Your Code (2)</h1>
+<pre class="prettyprint lang-java">
+public static int doSomeMath(int a, int b) {
+    long result = b;
+
+    result += a;
+    result -= b;
+    result <span class="attention-here">+=</span> a;
+
+    return (int) result;
+}
+</pre>
+
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced long subtraction with addition → SURVIVED
+                </p>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="10400">
+            <h1>Pit Has Messed With Your Code (3)</h1>
+<pre class="prettyprint lang-java">
+public static int doSomeMath(int a, int b) {
+    long result = b;
+
+    result += a;
+    result -= b;
+    result -= a;
+
+    return <span class="attention-here">((int) result == 0 ? 1 : 0)</span>;
+}
+</pre>
+
+            <div data-jmpress="fade">
+                <p class="not-covered">
+                    Replaced return value with (x == 0 ? 1 : 0) → SURVIVED
+                </p>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="11700">
+            <h1>So We Need To Assert Something</h1>
+
+<pre class="prettyprint lang-java" data-jmpress="fade">
+@Test
+public void testProperly() {
+    final int expected = 0;
+
+    for(int a = -5; a <= 5; a ++) {
+        for(int b = -5; b <= 5; b ++) {
+            <span class="attention-here">assertEquals</span>(expected, doSomeMath(a, b));
+        }
+    }
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="800" data-x="13000">
+            <h1>The Test Seems Fine Now</h1>
+
+<pre class="prettyprint console lang-bash" data-jmpress="fade">
+$ gradle test --tests *testProperly pitest
+</pre>
+            <div class="well well-lg" data-jmpress="fade">
+
+                <table class="table table-big-text">
+                    <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Line Coverage</td>
+                        <td>Mutation Coverage</td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td>100%</td>
+                        <td>100%</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td>SampleSmallClass.java</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!-- MUTATION ANALYSIS IN A NUTSHELL ENDS -->
+
+        <!-- PITEST DETAILS -->
+
+        <div class="step step-slide" data-y="1600">
+            <h1>The Ultimate Guide To Mutation Analysis</h1>
+            <ol>
+                <li data-jmpress="fade">Pick classes to mutate</li>
+                <li data-jmpress="fade">Mutate the chosen classes</li>
+                <li data-jmpress="fade">Run the tests against the mutants</li>
+            </ol>
+        </div>
+
+        <div class="step step-slide" data-y="1600" data-x="1300">
+            <h1>Picking Mutation Targets</h1>
+            <ol>
+                <li data-jmpress="fade">Compile the sources to <strong>bytecode</strong></li>
+                <li data-jmpress="fade">Run selected tests</li>
+                <li data-jmpress="fade">
+                    Remember which instructions are <strong>executed</strong>
+                    by which tests
+                </li>
+            </ol>
+        </div>
+
+        <div class="step step-slide" data-y="1600" data-x="2600">
+            <h1>Building Up Your Team Of Mutants</h1>
+            <div class="row">
+                <div class="col-md-3">
+                    <img data-jmpress="fade" class="img-responsive" src="img/mutants.jpg"/>
+                </div>
+                <div class="col-md-9">
+                    <p data-jmpress="fade">
+                        What we want to have:
+                    </p>
+                    <ul>
+                        <li data-jmpress="fade">
+                            <strong>Stability</strong>:
+                            a re-run produces identical results
+                        </li>
+                        <li data-jmpress="fade">
+                            <strong>Recall</strong>:
+                            all the possible errors are made
+                        </li>
+                        <li data-jmpress="fade">
+                            <strong>Precision</strong>:
+                            there are no false positives
+                        </li>
+                        <li data-jmpress="fade" class="list-unstyled text-muted">
+                            (aka <strong>Equivalent Mutations</strong>:
+                            mutations which result in no observable change in behavior)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-y="1600" data-x="3900"></div>
+
+        <div class="step no-borders" data-scale="0.5" data-y="1425" data-x="3600">
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="-300">
+                <h1>
+                    NEGATE_CONDITIONALS
+                    <span class="small" data-jmpress="fade"><span class="text-success">ON by default</span></span>
+                </h1>
+                <div class="row">
+                    <div id="c_n_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #c_n_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #c_n_before">
+                        <pre class="prettyprint lang-java">
+if(isAllowed(action, user)) {
+    action.execute();
+}</pre>
+                    </div>
+                    <div id="c_n_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+if(<span class="attention-here">!</span>isAllowed(action, user)) {
+    action.execute();
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="300">
+                <h1>
+                    CONDITIONALS_BOUNDARY
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+
+                <div class="row">
+                    <div id="c_b_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #c_b_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #c_b_before">
+                        <pre class="prettyprint lang-java">
+if(remainingHp &lt;= 0) {
+    kill(player);
+}</pre>
+                    </div>
+                    <div id="c_b_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+if(remainingHp <span class="attention-here">&lt;</span> 0) {
+    kill(player);
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="-300">
+                <h1>
+                    REMOVE_CONDITIONALS
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="c_r_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #c_r_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #c_r_before">
+                        <pre class="prettyprint lang-java">
+if(cacheEnabled()) {
+    cache.store(result);
+}</pre>
+                    </div>
+                    <div id="c_r_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+&nbsp;
+<span class="attention-here">cache.store(result);</span>
+&nbsp;</pre>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+if(isValid(authData)) {
+    login(authData);
+} else {
+    throw new GtfoException();
+}</pre>
+                    </div>
+                    <div class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+&nbsp;
+&nbsp;
+&nbsp;
+<span class="attention-here">throw new GtfoException();</span>
+&nbsp;</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step spoiler visit-me">
+                <div class="text-center text-v-center well">
+                    <h1 class="text-giant">Conditionals</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step no-borders" data-scale="0.5" data-y="1425" data-x="4200">
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="-300">
+                <h1>
+                    MATH
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+                <div class="row">
+                    <div id="m_m_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #m_m_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #m_m_before">
+                        <pre class="prettyprint lang-java">
+int sum = a + b;
+</pre>
+                    </div>
+                    <div id="m_m_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+int sum = a <span class="attention-here">-</span> b;</pre>
+                    </div>
+                </div>
+
+                <p data-jmpress="fade" class="well">
+                    NB: Also affects field increments and decrements
+                </p>
+
+                <div class="row">
+                    <div class="col-md-5" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+private int total;
+void add(double sample) {
+    total ++;
+}</pre>
+                    </div>
+
+                    <div class="col-md-2 text-center" data-jmpress="fade">
+                        <p class="text-giant">&rarr;</p>
+                    </div>
+
+                    <div class="col-md-5" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+0: aload_0
+1: dup
+2: getfield
+5: iconst_1
+6: iadd <span data-jmpress="fade"># &larr; addition</span>
+7: putfield</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="300">
+                <h1>
+                    INCREMENTS
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+
+                <div class="row">
+                    <div id="m_i_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #m_i_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #m_i_before">
+                        <pre class="prettyprint lang-java">
+int total = 0;
+for(...) {
+    total ++;
+}</pre>
+                    </div>
+                    <div id="m_i_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+int total = 0;
+for(...) {
+    total <span class="attention-here">--</span>;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="-300">
+                <h1>
+                    INVERT_NEGS
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+
+                <div class="row">
+                    <div id="m_n_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #m_n_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #m_n_before">
+                        <pre class="prettyprint lang-java">
+if(profit &lt; 0) {
+    loss = -profit;
+}</pre>
+                    </div>
+                    <div id="m_n_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+if(profit &lt; 0) {
+    loss = <span class="attention-here">&nbsp;</span>profit;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="300">
+                <h1>
+                    REMOVE_INCREMENTS
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="m_r_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #m_r_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #m_r_before">
+                        <pre class="prettyprint lang-java">
+int total = 0;
+for(...) {
+    total ++;
+}</pre>
+                    </div>
+                    <div id="m_r_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+int total = 0;
+for(...) {
+    <span class="attention-here">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step spoiler visit-me">
+                <div class="text-center text-v-center well">
+                    <h1 class="text-giant">Math</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step no-borders" data-scale="0.5" data-y="1775" data-x="3600">
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="-300">
+                <h1>
+                    VOID_METHOD_CALLS
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+                <div class="row">
+                    <div id="i_v_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #i_v_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #i_v_before">
+                        <pre class="prettyprint lang-java">
+for(Listener l : listeners) {
+    l.onStuffHappened(stuff);
+}</pre>
+                    </div>
+                    <div id="i_v_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+for(Listener l : listeners) {
+    <span class="attention-here">                        </span>
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="300">
+                <h1>
+                    NON_VOID_METHOD_CALLS
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="i_n_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #i_n_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #i_n_before">
+                        <pre class="prettyprint lang-java">
+double len = hypot(a, b);</pre>
+                    </div>
+                    <div id="i_n_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+double len = <span class="attention-here">0.0</span>;
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="-300">
+                <h1>
+                    CONSTRUCTOR_CALLS
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="i_c_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #i_c_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #i_c_before">
+                        <pre class="prettyprint lang-java">
+Product p = new Product(...);
+//...
+double result = calculate(p); </pre>
+                    </div>
+                    <div id="i_c_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+Product p = <span class="attention-here">null</span>;
+//...
+double result = calculate(p);</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="300">
+                <h1>
+                    RETURN_VALS
+                    <span class="small"><span class="text-success">ON by default</span></span>
+                </h1>
+
+                <div class="row">
+                    <div id="i_r_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #i_r_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #i_r_before">
+                        <pre class="prettyprint lang-java">
+User findOwner(...) {
+  //...
+  return possibleOwner;
+}</pre>
+                    </div>
+                    <div id="i_r_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+//...
+<p class="attention-here">if(possibleOwner == null)
+  throw new RuntimeException();
+else
+  return null;</p></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step spoiler visit-me">
+                <div class="text-center text-v-center well">
+                    <h1 class="text-giant">Calls</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step no-borders" data-scale="0.5" data-y="1775" data-x="4200">
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="-300">
+                <h1>
+                    INLINE_CONSTS
+                    <span class="small">OFF by default</span>
+                </h1>
+                <div class="row">
+                    <div id="mi_i_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #mi_i_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #mi_i_before">
+                        <pre class="prettyprint lang-java">
+void consume(Object obj) {
+    int tlr = (this.tlr =
+      (this.tlr * 1664525 +
+        1013904223));
+    //...
+}</pre>
+                    </div>
+                    <div id="mi_i_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+void consume(Object obj) {
+    int tlr = (this.tlr =
+      (this.tlr * 1664525 +
+        101390422<span class="attention-here">4</span>));
+    //...
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="-175" data-x="300">
+                <h1>
+                    EXPERIMENTAL_MEMBER_VARIABLE <span class="small">OFF</span>
+                </h1>
+
+                <div class="row">
+                    <div id="mi_m_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #mi_m_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #mi_m_before">
+                        <pre class="prettyprint lang-java">
+void stop() {
+    this.shouldStop = true;
+}</pre>
+                    </div>
+                    <div id="mi_m_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+void stop() {
+    <span class="attention-here">                       </span>
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="-300">
+                <h1>
+                    EXPERIMENTAL_SWITCH
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="mi_s_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #mi_s_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #mi_s_before">
+                        <pre class="prettyprint lang-java">
+switch(condition) {
+    case 1: doFirst(); break;
+    case 2: doSecond(); break;
+    default: doDefault(); break;
+}</pre>
+                    </div>
+                    <div id="mi_s_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+switch(condition) {
+    case 1: <span class="attention-here">doDefault();</span> break;
+    case 2: <span class="attention-here">doDefault();</span> break;
+    default: <span class="attention-here">doFirst();</span> break;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step step-slide" data-scale="0.5" data-y="175" data-x="300">
+                <h1>
+                    REMOVE_SWITCH
+                    <span class="small">OFF by default</span>
+                </h1>
+
+                <div class="row">
+                    <div id="mi_r_before" class="col-md-6 text-right" data-jmpress="fade">
+                        <h2>Before</h2>
+                    </div>
+                    <div class="col-md-6 text-left" data-jmpress="fade after 1 #mi_r_after">
+                        <h2>After</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" data-jmpress="fade after 1 #mi_r_before">
+                        <pre class="prettyprint lang-java">
+switch(condition) {
+    case 1: doFirst(); break;
+    case 2: doSecond(); break;
+    default: doDefault(); break;
+}</pre>
+                    </div>
+                    <div id="mi_r_after" class="col-md-6" data-jmpress="fade">
+                        <pre class="prettyprint lang-java">
+<span class="attention-here">doDefault();</span></pre>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="step spoiler visit-me">
+                <div class="text-center text-v-center well">
+                    <h1 class="text-giant">Misc</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-y="1600" data-x="3900"></div>
+
+        <div class="step step-slide" data-y="1600" data-x="5200">
+            <h1>Running The Analysis</h1>
+            <ol>
+                <li data-jmpress="fade">Pick one mutant at a time</li>
+                <li data-jmpress="fade">Inject it via Instrumentation API</li>
+                <li data-jmpress="fade">Run the relevant tests until one fails</li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    Watch out for:
+                    <ul>
+                        <li data-jmpress="fade">Infinite loops</li>
+                        <li data-jmpress="fade">OOM and other failures</li>
+                        <li data-jmpress="fade">RuntimeExceptions</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- PITEST DETAILS END -->
+
+        <!-- WHY USE PITEST -->
+
+        <div class="step step-slide text-center" data-y="2400">
+            <div class="jumbotron">
+                <h1 class="margin-a-lot text-giant">The Rules Of TDD</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide text-center spoiler" data-y="2400">
+            <div class="jumbotron">
+                <img class="graph" src="img/the-three-rules.jpg"/>
+            </div>
+        </div>
+
+        <div class="step step-slide text-center" data-y="2400" data-x="1300">
+            <div class="v-center">
+                <h2>&nbsp;</h2>
+                <h1>Do Not Write Any Production Code</h1>
+                <h1 data-jmpress="fade">Unless</h1>
+                <h1 data-jmpress="fade">It Is To Make A Failing Test Pass</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide text-center" data-y="2400" data-x="2600">
+            <div class="v-center">
+                <h2>&nbsp;</h2>
+                <h1>Do Not Write Any <span data-jmpress="appear-inline">More</span> Unit Tests</h1>
+                <h1 data-jmpress="fade">Than Is Sufficient To Fail</h1>
+                <h1 data-jmpress="fade" class="text-muted">
+                    (Compilation Failures Are Failures, Too)
+                </h1>
+            </div>
+        </div>
+
+        <div class="step step-slide text-center" data-y="2400" data-x="3900">
+            <div class="v-center">
+                <h2>&nbsp;</h2>
+                <h1>Do Not Write Any More Production Code</h1>
+                <h1 data-jmpress="fade">Than Is Sufficient To Pass</h1>
+                <h1 data-jmpress="fade">
+                    The One Failing Unit Test
+                </h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200">
+            <h1>Pitest Grants You Confidence</h1>
+            <p data-jmpress="fade">
+                A success story from TheLadders.com
+                <ul>
+                    <li data-jmpress="fade">
+                        A project from scratch, Pitest used from the start
+                    </li>
+                    <li data-jmpress="fade">
+                        Code and Mutation Coverage of about <span class="text-success">95%</span>
+                    </li>
+                    <li data-jmpress="fade">
+                        Needed to refactor the core to use event sourcing
+                    </li>
+                    <li data-jmpress="fade">
+                        So they just did it
+                    </li>
+                    <li data-jmpress="fade">
+                        And had no issues!<sup>*</sup>
+                    </li>
+                </ul>
+            </p>
+        </div>
+
+        <!-- WHY USE PITEST ENDS -->
+
+        <!-- PITEST PERFORMANCE -->
+
+        <div class="step step-slide" data-y="3200" data-x="1300">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot text-giant">Okay, but... uh...</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="1300">
+            <div class="jumbotron text-center">
+                <img src="img/slowpoke.png" class="graph">
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="3200" data-x="2600">
+            <h1>Let's Test It On Commons Math</h1>
+            <ul>
+                <li data-jmpress="fade">Loads of complex mathematical algorithms</li>
+                <li data-jmpress="fade"><strong>177K</strong> lines of source code</li>
+                <li data-jmpress="fade">
+                    About <strong>5K</strong> tests in <strong>109K</strong> lines of code
+                </li>
+            </ul>
+            <pre class="prettyprint console lang-bash" data-jmpress="fade">
+<span>$ svn checkout http://svn.apache.org/repos/asf/comm [...]</span>
+<span data-jmpress="fade">$ cd commons-math3</span>
+<span data-jmpress="fade">$ patch commons-math3/pom.xml commons-math3-pom-patch.diff</span></pre>
+        </div>
+
+        <div class="step demotivator step-slide spoiler" data-y="3200" data-x="2600">
+            <h1 class="top">Benchmarking</h1>
+            <img src="img/shipilev-large.jpg"/>
+            <h1 class="bottom">You're Doing It Wrong</h1>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="3200" data-x="3900">
+            <h1>Baseline: Just Run Teh Tests</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test
+
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">
+Tests run: 4901, Failures: 0, Errors: 0, Skipped: 43
+
+[INFO] ---------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ---------------------------------------------
+[INFO] Total time: <span class="nb">05:17 min</span></span>
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="4000" data-x="3900">
+            <h1>Go pitest!</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test pitest:mutationCoverage
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================</span>
+<span data-jmpress="fade">> scan classpath : < 1 second</span>
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">27 minutes and 31 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : 7 seconds</span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">3 hours, 47 minutes and 7 seconds</span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">4 hours, 14 minutes and 46 seconds</span></span>
+</pre>
+            <div id="slowpoke" data-jmpress="drive-left">
+                <img src="img/slowpoke.png" data-jmpress="disappear"/>
+            </div>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="4000" data-x="3900">
+            <div class="jumbotron text-center text-giant text-v-center">
+                <h1>Mutation Coverage: 79%</h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="4800" data-x="3900">
+            <h1>Throw In More Threads, Maybe?</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn clean test pitest:mutationCoverage -Dpit.threads=2
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================</span>
+<span data-jmpress="fade">> scan classpath : < 1 second</span>
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">27 minutes and 28 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : 3 seconds</span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">2 hours, 2 minutes and 1 seconds</span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">2 hours, 29 minutes and 33 seconds</span></span>
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="5600" data-x="3900">
+            <h1>Pitest Performance Over Time</h1>
+            <div id="pitest-perf"></div>
+        </div>
+
+        <div class="step step-slide" data-y="5600" data-x="5200">
+            <div class="jumbotron text-center text-giant text-v-center">
+                <h1>Still, An Hour?</h1>
+            </div>
+            <div id="slowpoke-2" data-jmpress="drive-up">
+                <img src="img/slowpoke.png"/>
+            </div>
+        </div>
+
+        <!-- PITEST PERFORMANCE ENDS -->
+
+        <!-- INCREMENTAL ANALYSIS -->
+
+        <div class="step step-slide" data-y="6400">
+            <h1>Incremental analysis</h1>
+            <p data-jmpress="fade">
+                Store the following info between runs:
+            </p>
+            <ul>
+                <li data-jmpress="fade">The hashes of all tested classes</li>
+                <li data-jmpress="fade">The hashes of all the tests</li>
+                <li data-jmpress="fade">Analysis results</li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="1300">
+            <h1>Incremental analysis: Heuristics</h1>
+            <p data-jmpress="fade">
+                Do not check a mutant, if in the previous run:
+            </p>
+            <ul>
+                <li data-jmpress="fade">
+                    It <span class="text-info">timed out</span>, and the class has not changed
+                </li>
+                <li data-jmpress="fade">It was <span class="text-success">killed</span>, and neither the class nor the test have changed</li>
+                <li data-jmpress="fade">It <span class="text-danger">survived</span>, and there are no new/changed tests for it</li>
+            </ul>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="2600">
+            <h1>Incremental Analysis: Overhead</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================
+> scan classpath : < 1 second
+> coverage and dependency analysis : <span class="nb">7 minutes and 15 seconds</span>
+> build mutation tests : 2 seconds
+> run mutation analysis : <span class="nb">55 minutes and 41 seconds</span>
+======================================================
+> Total  : <span class="nb">1 hours, 2 minutes and 59 seconds</span></span>
+</pre>
+            </pre>
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="3900">
+            <h1><code>o.a.c.math3.linear.MatrixUtils</code></h1>
+
+            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="disappear">
+public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
+    createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
+<span class="covered">        final T zero = field.getZero();
+        final T one  = field.getOne();
+        final T[][] d = MathArrays.buildArray(field, dimension, dimension);
+        for (int row = 0; row < dimension; row++) {
+            final T[] dRow = d[row];</span>
+<span class="not-covered">            Arrays.fill(dRow, zero);</span>
+<span class="covered">            dRow[row] = one;
+        }
+        return new Array2DRowFieldMatrix&lt;T&gt;(field, d, false);</span>
+}</pre>
+
+            <pre class="prettyprint commons smaller lang-java linenums:193" data-jmpress="appear after 1ms">
+public static &lt;T extends FieldElement&lt;T&gt;&gt; FieldMatrix&lt;T&gt;
+    createFieldIdentityMatrix(final Field&lt;T&gt; field, final int dimension) {
+<span class="covered">        final T zero = field.getZero();
+        final T one  = field.getOne();
+        final T[][] d = MathArrays.buildArray(field, dimension, dimension);
+        for (int row = 0; row < dimension; row++) {
+            final T[] dRow = d[row];
+            dRow[row] = one;
+        }
+        return new Array2DRowFieldMatrix&lt;T&gt;(field, d, false);</span>
+}</pre>
+
+            <p class="not-covered">
+                200: removed call to java/util/Arrays::fill : SURVIVED
+            </p>
+
+        </div>
+
+        <div class="step step-slide" data-y="6400" data-x="5200">
+            <h1>Incremental Analysis: Profit</h1>
+            <pre class="prettyprint console lang-bash">
+$ mvn ... pitest:mutationCoverage -P pit-history -Dpit.threads=4
+<span data-jmpress="fade">[...]</span>
+<span data-jmpress="fade after 300ms">======================================================
+- Timings
+======================================================
+> scan classpath : < 1 second
+<span data-jmpress="fade">> coverage and dependency analysis : <span class="nb">7 minutes and 3 seconds</span></span>
+<span data-jmpress="fade">> build mutation tests : <span class="nb">1 minutes and 1 seconds</span></span>
+<span data-jmpress="fade">> run mutation analysis : <span class="nb">56 seconds</span></span>
+<span data-jmpress="fade">======================================================
+> Total  : <span class="nb">9 minutes and 0 seconds</span></span></span>
+</pre>
+            </pre>
+        </div>
+
+        <div class="step step-slide text-center spoiler" data-y="6400" data-x="5200">
+            <img class="graph" src="img/cool-jenkins.png"/>
+        </div>
+
+        <!-- INCREMENTAL ANALYSIS ENDS -->
+
+        <!-- PITFALLS -->
+
+        <div class="step step-slide text-center" data-y="7200">
+            <h1>Get Pitest NOW!</h1>
+            <img class="graph" src="img/epic-meme.jpg"/>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="7200" data-x="1300">
+            <div class="jumbotron text-center">
+                <h1 class="margin-a-lot"><span class="text-giant">
+                    Nothing Is Perfect
+                </span></h1>
+            </div>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="2600">
+            <h1>Pitest vs. Defensive Programming</h1>
+            <pre class="prettyprint smaller lang-java linenums:5">
+public int evaluate(final int distance) {
+    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");
+    }
+
+    int result = 0;
+    if(distance > 0) {
+        result += calculateDistanceAdjustment(distance);
+    }
+
+    return result;
+}</pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="7200" data-x="2600">
+            <h1>Pitest vs. Defensive Programming</h1>
+            <pre class="prettyprint smaller lang-java linenums:5">
+public int evaluate(final int distance) {
+<span class="covered">    if(distance == 0) {
+        throw new IllegalArgumentException("Distance should be non-zero");
+    }
+
+    int result = 0;</span>
+<span class="not-covered">    if(distance > 0) {</span>
+<span class="covered">        result += calculateDistanceAdjustment(distance);
+    }
+
+    return result;</span>
+}</pre>
+
+            <p class="not-covered">
+                11: changed conditional boundary → SURVIVED
+            </p>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="3900">
+            <h1>Pitest vs. Dangerous Code</h1>
+            <pre class="prettyprint smaller lang-java">
+public class Minitrue {
+    public static void rectify(String path) {
+        ensurePathIsSecure(path);
+        rmRf(path);
+    }
+
+    private static final void rmRf(String path) {
+        String command = "$ rm -rf " + path;
+        System.out.println("Executing: " + command);
+        exec(command);
+    }
+
+    // ...
+}</pre>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="5200">
+            <h1>Pitest vs. Dangerous Code</h1>
+            <pre class="prettyprint smaller lang-java">
+@Test
+public void testRectifySecurity() {
+    boolean rejected = false;
+
+    try {
+        Minitrue.rectify("/");
+    } catch(SecurityException e) {
+        rejected = true;
+    }
+
+    Assert.assertTrue(rejected);
+    Assert.assertFalse(Minitrue.isUnpath("/"));
+}
+</pre>
+        </div>
+
+        <div class="step step-slide" data-y="7200" data-x="6500">
+            <h1>What Could Possibly Go Wrong?</h1>
+            <pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">stderr  : PIT >> Running mutation  <span class="text-muted">[...]</span>
+<span data-jmpress="fade">          mutator=<span class="text-info">VoidMethodCallMutator</span>,</span>
+<span data-jmpress="fade">          description=<span class="text-warning">removed call to Minitrue::ensurePathIsSecure</span></span>
+
+<span data-jmpress="fade" class="text-muted">stderr  : PIT >> mutating method rectify
+stderr  : PIT >> 2 relevant test for rectify
+stderr  : PIT >> Running 1 units</span>
+
+<span data-jmpress="fade" class="text-danger">stdout  : Executing: rm -rf /</span>
+</span></pre>
+        </div>
+
+        <div class="step step-slide spoiler" data-y="7200" data-x="6500">
+            <div class="jumbotron text-center text-v-center">
+                <h1><span class="text-giant">
+                    I Accidentally Your Data
+                </span></h1>
+            </div>
+        </div>
+
+        <!-- PITFALLS END -->
+
+        <div class="step step-slide" data-y="-1600" data-x="1300">
+            <h1>See Also</h1>
+            <ul>
+                <li>
+                    Official Guide:
+                    <a href="http://pitest.org/quickstart/">pitest.org/quickstart/</a>
+                </li>
+                <li>
+                    Jenkins Plugin:
+                    <a href="https://github.com/edwardwe7/pitmutation-jenkins">github.com/edwardwe7/pitmutation-jenkins</a>
+                </li>
+                <li>
+                    Gradle Sample:
+                    <a href="https://github.com/gvsmirnov/pitest-gradle-sample">github.com/gvsmirnov/pitest-gradle-sample</a>
+                </li>
+                <li>
+                    Maven Sample:
+                    <a href="https://github.com/gvsmirnov/pitest-sample">github.com/gvsmirnov/pitest-sample</a>
+                </li>
+                <li>
+                    Talk by Henry Coles
+                    <a href="http://vimeo.com/89083982">goo.gl/AYhkm7</a>
+                </li>
+                <li>
+                    Talk by Filip Van Laenen
+                    <a href="http://www.slideshare.net/filipvanlaenen/mutation-testing-11298526">goo.gl/Cu8jUh</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="js/custom.js"></script>
+
+    <script type="text/javascript">
+        !function ($) {
+            $(function(){
+
+                $('#impress').jmpress({
+                    "mouse": { clickSelects: false },
+                    "beforeChange": function(element, eventData) {
+                        element = $(element);
+                        if(element.hasClass("visit-me")) {
+                            element.addClass('visited');
+                        }
+
+                        updateCurrentSlide(element);
+                    }
+                });
+
+                window.prettyPrint && prettyPrint()
+                $('body').mousemove(function(e){
+                    $('#laser').css('left', e.clientX).css('top', e.clientY);
+                });
+            });
+        }(window.jQuery);
+
+
+
+        $(function () {
+
+            var s = function(h, m, s) {
+                return s + 60 * (m + 60 * h);
+            };
+
+            // Thank you, StackOverflow!
+            var h = function(seconds)
+            {
+                var date = new Date(1970,0,1);
+                date.setSeconds(seconds);
+                return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            }
+
+            var coverageColor = '#1AB9CC';
+            var overheadColor = '#FF484D';
+            var expectedColor = '#18CCB1';
+
+            $('#pitest-perf').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                tooltip: {
+                    formatter: function() {
+                        var stack = this.series.stackKey.substr(6);
+                        return this.series.name + ": " + h(this.y) + " s in " + stack;
+
+                    }
+                },
+                title: '',
+                xAxis: {
+                    categories: ['PIT 0.29', 'PIT 0.30', 'PIT 0.31', 'PIT 1.0.0']
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Time [s]'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [
+                    {// 1 thread
+                        name: 'Overhead',
+                        data: [0, 0, 0, 0],
+                        stack: '1 thread',
+                        color: overheadColor
+                    },
+                    {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0), s(3,31,0), s(3,19,0), s(3,7,0)],
+                        stack: '1 thread',
+                        color: expectedColor
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '1 thread',
+                        color: coverageColor
+                    },
+                    {// 2 threads
+                        name: 'Overhead',
+                        data: [s(0,15,0), 34, 31, 20],
+                        stack: '2 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/2, s(3,31,0)/2, s(3,19,0)/2, s(3,7,0)/2],
+                        stack: '2 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '2 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    },
+                    {//4 threads
+                        name: 'Overhead',
+                        data: [s(0,31,17), 45, 42, 37],
+                        stack: '4 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    }, {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/4, s(3,31,0)/4, s(3,19,0)/4, s(3,7,0)/4],
+                        stack: '4 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '4 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    },
+                    {//8 threads
+                        name: 'Overhead',
+                        data: [s(0,56,17), s(0,8,10), s(0,9,0), s(0,8,54)],
+                        stack: '8 threads',
+                        color: overheadColor,
+                        showInLegend: false
+                    }, {
+                        name: 'Theoretical Time',
+                        data: [s(3,47,0)/8, s(3,31,0)/8, s(3,19,0)/8, s(3,7,0)/8],
+                        stack: '8 threads',
+                        color: expectedColor,
+                        showInLegend: false
+                    },
+                    {
+                        name: 'Code Coverage Time',
+                        data: [s(0,23,0), s(0,23,0), s(0,9,0), s(0,8,0)],
+                        stack: '8 threads',
+                        color: coverageColor,
+                        showInLegend: false
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

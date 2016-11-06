@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+
+    <title>The Mysteries Lie In Our Heads, Not In The JVM</title>
+
+    <link href="css/impress.css" rel="stylesheet"/>
+    <link href="css/prettify.css" rel="stylesheet"/>
+    <link href="css/animation.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/whhg.css" rel="stylesheet"/>
+    <link href="css/fonts.css" rel="stylesheet"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jmpress.impress.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                TopConf Tallinn 2016
+            </a>
+
+            <p class="navbar-text">
+                The Mysteries Lie In Our Heads, Not In The JVM <span class="text-muted">by</span> <span class="text-info">@gvsmirnov</span>
+            </p>
+
+
+        </div>
+        <div class="navbar-right">
+            <a class="navbar-brand">
+                Slide <span id="current-slide-number">#</span>/<span id="total-slides">#</span>
+            </a>
+            <img class="navbar-brand" src="img/cc0.png">
+        </div>
+    </div>
+</nav>
+
+
+<div id="laser"></div>
+
+
+<div id="impress">
+
+<div class="step step-title mystery" data-y="-800">
+    <div class="jumbotron text-center">
+        <div class="title">
+            <h1>
+                <span class="well well-sm">The Mysteries Lie In Our Heads</span>
+            </h1>
+            <h2>
+                <span class="well well-sm">(Not In The JVM)</span>
+            </h2>
+        </div>
+
+        <p><span class="well well-sm">#openjdk #mystery #hotspot</span></p>
+        <p><span class="well well-sm">#topconf</span></p>
+
+        <footer>
+            <h2><span class="well well-sm">Gleb Smirnov, Plumbr</span></h2>
+            <h3><span class="well well-sm">me<span class="text-info">@gvsmirnov</span>.ru</span></h3>
+        </footer>
+
+    </div>
+</div>
+
+<!-- INTRO -->
+
+<div class="step step-slide">
+    <div class="text-v-center text-center text-giant">
+        <h1><img src="img/openjdk.png"/>
+            <br/><span data-jmpress="fade">&approx; <strong>5.5M</strong> LOC </span>
+            <br/><span data-jmpress="fade"><strong>hundreds of thousands</strong><br/>of person-hours</span>
+        </h1>
+
+        <!-- http://openjdk.java.net/groups/hotspot/ -->
+        <!-- https://www.openhub.net/p/openjdk/analyses/latest/languages_summary -->
+    </div>
+</div>
+
+<div class="step step-slide" data-x="1300">
+    <h1>It's a big and complex system</h1>
+    <ul>
+        <li data-jmpress="fade">A single person cannot know <em>all</em> the things</li>
+        <li data-jmpress="fade">Abstractions <em>will</em> leak unavoidably</li>
+        <li data-jmpress="fade">Unexpected things will happen</li>
+    </ul>
+</div>
+
+<div class="step step-slide" data-x="2600">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/trollface.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="3900">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/duckduckgo.png"/>
+    </div>
+</div>
+
+<div class="step step-slide spoiler" data-x="3900">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/duckduckgo-2.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="5200">
+    <div class="text-center">
+        <img class="graph" src="img/stackoverflow.png"/>
+    </div>
+</div>
+
+<div class="step step-slide spoiler" data-x="5200">
+    <div class="text-center">
+        <img class="graph" src="img/stackoverflow-2.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="6500">
+    <div class="text-center">
+        <img class="graph" src="img/twitter.png"/>
+        <hr/>
+        <h1><em>[Kind Sir, I have encountered a trollface in my Java application. Send halp!]</em></h1>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="7800">
+    <div class="text-center">
+        <img class="graph" src="img/twitter-2.png"/>
+        <hr/>
+        <h1><em>[Kindly refer to the source code of HotSpot, o poor confused young man]</em></h1>
+    </div>
+</div>
+
+<!-- INTRO ENDS -->
+
+<!-- MAX MEMORY -->
+
+<div class="step step-slide" data-y="900">
+    <h1>What will be the output of this program?</h1>
+<pre class="prettyprint lang-java">
+public class MemoryChecker {
+    public static void main(String[] args) {
+        long maxMemory = Runtime.getRuntime().maxMemory();
+
+        System.out.printf(
+                "Max memory: %d MB", maxMemory / 1024 / 1024
+        );
+    }
+}</pre>
+</div>
+
+<div class="step step-slide" data-y="900" data-x="1300">
+<pre class="console prettyprint">
+<span class="nocode">$ java <span class="text-info">-Xmx512m</span> MemoryChecker
+
+Max memory: <span class="text-danger" data-jmpress="fade">455 MB</span></span>
+</pre>
+</div>
+
+<div class="step step-slide spoiler fill-bg" data-y="900" data-x="1300">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/where-is-my-memory-en.jpeg"/>
+    </div>
+</div>
+
+<!-- MAX MEMORY ENDS -->
+
+<!-- OUTTAKES 1 -->
+
+    <div class="step step-slide" data-y="1800">
+        <h1>HotSpot Folder Layout</h1>
+<pre class="console prettyprint" data-jmpress="fade">
+<span class="nocode">hotspot/src/
+<span data-jmpress="fade">├── cpu <span class="text-info"># CPU specific</span>
+│   └── [x86, sparc, ...]</span>
+<span data-jmpress="fade">├── os <span class="text-info"># OS specific</span>
+│   └── [bsd, linux, windows, ...]</span>
+<span data-jmpress="fade">├── os_cpu <span class="text-info"># OS and CPU specific</span>
+│   └── [bsd_zero, linux_sparc, windows_x86, ...]</span>
+<span data-jmpress="fade">└── share
+    ├── tools <span class="text-info"># Stuff you probably won't need</span>
+    └── vm <span class="text-info"># Most of the interesting stuff</span></span></span>
+</pre>
+    </div>
+
+    <div class="step step-slide" data-y="1800" data-x="1300">
+<pre class="console prettyprint">
+<span class="nocode">hotspot/src/share/vm
+<span data-jmpress="fade">├── c1 <span class="text-info" data-jmpress="fade"># Client compiler</span></span>
+<span data-jmpress="fade">├── classfile <span class="text-info" data-jmpress="fade"># Class loading, verification, representation, ...</span></span>
+<span data-jmpress="fade">├── code <span class="text-info" data-jmpress="fade"># Machine code management</span></span>
+<span data-jmpress="fade">├── compiler <span class="text-info" data-jmpress="fade"># Things common for the compilers</span></span>
+<span data-jmpress="fade">├── gc_* <span class="text-info" data-jmpress="fade"># Garbage Collection</span></span>
+<span data-jmpress="fade">├── interpreter <span class="text-info" data-jmpress="fade"># Interpreter for experiments</span></span>
+<span data-jmpress="fade">├── memory <span class="text-info" data-jmpress="fade"># Base stuff for memory, also the Universe lives here</span></span>
+<span data-jmpress="fade">├── oops <span class="text-info" data-jmpress="fade"># Ordinary Object PointerS</span></span>
+<span data-jmpress="fade">├── opto <span class="text-info" data-jmpress="fade"># Server compiler</span></span>
+<span data-jmpress="fade">├── prims <span class="text-info" data-jmpress="fade"># Unsafe, JNI, JVMTI, lots of stuff</span></span>
+<span data-jmpress="fade">├── runtime <span class="text-info" data-jmpress="fade"># VM runtime, threading, perf data, LOTS of stuff</span></span>
+<span data-jmpress="fade">└── [...]</span></span>
+</pre>
+    </div>
+
+    <div class="step step-slide" data-x="2600" data-y="1800">
+        <h1>Use <code>grep</code>, Luke!</h1>
+
+        <ul>
+            <li data-jmpress="fade">Recursive search: <code>grep -r</code></li>
+            <li data-jmpress="fade">Show context: <code>grep -C 3</code></li>
+            <li data-jmpress="fade">Show line numbers: <code>grep -n</code></li>
+        </ul>
+    </div>
+
+    <div class="step step-slide" data-x="3900" data-y="1800">
+        <h1>Use NetBeans, Luke!</h1>
+
+<pre class="prettyprint console">
+jdk9/common/nb_native/nbproject/
+</pre>
+        <div class="well well-lg" data-jmpress="fade">
+            <ul>
+                <li>Find Usages</li>
+                <li data-jmpress="fade">Syntax highlighting</li>
+                <li data-jmpress="fade">Macro preprocessing</li>
+                <li data-jmpress="fade">It just works<sup>*</sup> out of the box</li>
+            </ul>
+        </div>
+    </div>
+
+<!-- OUTTAKES 1 END -->
+
+<!-- DEFAULT METHODS -->
+<div class="step step-slide" data-y="2700">
+<pre class="prettyprint lang-java">
+public static long register (Class&lt;?&gt; clazz) {
+    System.out.println("Initialized: " + clazz.getSimpleName());
+    return System.currentTimeMillis();
+}
+</pre>
+<pre class="prettyprint lang-java" data-jmpress="fade">
+public interface MemoryManager {
+    long initializedAt = register(MemoryManager.class);
+
+    static long getInitTime() { return initializedAt; }
+}</pre>
+<pre class="prettyprint lang-java" data-jmpress="fade">
+public interface GarbageCollector extends MemoryManager {
+    long initializedAt = register(GarbageCollector.class);
+}
+</pre>
+</div>
+
+<div class="step step-slide spoiler fill-bg" data-y="2700">
+<pre class="prettyprint lang-java">
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(GarbageCollector.initializedAt);
+    }
+}</pre>
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ java Main
+<span  data-jmpress="fade">
+Initialized: GarbageCollector
+1429533210331
+</span></span>
+</pre>
+</div>
+
+
+<div class="step step-slide spoiler fill-bg" data-y="2700">
+    <div class="text-v-center text-center">
+        <h1 class="text-giant">
+            JLS <span class="text-info">§12.4.1</span>
+        </h1>
+    </div>
+</div>
+
+
+    <div class="step step-slide" data-y="2700" data-x="1300">
+<pre class="prettyprint lang-java">
+   public interface MemoryManager {
+       long initializedAt = register(MemoryManager.class);
+    <span class="nocode text-danger">
+-      static  long getInitTime() { return initializedAt; }</span><span class="nocode text-success">
++      default long getInitTime() { return initializedAt; }</span>
+   }</pre>
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ java Main
+<span data-jmpress="fade">
+<span class="text-warning">Initialized: MemoryManager</span>
+Initialized: GarbageCollector
+1429533210331</span></span>
+</pre>
+</div>
+
+<div class="step step-slide spoiler fill-bg" data-y="2700" data-x="1300">
+    <div class="text-v-center text-center">
+        <h1 class="text-giant">
+            <a href="https://bugs.openjdk.java.net/browse/JDK-8098557">
+                <i class="icon icon-bug small"></i> JDK-8098557
+            </a><br/>
+            (fixed in Java 9)
+        </h1>
+    </div>
+</div>
+
+<!-- DEFAULT METHODS END -->
+
+<!-- GC CAUSES -->
+
+<div class="step step-slide" data-y="3600">
+
+<pre class="console prettyprint">
+$ jstat -gccause [...]
+
+<span class="nocode">Timestamp     LGCC                                       GCC
+1.6           Last ditch collection                    No GC
+1.7           <span class="text-danger">No GC</span>                    Last ditch collection
+1.8           <span class="text-danger">No GC</span>                    Last ditch collection
+1.9           <span class="text-danger">No GC</span>                    Last ditch collection
+2.0           <span class="text-danger">No GC</span>                    Last ditch collection</span>
+</pre>
+
+</div>
+
+<!-- GC CAUSES END -->
+
+<!-- OUTTAKES -->
+
+<div class="step step-slide" data-x="1300" data-y="3600">
+    <h1>It Could Be a Bug That's Already Fixed</h1>
+
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ hg grep -f --all '::_no_gc'
+<span class="text-muted">[...]</span>
+vmGCOperations.cpp:<span class="text-info text-highlighted">2097</span>:+:  assert(((_gc_cause != GCCause::_no_gc)
+</span></pre>
+
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ hg log --rev <span class="text-info">2097</span>
+<span class="text-muted">[...]</span>
+summary:     <span class="text-info text-highlighted">7015169</span>: GC Cause not always set</span></pre>
+
+</div>
+
+<div class="step step-slide spoiler" data-x="2600" data-y="3600">
+    <div class="text-center">
+        <img class="graph scale-to-fit-h" src="img/jira.png"/>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="3900" data-y="3600">
+    <h1>How Do I Find The Fix Version?</h1>
+
+    <div class="text-center">
+        <img class="graph" src="img/jira-2.png"/>
+
+        <div id="confuse-1" data-jmpress="drive-up">
+            <img src="img/confused-guy.png"/>
+        </div>
+    </div>
+</div>
+
+<div class="step step-slide spoiler well-lg well" data-x="3900" data-y="3600">
+    <h1>How Do I Find The Fix Version?</h1>
+
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ hg log --rev "last(::<span class="text-info">2097</span> and tagged(), 10)"
+<span class="text-muted">[...]</span>
+changeset:   1993:102466e70deb
+tag:         <span class="text-info text-highlighted">jdk7-b127</span>
+<span class="text-muted">[...]</span>
+</span></pre>
+
+    <div class="well well-lg" data-jmpress="fade">
+        <p>Не путать: <code>b127</code> и <code>u127</code> &mdash; не одно и то же</p>
+    </div>
+
+</div>
+
+<div class="step step-slide" data-x="5200" data-y="3600">
+    <h1>Builds vs Updates vs Versions</h1>
+
+<pre class="prettyprint console" data-jmpress="fade">
+<span class="nocode">$ java -version
+java version "1.7.0<span class="text-info text-highlighted">_51</span>" <span data-jmpress="fade" class="text-info"># update 51</span>
+Java(TM) SE Runtime Environment (build 1.7.0_51-<span class="text-info text-highlighted">b13</span>) <span data-jmpress="fade" class="text-info"># build 13</span>
+Java HotSpot(TM) 64-Bit Server VM (build <span class="text-info text-highlighted">24</span>.51-<span class="text-info text-highlighted">b03</span>, mixed mode)
+</span></pre>
+
+    <div class="well well-lg" data-jmpress="fade">
+        <p>HotSpot has its own version and its own build numbers.  ¯\_(ツ)_/¯ </p>
+    </div>
+</div>
+
+<div class="step step-slide" data-x="6500" data-y="3600">
+    <h1>Verify Your Hypotheses</h1>
+    <ul>
+        <li data-jmpress="fade">Perform Isolated Experiments</li>
+        <li data-jmpress="fade">
+            Positive Control
+            <ul>
+                <li data-jmpress="fade">Run on a JDK version where it's supposed to be fixed</li>
+                <li data-jmpress="fade" class="list-unstyled">
+                    <a href="http://www.oracle.com/technetwork/java/archive-139210.html">
+                        http://www.oracle.com/technetwork/java/archive-139210.html
+                    </a>
+                </li>
+                <li data-jmpress="fade">Build your own JVM, with fixes and debug output</li>
+            </ul>
+        </li>
+
+        <li data-jmpress="fade">
+            Negative control
+            <ul>
+                <li data-jmpress="fade">Run on a different JDK version where it's <strong>not</strong> fixed</li>
+                <li data-jmpress="fade">Change irrelevant params of the experiment (OS, <code>-Xint</code>, ...)</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- OUTTAKES END -->
+
+<div class="step step-slide" data-y="4300">
+<pre class="prettyprint lang-java">
+public class HarmlessClass {
+
+    private static final int[] VALUES = new int[256];
+
+    public static void main(String[] args) {
+        byte[] bytes = new byte[] {-1};
+        while (true) {
+            for (Byte b : bytes) {
+                VALUES[b & 0xff]++;
+            }
+        }
+    }
+}
+</pre>
+</div>
+
+<div class="step step-slide" data-x="1300" data-y="4300">
+<pre class="prettyprint console"><span class="text-small nocode">#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  <span class="text-danger">SIGSEGV (0xb) at pc=0x000000010fe862ef, pid=51953, tid=4867</span>
+#
+# JRE version: Java(TM) SE Runtime Environment (<span class="text-info">8.0_31-b13</span>) (build 1.8.0_31-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.31-b07 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# J 95% C2 HarmlessClass.main([Ljava/lang/String;)V (57 bytes) @ 0x000000010fe862ef [0x000000010fe86260+0x8f]
+#
+# Failed to write core dump. Core dumps have been disabled.
+# To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# An error report file with more information is saved as:
+# /Users/gvsmirnov/sources/docs/hs_err_pid51953.log
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#</span>
+</pre>
+</div>
+
+<div class="step step-slide spoiler fill-bg" data-x="1300" data-y="4300">
+    <div class="text-v-center text-center">
+        <h1 class="text-giant">
+            <a href="https://bugs.openjdk.java.net/browse/JDK-8058847">
+                <i class="icon icon-bug small"></i>JDK-8058847
+            </a><br/>(fixed in <code>8u40</code>)
+        </h1>
+    </div>
+</div>
+
+<!-- LAST REMARKS -->
+
+<div class="step step-slide" data-y="7200">
+        <h1>Community Is Your Best Friend</h1>
+        <ul>
+            <li data-jmpress="fade">
+                The mailing lists are a treasure trove of info:
+                <ul>
+                    <li data-jmpress="fade">
+                        <a href="http://mail.openjdk.java.net/pipermail/hotspot-dev/">http://mail.openjdk.java.net/pipermail/hotspot-dev/</a>
+                    </li>
+                    <li data-jmpress="fade">
+                        <a href="http://mail.openjdk.java.net/mailman/listinfo">http://mail.openjdk.java.net/mailman/listinfo</a>
+                    </li>
+                </ul>
+            </li>
+            <li data-jmpress="fade">Don't hesitate to ask <em>good</em> questions</li>
+            <li data-jmpress="fade">Your input may help other people</li>
+        </ul>
+</div>
+
+<div class="step step-slide" data-x="1300" data-y="7200">
+    <h1>Extra Materials</h1>
+    <ul>
+        <li data-jmpress="fade">
+            "Introduction to HotSpot Internals" by Paul Nauman
+        </li>
+        <li data-jmpress="fade">
+            "Oracle JRockit: The Definitive Guide" by Marcus & Marcus
+        </li>
+        <li data-jmpress="fade">
+            <a href="http://blog.jamesdbloom.com/JVMInternals.html">
+                http://blog.jamesdbloom.com/JVMInternals.html
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="step step-slide qr" data-x="1300" data-y="-800">
+    <div class="text-center">
+        <img class="graph" src="img/qr-joker.png"/>
+
+        <h2>
+            <a href="http://gvsmirnov.ru/docs/presentations/java-mysterious-hotspot/joker-oct-2014.html">
+                goo.gl/HQx0xa
+            </a>
+        </h2>
+    </div>
+</div>
+
+<!-- LAST REMARKS END -->
+
+</div>
+</body>
+
+<script src="js/custom.js"></script>
+
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+
+            $('#impress').jmpress({
+                "mouse": { clickSelects: false },
+                "beforeChange": function(element, eventData) {
+                    element = $(element);
+                    if(element.hasClass("visit-me")) {
+                        element.addClass('visited');
+                    }
+
+                    updateCurrentSlide(element);
+                }
+            });
+
+            window.prettyPrint && prettyPrint()
+            $('body').mousemove(function(e){
+                $('#laser').css('left', e.clientX).css('top', e.clientY);
+            });
+        });
+    }(window.jQuery)
+</script>
+
+</html>
