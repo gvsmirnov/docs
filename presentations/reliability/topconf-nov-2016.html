@@ -1,0 +1,210 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/white.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="title">
+                    <h1>How Do I make It Perform Reliably</h1>
+                    <h3>
+                        <br/><br/><br/>
+                        @gvsmirnov from Plumbr <br/>
+                        me@gvsmirnov.ru <br/>
+                        #topconfEE
+                    </h3>
+                </section>
+
+
+                <section>
+                    <h3>Very Scare</h3>
+                    <ul>
+                        <li class="fragment">Adding <strong>1 second</strong> to the search time, the number of <strong>searches </strong><a href="http://www.exp-platform.com/Documents/2007-10EmetricsExperimenation.pdf"><strong>in Bing dropped by 1.5%</strong></a>.</li>
+                        <li class="fragment">A/B tests in Amazon revealed that each <strong>100ms</strong> in the time it took to load a page <strong>reduced the </strong><a href="http://glinden.blogspot.com.ee/2006/11/marissa-mayer-at-web-20.html"><strong>sales of Amazon</strong></a><strong> by 1%</strong>.</li>
+                        <li class="fragment">According to <a href="http://www4.akamai.com/dl/reports/Site_Abandonment_Final_Report.pdf">Akamai</a>,<strong> 75% of online shoppers</strong> who experience a <strong>crash, freeze or slow</strong> render time<strong> will no longer buy</strong> from that site.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Users don't like to wait</h3>
+                    <img src="img/user-experience-impact-on-performance.png"/>
+                </section>
+
+                <section>
+                    <h2>
+                        Devs VS Ops:<br/>
+                        a structural conflict
+                    </h2>
+                    <ul>
+                        <li class="fragment">Devs want to release new stuff</li>
+                        <li class="fragment">Ops want stuff to just work</li>
+                        <li class="fragment">But devs will <em>inevitably</em> break stuff</li>
+                    </ul>
+                    <aside class="notes">
+                        DevOps is not just automating deployment
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Enter DevOps</h2>
+                    <p class="fragment">
+                        <em>YOU</em> have to make sure your stuff works
+                    </p>
+                </section>
+
+                <section>
+                    <p>
+                        <em>
+                            If a microservice goes down in a cluster, <br/>
+                            but no user gets impacted, <br/>
+                            is there a downtime?
+                        </em>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Embrace failure</h2>
+                    <p class="fragment">Stop pretending you can avoid it</p>
+                    <p class="fragment">
+                        Start making sure that when shit hits the fan,
+                        <br/>you can <em>quickly recover</em>
+                    </p>
+                </section>
+
+                <section>
+                    <p>
+                        <img style="border: none; box-shadow: none;" src="img/pyramid.png"/><br/>
+                        <small><em>(source: Google SRE book)</em></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>But what does "performs reliably" even mean?</h3>
+                </section>
+
+                <section>
+                    <h2>Does the app perform well?</h2>
+                    <img style="border: none; box-shadow: none;" src="img/cpu.PNG"/>
+                </section>
+
+                <section>
+                    <h2>Use infra monitoring to:</h2>
+                    <ul>
+                        <li class="fragment list-unstyled">☑ Receive early alerts for resource exhaustion</li>
+                        <li class="fragment list-unstyled">☑️ Harvest information for capacity planning</li>
+                        <li class="fragment list-unstyled">✗ Try to figure out user experience</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Use logging to:</h2>
+                    <ul>
+                        <li class="fragment list-unstyled">☑ Capture state at business-critical points</li>
+                        <li class="fragment list-unstyled">☑️ Have evidence for troubleshooting issues</li>
+                        <li class="fragment list-unstyled">✗ Detect that something is wrong</li>
+                        <li class="fragment list-unstyled">✗ Log all the things!</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Use health checks to:</h2>
+                    <ul>
+                        <li class="fragment list-unstyled">☑ Sanity check your services: process up, port open</li>
+                        <li class="fragment list-unstyled">☑️ Check availability from different parts of the globe</li>
+                        <li class="fragment list-unstyled">✗ Measure the performance</li>
+                        <li class="fragment list-unstyled">✗ Understand user experience</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>
+                        Monitoring actual usage
+                    </h2>
+                </section>
+
+                <section>
+                    <h3>«All the requests must be HTTP 200 OK»</h3>
+
+                    <img style="border: none; box-shadow: none;" src="img/business-impact-of-latency.png"/>
+                </section>
+
+                <section>
+                    <h3>«Average time must be < 5 sec»</h3>
+
+                    <img style="border: none; box-shadow: none;" src="img/averages.png"/>
+                </section>
+
+                <section>
+                    <h3>«99.9 pctile must be <5 seconds»</h3>
+
+                    <p>
+                        <strong>This is not enough!</strong> What if your most valued
+                        user lives at the 99.99 percentile? <em>(happens all the time)</em>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>
+                        Monitoring <em>actual</em><br/>
+                        User Experience
+                    </h2>
+                </section>
+
+                <section>
+                    <h2>
+                        This is not a marketing talk
+                        <br/>
+                        <br/>
+                        <em class="fragment">but... ;)</em>
+                    </h2>
+                </section>
+
+                <section>
+                    <h2>Shit has hit the fan, now what?</h2>
+                    <ol>
+                        <li class="fragment">Estimate impact</li>
+                        <li class="fragment">Restore service (VS) capture evidence</li>
+                        <li class="fragment">Find the root cause</li>
+                        <li class="fragment">Deploy the fix</li>
+                        <li class="fragment">Write a postmortem</li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>Establish on-call duty rotation</h2>
+                </section>
+
+                <section>
+                    <h2>Join the Bayesian Conspiracy</h2>
+                </section>
+
+                <section>
+                    <h2>Have good priors</h2>
+
+                    <img style="border: none; box-shadow: none;" src="img/what-are-the-most-common-performance-bottlenecks.png"/>
+                </section>
+
+                <section>
+                    <h2>Read this book</h2>
+
+                    <img style="border: none; box-shadow: none;" src="img/book-2x.png"/>
+                </section>
+
+                <section>
+                    <h2>Have a great APM ;)</h2>
+
+                    <img src="img/plumbr-logo.png" style="border: none; box-shadow: none;"/><br/>
+                    <a href="http://plumbr.eu">http://plumbr.eu</a>
+                </section>
+
+
+            </div>
+        </div>
+
+        <script src="js/reveal.js"></script>
+        <script>
+            Reveal.initialize();
+        </script>
+    </body>
+</html>

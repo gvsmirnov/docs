@@ -245,14 +245,14 @@ public static long register (Class&lt;?&gt; clazz) {
 }
 </pre>
 <pre class="prettyprint lang-java" data-jmpress="fade">
-public interface MemoryManager {
-    long initializedAt = register(MemoryManager.class);
+public interface ParentInterface {
+    long initializedAt = register(ParentInterface.class);
 
-    static long getInitTime() { return initializedAt; }
+    static void foo() {}
 }</pre>
 <pre class="prettyprint lang-java" data-jmpress="fade">
-public interface GarbageCollector extends MemoryManager {
-    long initializedAt = register(GarbageCollector.class);
+public interface ChildInterface extends ParentInterface {
+    long initializedAt = register(ChildInterface.class);
 }
 </pre>
 </div>
@@ -261,13 +261,13 @@ public interface GarbageCollector extends MemoryManager {
 <pre class="prettyprint lang-java">
 public class Main {
     public static void main(String[] args) {
-        System.out.println(GarbageCollector.initializedAt);
+        System.out.println(ChildInterface.initializedAt);
     }
 }</pre>
 <pre class="prettyprint console" data-jmpress="fade">
 <span class="nocode">$ java Main
 <span  data-jmpress="fade">
-Initialized: GarbageCollector
+Initialized: ChildInterface
 1429533210331
 </span></span>
 </pre>
@@ -288,14 +288,14 @@ Initialized: GarbageCollector
    public interface MemoryManager {
        long initializedAt = register(MemoryManager.class);
     <span class="nocode text-danger">
--      static  long getInitTime() { return initializedAt; }</span><span class="nocode text-success">
-+      default long getInitTime() { return initializedAt; }</span>
+-      static  void foo() { return initializedAt; }</span><span class="nocode text-success">
++      default void foo() { return initializedAt; }</span>
    }</pre>
 <pre class="prettyprint console" data-jmpress="fade">
 <span class="nocode">$ java Main
 <span data-jmpress="fade">
-<span class="text-warning">Initialized: MemoryManager</span>
-Initialized: GarbageCollector
+<span class="text-warning">Initialized: ParentInterface</span>
+Initialized: ChildInterface
 1429533210331</span></span>
 </pre>
 </div>
